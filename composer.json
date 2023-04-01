@@ -53,6 +53,9 @@
         ],
         "php-cs-fixer-lint": [
             "vendor/bin/php-cs-fixer fix --dry-run --diff"
+        ],
+        "fixer": [
+            "vendor/bin/php-cs-fixer fix"
         ]
     },
     "extra": {

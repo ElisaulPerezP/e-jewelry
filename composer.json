@@ -50,6 +50,9 @@
         ],
         "test-continuous-integration": [
             "vendor/bin/phpunit --stop-on-failure --stop-on-error"
+        ],
+        "php-cs-fixer-lint": [
+            "vendor/bin/php-cs-fixer fix --dry-run --diff"
         ]
     },
     "extra": {

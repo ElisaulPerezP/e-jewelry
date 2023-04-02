@@ -9,4 +9,5 @@ return[
     'save' => 'Save',
     'back' => 'Back',
     'cancel' => 'Cancel',
+    'status' => 'Enabled status',
 ];

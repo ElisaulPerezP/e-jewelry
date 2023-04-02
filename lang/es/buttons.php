@@ -9,4 +9,5 @@ return[
     'save' => 'Guardar',
     'back' => 'Atras',
     'cancel' => 'Cancelar',
+    'status' => 'Estado habilitado',
 ];

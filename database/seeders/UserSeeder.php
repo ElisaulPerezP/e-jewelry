@@ -12,6 +12,7 @@ class UserSeeder extends Seeder
         User::factory()->create([
             'name' => 'Admin',
             'email' => 'admin@jewelry.com',
+            'status' => '0',
 
         ]);
 

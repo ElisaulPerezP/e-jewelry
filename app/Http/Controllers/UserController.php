@@ -34,4 +34,11 @@ class UserController extends Controller
 
         return redirect(route('users.index'));
     }
+    public function changeStatus(User $user): RedirectResponse
+    {
+        $user->status = !$user->status;
+        $user->save();
+
+        return redirect(route('users.index'));
+    }
 }

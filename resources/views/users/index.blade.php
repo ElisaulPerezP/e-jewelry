@@ -22,8 +22,8 @@
                                         <th class="px-4 py-3">Id</th>
                                         <th class="px-4 py-3">{{ trans('auth.name') }}</th>
                                         <th class="px-4 py-3">{{ trans('auth.email') }}</th>
-                                        <th class="px-4 py-3">{{ trans('tables.show') }}</th>
                                         <th class="px-4 py-3">{{ trans('tables.update') }}</th>
+                                        <th class="px-4 py-3">{{ trans('tables.show') }}</th>
                                         <th class="px-4 py-3">{{ trans('tables.habilitation') }}</th>
 
                                     </tr>
@@ -50,6 +50,16 @@
                                                 </td>
                                                 <td class="px-4 py-3 border">
                                                     <div class="flex items-center text-sm">
+                                                        <a
+                                                            href="{{ route('users.edit', $user) }}">
+                                                                <x-primary-button>
+                                                                    {{ trans('buttons.update') }}
+                                                                </x-primary-button>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                                <td class="px-4 py-3 border">
+                                                    <div class="flex items-center text-sm">
                                                         <x-primary-button
                                                             href="#">
                                                             {{ trans('buttons.show') }}
@@ -60,18 +70,8 @@
                                                     <div class="flex items-center text-sm">
                                                         <x-primary-button
                                                             href="#">
-                                                            {{ trans('buttons.update') }}
-                                                        </x-primary-button>
-                                                    </div>
-                                                </td>
-                                                <td class="px-4 py-3 border">
-                                                    <div class="flex items-center text-sm">
-
-                                                        <x-primary-button
-                                                            href="#">
                                                             {{ trans('buttons.enable') }}
                                                         </x-primary-button>
-
                                                     </div>
                                                 </td>
                                             </tr>

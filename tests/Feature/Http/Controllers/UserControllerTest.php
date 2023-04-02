@@ -60,4 +60,26 @@ class UserControllerTest extends TestCase
         $this->assertEquals('testingName', $userUpdated->name);
         $this->assertEquals('testing@test.com', $userUpdated->email);
     }
+
+    public function testItCanChangeUserStatus(): void
+    {
+        $user = User::factory()->create();
+
+        $admin = User::factory()->create();
+
+        $response = $this->actingAs($admin)->put(route('users.changeStatus', $user));
+
+        $userChanged = User::findOrFail($user->id);
+
+        $response->assertRedirect();
+        $this->assertDatabaseCount('users', 2);
+        $this->assertAuthenticated();
+        $this->assertEquals(0, $userChanged->status);
+
+        $this->actingAs($admin)->put(route('users.changeStatus', $user));
+
+        $userChanged = User::findOrFail($user->id);
+
+        $this->assertEquals(1, $userChanged->status);
+    }
 }

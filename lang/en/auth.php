@@ -1,6 +1,6 @@
 <?php
 
 return[
-    'email' => 'email',
-    'name' => 'name',
+    'email' => 'Email',
+    'name' => 'Name',
 ];

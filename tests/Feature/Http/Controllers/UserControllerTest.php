@@ -97,4 +97,16 @@ class UserControllerTest extends TestCase
         $response->assertViewIs('users.show');
         $response->assertViewHas('user');
     }
+
+    public function testItCantShowAllUsersWhenUserIsUnable(): void
+    {
+        $admin = User::factory()->create([
+            'status' => false,
+        ]);
+
+        $response = $this->actingAs($admin)->get(route('users.index'));
+
+        $this->assertGuest();
+        $response->assertRedirect(route('login'));
+    }
 }

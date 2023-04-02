@@ -48,7 +48,7 @@ class UserControllerTest extends TestCase
 
         $response = $this->actingAs($admin)->put(route('users.update', $user), [
             'name' => 'testingName',
-            'email' => 'testing@test.com'
+            'email' => 'testing@test.com',
         ]);
 
         $userUpdated = User::findOrFail($user->id);

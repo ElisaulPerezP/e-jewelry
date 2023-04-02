@@ -7,10 +7,12 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <section class="container mx-auto p-6 font-mono">
                         <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
-                            <div class="w-full overflow-x-auto">
-                                <form action="{{ route('users.update', $user) }}" method="POST">
-                                    @csrf
-                                    @method('PUT')
+                            <x-auth-validation-errors class="mb-4" :errors="$errors"/>
+                            <form action="{{ route('users.update', $user) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <div class="w-full overflow-x-auto">
+
                                     <label class="block m-2 font-medium text-sm text-gray-700"
                                            for="name">{{ trans('boxes.name') }}</label>
                                     <input
@@ -20,20 +22,22 @@
                                            class="block m-2 font-medium text-sm text-gray-700">{{ trans('boxes.email') }}</label>
                                     <input
                                         class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                        name="email" type="text" class="form-control" id="email"
+                                        name="email" type="text" id="email"
                                         value="{{ $user->email }}"><br>
-                                    <x-primary-button class="m-2">
-                                        {{trans('buttons.save')}}
-                                    </x-primary-button>
-                                </form>
-                                <a href="/users">
-                                    <x-primary-button class="m-2">
-                                        {{trans('buttons.cancel')}}
-                                    </x-primary-button>
-                                </a>
-                            </div>
+                                </div>
+                                <div class="w-full overflow-y-auto mt-4">
+                                <x-primary-button class="m-2">
+                                    {{trans('buttons.save')}}
+                                </x-primary-button>
+                                </div>
+                            </form>
                         </div>
                     </section>
+                    <a href="/users">
+                        <x-primary-button class="m-2">
+                            {{trans('buttons.cancel')}}
+                        </x-primary-button>
+                    </a>
                 </div>
             </div>
         </div>

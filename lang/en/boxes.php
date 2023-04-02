@@ -15,4 +15,6 @@ return[
     'street'=>'Street',
     'numberDoor'=>'Number Door',
     'address'=>'address',
+    'user' => 'User',
+    'userDetail' => 'User detail',
 ];

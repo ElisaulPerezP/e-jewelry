@@ -15,5 +15,6 @@ return[
     'street'=>'Calle',
     'numberDoor'=>'Numero de direccion',
     'address'=>'Direccion',
-
+    'user' => 'Usuario',
+    'userDetail' => 'Detalle de usuario',
 ];

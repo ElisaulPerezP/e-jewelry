@@ -50,10 +50,12 @@
                                                 </td>
                                                 <td class="px-4 py-3 border">
                                                     <div class="flex items-center text-sm">
-                                                        <x-primary-button
-                                                            href="#">
-                                                            {{ trans('buttons.show') }}
-                                                        </x-primary-button>
+                                                        <a
+                                                            href="{{ route('users.show', $user) }}">
+                                                            <x-primary-button>
+                                                                {{ trans('buttons.show') }}
+                                                            </x-primary-button>
+                                                        </a>
                                                     </div>
                                                 </td>
                                                 <td class="px-4 py-3 border">
@@ -92,6 +94,12 @@
             <div class="m-4">
                 {{ $users->links() }}
             </div>
+            <a
+                href="{{ route('welcome') }}"  class="absolute mb-4 mr-10">
+                <x-primary-button>
+                    {{ trans('buttons.back') }}
+                </x-primary-button>
+            </a>
         </div>
     </div>
 </x-app-layout>

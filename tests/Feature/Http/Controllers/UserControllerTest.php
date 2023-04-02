@@ -82,4 +82,19 @@ class UserControllerTest extends TestCase
 
         $this->assertEquals(1, $userChanged->status);
     }
+    public function testItCanShowDetailView(): void
+    {
+        $user = User::factory()->create();
+
+        $admin = User::factory()->create();
+
+        $response = $this->actingAs($admin)->get(route('users.show', $user));
+
+        $this->assertDatabaseCount('users', 2);
+        $this->assertAuthenticated();
+
+        $response->assertOk();
+        $response->assertViewIs('users.show');
+        $response->assertViewHas('user');
+    }
 }

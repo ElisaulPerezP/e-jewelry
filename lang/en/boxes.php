@@ -17,4 +17,5 @@ return[
     'address'=>'address',
     'user' => 'User',
     'userDetail' => 'User detail',
+    'seeUsers' => 'See users',
 ];

@@ -13,7 +13,7 @@ class UserControllerTest extends TestCase
     use RefreshDatabase;
     public function testItCanShowAllUsers(): void
     {
-        User::factory(100)->create();
+        User::factory(1000)->create();
 
         $admin = User::factory()->create();
         $permission = Permission::findOrCreate('index.user');
@@ -26,7 +26,7 @@ class UserControllerTest extends TestCase
         $response->assertOk();
         $response->assertViewIs('users.index');
         $response->assertViewHas('users');
-        $this->assertDatabaseCount('users', 101);
+        $this->assertDatabaseCount('users', 1001);
     }
 
     public function testItCanShowEditView(): void

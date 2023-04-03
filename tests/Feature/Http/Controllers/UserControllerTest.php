@@ -4,6 +4,8 @@ namespace Tests\Feature\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class UserControllerTest extends TestCase
@@ -14,6 +16,9 @@ class UserControllerTest extends TestCase
         User::factory(100)->create();
 
         $admin = User::factory()->create();
+        $permission = Permission::findOrCreate('index.user');
+        $role = Role::findOrCreate('admin')->givePermissionTo($permission);
+        $admin->assignRole($role);
 
         $response = $this->actingAs($admin)->get(route('users.index'));
 
@@ -29,6 +34,9 @@ class UserControllerTest extends TestCase
         $user = User::factory()->create();
 
         $admin = User::factory()->create();
+        $permission = Permission::findOrCreate('edit.user');
+        $role = Role::findOrCreate('admin')->givePermissionTo($permission);
+        $admin->assignRole($role);
 
         $response = $this->actingAs($admin)->get(route('users.edit', $user));
 
@@ -45,6 +53,9 @@ class UserControllerTest extends TestCase
         $user = User::factory()->create();
 
         $admin = User::factory()->create();
+        $permission = Permission::findOrCreate('update.user');
+        $role = Role::findOrCreate('admin')->givePermissionTo($permission);
+        $admin->assignRole($role);
 
         $response = $this->actingAs($admin)->put(route('users.update', $user), [
             'name' => 'testingName',
@@ -66,6 +77,9 @@ class UserControllerTest extends TestCase
         $user = User::factory()->create();
 
         $admin = User::factory()->create();
+        $permission = Permission::findOrCreate('changeStatus.user');
+        $role = Role::findOrCreate('admin')->givePermissionTo($permission);
+        $admin->assignRole($role);
 
         $response = $this->actingAs($admin)->put(route('users.changeStatus', $user));
 
@@ -87,6 +101,9 @@ class UserControllerTest extends TestCase
         $user = User::factory()->create();
 
         $admin = User::factory()->create();
+        $permission = Permission::findOrCreate('show.user');
+        $role = Role::findOrCreate('admin')->givePermissionTo($permission);
+        $admin->assignRole($role);
 
         $response = $this->actingAs($admin)->get(route('users.show', $user));
 

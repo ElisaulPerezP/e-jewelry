@@ -9,12 +9,12 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::factory()->create([
+        $admin = User::factory()->create([
             'name' => 'Admin',
             'email' => 'admin@jewelry.com',
-            'status' => '0',
-
         ]);
+
+        $admin->assignRole('admin');
 
         User::factory()
             ->count(1000)

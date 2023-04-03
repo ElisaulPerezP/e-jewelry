@@ -4,6 +4,8 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class ProfileTest extends TestCase
@@ -12,10 +14,13 @@ class ProfileTest extends TestCase
 
     public function test_profile_page_is_displayed(): void
     {
-        $user = User::factory()->create();
+        $admin = User::factory()->create();
+        $permission = Permission::findOrCreate('index.user');
+        $role = Role::findOrCreate('admin')->givePermissionTo($permission);
+        $admin->assignRole($role);
 
         $response = $this
-            ->actingAs($user)
+            ->actingAs($admin)
             ->get('/profile');
 
         $response->assertOk();
@@ -23,10 +28,13 @@ class ProfileTest extends TestCase
 
     public function test_profile_information_can_be_updated(): void
     {
-        $user = User::factory()->create();
+        $admin = User::factory()->create();
+        $permission = Permission::findOrCreate('index.user');
+        $role = Role::findOrCreate('admin')->givePermissionTo($permission);
+        $admin->assignRole($role);
 
         $response = $this
-            ->actingAs($user)
+            ->actingAs($admin)
             ->patch('/profile', [
                 'name' => 'Test User',
                 'email' => 'test@example.com',
@@ -36,37 +44,43 @@ class ProfileTest extends TestCase
             ->assertSessionHasNoErrors()
             ->assertRedirect('/profile');
 
-        $user->refresh();
+        $admin->refresh();
 
-        $this->assertSame('Test User', $user->name);
-        $this->assertSame('test@example.com', $user->email);
-        $this->assertNull($user->email_verified_at);
+        $this->assertSame('Test User', $admin->name);
+        $this->assertSame('test@example.com', $admin->email);
+        $this->assertNull($admin->email_verified_at);
     }
 
     public function test_email_verification_status_is_unchanged_when_the_email_address_is_unchanged(): void
     {
-        $user = User::factory()->create();
+        $admin = User::factory()->create();
+        $permission = Permission::findOrCreate('index.user');
+        $role = Role::findOrCreate('admin')->givePermissionTo($permission);
+        $admin->assignRole($role);
 
         $response = $this
-            ->actingAs($user)
+            ->actingAs($admin)
             ->patch('/profile', [
                 'name' => 'Test User',
-                'email' => $user->email,
+                'email' => $admin->email,
             ]);
 
         $response
             ->assertSessionHasNoErrors()
             ->assertRedirect('/profile');
 
-        $this->assertNotNull($user->refresh()->email_verified_at);
+        $this->assertNotNull($admin->refresh()->email_verified_at);
     }
 
     public function test_user_can_delete_their_account(): void
     {
-        $user = User::factory()->create();
+        $admin = User::factory()->create();
+        $permission = Permission::findOrCreate('index.user');
+        $role = Role::findOrCreate('admin')->givePermissionTo($permission);
+        $admin->assignRole($role);
 
         $response = $this
-            ->actingAs($user)
+            ->actingAs($admin)
             ->delete('/profile', [
                 'password' => 'password',
             ]);
@@ -76,15 +90,18 @@ class ProfileTest extends TestCase
             ->assertRedirect('/');
 
         $this->assertGuest();
-        $this->assertNull($user->fresh());
+        $this->assertNull($admin->fresh());
     }
 
     public function test_correct_password_must_be_provided_to_delete_account(): void
     {
-        $user = User::factory()->create();
+        $admin = User::factory()->create();
+        $permission = Permission::findOrCreate('index.user');
+        $role = Role::findOrCreate('admin')->givePermissionTo($permission);
+        $admin->assignRole($role);
 
         $response = $this
-            ->actingAs($user)
+            ->actingAs($admin)
             ->from('/profile')
             ->delete('/profile', [
                 'password' => 'wrong-password',
@@ -94,6 +111,6 @@ class ProfileTest extends TestCase
             ->assertSessionHasErrorsIn('userDeletion', 'password')
             ->assertRedirect('/profile');
 
-        $this->assertNotNull($user->fresh());
+        $this->assertNotNull($admin->fresh());
     }
 }

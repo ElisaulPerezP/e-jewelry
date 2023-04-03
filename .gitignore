@@ -20,3 +20,4 @@ yarn-error.log
 phpunit.coverage.xml
 phpunit.report.xml
 .php-cs-fixer.cache
+.env.testing

@@ -120,9 +120,11 @@
                         </div>
                     </section>
                     <section>
-                        <a href="/users" >
-                            <x-primary-button class="m-2">
-                                {{trans('buttons.back')}}
+                        <a
+                            href="{{ url()->previous() }}"  class="absolute mt-4 mr-10">
+                            <br>
+                            <x-primary-button>
+                                {{ trans('buttons.back') }}
                             </x-primary-button>
                         </a>
                     </section>

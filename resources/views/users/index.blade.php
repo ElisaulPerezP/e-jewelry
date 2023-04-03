@@ -95,7 +95,7 @@
                 {{ $users->links() }}
             </div>
             <a
-                href="{{ route('welcome') }}"  class="absolute mb-4 mr-10">
+                href="{{ url()->previous() }}"  class="absolute mb-4 mr-10">
                 <x-primary-button>
                     {{ trans('buttons.back') }}
                 </x-primary-button>

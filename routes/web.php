@@ -20,8 +20,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    Route::get('/users/{user}', [UserController::class, 'edit'])->name('users.edit');
-    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::middleware(['password.confirm'])->group(function () {
+        Route::get('/users/{user}', [UserController::class, 'edit'])->name('users.edit');
+        Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+    });
     Route::put('/users/changeStatus/{user}', [UserController::class, 'changeStatus'])->name('users.changeStatus');
     Route::get('/users/show/{user}', [UserController::class, 'show'])->name('users.show');
 });

@@ -1,10 +1,10 @@
 <?php
 
-return[
+return [
     'show' => 'Detallar',
     'update' => 'Actualizar',
-    'habilitation' => 'Habilitar',
-    'createDate' => 'Fecha de creacion',
-    'updateDate' => 'Fecha de actualizacion',
-    'verificationMailDate' => 'Fecha de verificacion del correo',
+    'enabling' => 'Habilitar',
+    'createDate' => 'Fecha de creación',
+    'updateDate' => 'Fecha de actualización',
+    'verificationMailDate' => 'Fecha de verificación del correo',
 ];

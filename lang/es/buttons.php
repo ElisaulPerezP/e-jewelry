@@ -1,16 +1,17 @@
 <?php
 
-return[
+return [
     'show' => 'Ver',
     'update' => 'Actualizar',
     'enable' => 'Habilitar',
-    'disable' => 'Desabilitar',
+    'disable' => 'Deshabilitar',
     'search' => 'Buscar',
     'save' => 'Guardar',
-    'back' => 'Atras',
+    'back' => 'Atrás',
     'cancel' => 'Cancelar',
-    'status' => 'Estado de habilitacion',
+    'status' => 'Estado de habilitación',
     'enableStatus' => 'Habilitado',
     'disableStatus' => 'Inhabilitado',
+    'deleteAccount' => 'Borrar cuenta',
 
 ];

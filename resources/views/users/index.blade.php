@@ -70,15 +70,16 @@
                                                 </td>
                                                 <td class="px-4 py-3 border">
                                                     <div class="flex items-center text-sm">
-                                                        <form action="{{ route('users.changeStatus', $user) }}"
-                                                              method="POST">
-                                                            @csrf
-                                                            {{ method_field('PUT') }}
-                                                            <x-primary-button>
-                                                                {{ $user->status ? trans('buttons.disable'): trans('buttons.enable')}}
-                                                            </x-primary-button>
-                                                        </form>
-
+                                                        @if($user->email != 'admin@jewelry.com')
+                                                            <form action="{{ route('users.changeStatus', $user) }}"
+                                                                  method="POST">
+                                                                @csrf
+                                                                {{ method_field('PUT') }}
+                                                                <x-primary-button>
+                                                                    {{ $user->status ? trans('buttons.disable'): trans('buttons.enable')}}
+                                                                </x-primary-button>
+                                                            </form>
+                                                        @endif
                                                     </div>
                                                 </td>
                                             </tr>
@@ -95,7 +96,7 @@
                 {{ $users->links() }}
             </div>
             <a
-                href="{{ url()->previous() }}"  class="absolute mb-4 mr-10">
+                href="{{ url()->previous() }}" class="absolute mb-4 mr-10">
                 <x-primary-button>
                     {{ trans('buttons.back') }}
                 </x-primary-button>
@@ -103,7 +104,6 @@
         </div>
     </div>
 </x-app-layout>
-
 
 
 <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
@@ -120,7 +120,7 @@
         </p>
 
         <div class="mt-6">
-            <x-input-label for="password" value="{{ __('Password') }}" class="sr-only" />
+            <x-input-label for="password" value="{{ __('Password') }}" class="sr-only"/>
 
             <x-text-input
                 id="password"
@@ -130,7 +130,7 @@
                 placeholder="{{ __('Password') }}"
             />
 
-            <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
+            <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2"/>
         </div>
 
         <div class="mt-6 flex justify-end">

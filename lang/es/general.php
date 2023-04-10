@@ -22,4 +22,5 @@ return [
     'warningDataLost' => 'Una vez que se elimine tu cuenta, todos sus recursos y datos se eliminarán permanentemente. Antes de eliminar tu cuenta, descarga cualquier dato o información que desees conservar.',
     'areYouSure' => '¿Está seguro de querer eliminar la cuenta?',
     'onceDeleted' => 'Una vez que se elimine tu cuenta, todos sus recursos y datos se eliminarán permanentemente. Por favor, ingresa tu contraseña para confirmar que deseas eliminar tu cuenta de forma permanente.',
+    'register' => 'Registrarse',
 ];

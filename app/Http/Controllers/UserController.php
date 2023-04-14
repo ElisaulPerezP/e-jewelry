@@ -28,8 +28,8 @@ class UserController extends Controller
 
     public function update(UserRequest $request, User $user): RedirectResponse
     {
-        $user->name = $request->validated('name');
-        $user->email = $request->validated('email');
+        $user->name = $request->name;
+        $user->email = $request->email;
         $user->save();
 
         return redirect(route('users.index'));

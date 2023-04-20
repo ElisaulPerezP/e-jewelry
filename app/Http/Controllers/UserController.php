@@ -5,14 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 
 class UserController extends Controller
 {
     public function index(): View
     {
-        $users = User::select('id', 'name', 'email', 'status')->paginate(10);
-
+        $users = Cache::rememberForever('users', function () {
+            return User::select('id', 'name', 'email', 'status')->paginate(10);
+        });
         return view('users.index', compact('users'));
     }
 
@@ -32,12 +34,16 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->save();
 
+        Cache::forget('users');
+
         return redirect(route('users.index'));
     }
     public function changeStatus(User $user): RedirectResponse
     {
         $user->status = !$user->status;
         $user->save();
+
+        Cache::forget('users');
 
         return redirect(route('users.index'));
     }

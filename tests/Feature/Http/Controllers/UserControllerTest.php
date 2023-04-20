@@ -4,6 +4,7 @@ namespace Tests\Feature\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -50,6 +51,10 @@ class UserControllerTest extends TestCase
 
     public function testItCanUpdateUser(): void
     {
+        Cache::rememberForever('users', function () {
+            return 'users';
+        });
+
         $user = User::factory()->create();
 
         $admin = User::factory()->create();
@@ -61,6 +66,8 @@ class UserControllerTest extends TestCase
             'name' => 'testingName',
             'email' => 'testing@test.com',
         ]);
+
+        $this->assertFalse(Cache::has('users'));
 
         $userUpdated = User::findOrFail($user->id);
 
@@ -74,6 +81,10 @@ class UserControllerTest extends TestCase
 
     public function testItCanChangeUserStatus(): void
     {
+        Cache::rememberForever('users', function () {
+            return 'users';
+        });
+
         $user = User::factory()->create();
 
         $admin = User::factory()->create();
@@ -82,6 +93,8 @@ class UserControllerTest extends TestCase
         $admin->assignRole($role);
 
         $response = $this->actingAs($admin)->put(route('users.changeStatus', $user));
+
+        $this->assertFalse(Cache::has('users'));
 
         $userChanged = User::findOrFail($user->id);
 
@@ -125,5 +138,20 @@ class UserControllerTest extends TestCase
 
         $this->assertGuest();
         $response->assertRedirect(route('login'));
+    }
+
+    public function testItCanFirstTimeWriteCache()
+    {
+        User::factory(1000)->create();
+
+        $admin = User::factory()->create();
+        $permission = Permission::findOrCreate('index.user');
+        $role = Role::findOrCreate('admin')->givePermissionTo($permission);
+        $admin->assignRole($role);
+
+        $this->assertFalse(Cache::has('users'));
+        $this->actingAs($admin)->get(route('users.index'));
+        $this->assertTrue(Cache::has('users'));
+        $this->assertEquals(Cache::get('users'), User::select('id', 'name', 'email', 'status')->paginate(10));
     }
 }

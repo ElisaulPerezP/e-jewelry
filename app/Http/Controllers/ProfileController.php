@@ -6,6 +6,7 @@ use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
@@ -34,6 +35,8 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
+        Cache::forget('users');
+
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
@@ -51,6 +54,8 @@ class ProfileController extends Controller
         Auth::logout();
 
         $user->delete();
+
+        Cache::forget('users');
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

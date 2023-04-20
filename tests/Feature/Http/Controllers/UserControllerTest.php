@@ -24,6 +24,8 @@ class UserControllerTest extends TestCase
         $response = $this->actingAs($admin)->get(route('users.index'));
 
         $this->assertAuthenticated();
+        $this->assertTrue(Cache::has('users'));
+        $this->assertEquals(Cache::get('users'), User::select('id', 'name', 'email', 'status')->paginate(10));
         $response->assertOk();
         $response->assertViewIs('users.index');
         $response->assertViewHas('users');
@@ -43,7 +45,6 @@ class UserControllerTest extends TestCase
 
         $this->assertDatabaseCount('users', 2);
         $this->assertAuthenticated();
-
         $response->assertOk();
         $response->assertViewIs('users.edit');
         $response->assertViewHas('user');
@@ -56,7 +57,6 @@ class UserControllerTest extends TestCase
         });
 
         $user = User::factory()->create();
-
         $admin = User::factory()->create();
         $permission = Permission::findOrCreate('update.user');
         $role = Role::findOrCreate('admin')->givePermissionTo($permission);
@@ -67,14 +67,12 @@ class UserControllerTest extends TestCase
             'email' => 'testing@test.com',
         ]);
 
-        $this->assertFalse(Cache::has('users'));
-
         $userUpdated = User::findOrFail($user->id);
 
-        $this->assertDatabaseCount('users', 2);
-        $this->assertAuthenticated();
-
         $response->assertRedirect();
+        $this->assertAuthenticated();
+        $this->assertDatabaseCount('users', 2);
+        $this->assertFalse(Cache::has('users'));
         $this->assertEquals('testingName', $userUpdated->name);
         $this->assertEquals('testing@test.com', $userUpdated->email);
     }
@@ -86,7 +84,6 @@ class UserControllerTest extends TestCase
         });
 
         $user = User::factory()->create();
-
         $admin = User::factory()->create();
         $permission = Permission::findOrCreate('changeStatus.user');
         $role = Role::findOrCreate('admin')->givePermissionTo($permission);
@@ -94,11 +91,10 @@ class UserControllerTest extends TestCase
 
         $response = $this->actingAs($admin)->put(route('users.changeStatus', $user));
 
-        $this->assertFalse(Cache::has('users'));
-
         $userChanged = User::findOrFail($user->id);
 
         $response->assertRedirect();
+        $this->assertFalse(Cache::has('users'));
         $this->assertDatabaseCount('users', 2);
         $this->assertAuthenticated();
         $this->assertEquals(0, $userChanged->status);
@@ -122,7 +118,6 @@ class UserControllerTest extends TestCase
 
         $this->assertDatabaseCount('users', 2);
         $this->assertAuthenticated();
-
         $response->assertOk();
         $response->assertViewIs('users.show');
         $response->assertViewHas('user');
@@ -138,20 +133,5 @@ class UserControllerTest extends TestCase
 
         $this->assertGuest();
         $response->assertRedirect(route('login'));
-    }
-
-    public function testItCanFirstTimeWriteCache()
-    {
-        User::factory(1000)->create();
-
-        $admin = User::factory()->create();
-        $permission = Permission::findOrCreate('index.user');
-        $role = Role::findOrCreate('admin')->givePermissionTo($permission);
-        $admin->assignRole($role);
-
-        $this->assertFalse(Cache::has('users'));
-        $this->actingAs($admin)->get(route('users.index'));
-        $this->assertTrue(Cache::has('users'));
-        $this->assertEquals(Cache::get('users'), User::select('id', 'name', 'email', 'status')->paginate(10));
     }
 }

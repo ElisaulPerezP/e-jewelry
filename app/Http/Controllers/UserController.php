@@ -15,6 +15,7 @@ class UserController extends Controller
         $users = Cache::rememberForever('users', function () {
             return User::select('id', 'name', 'email', 'status')->paginate(10);
         });
+
         return view('users.index', compact('users'));
     }
 

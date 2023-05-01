@@ -134,4 +134,25 @@ class UserControllerTest extends TestCase
         $this->assertGuest();
         $response->assertRedirect(route('login'));
     }
+
+    public function testItCanLogAllVisits(): void
+    {
+        $guest = User::factory()->create();
+
+        $admin = User::factory()->create();
+        $permission = Permission::findOrCreate('index.user');
+        $role = Role::findOrCreate('admin')->givePermissionTo($permission);
+        $admin->assignRole($role);
+
+        $file = storage_path('logs/visits.log');
+        $lineCountInitial = count(file($file));
+        $this->actingAs($admin)->get(route('users.index'));
+        $lineCountFinal = count(file($file));
+        $this->assertEquals($lineCountInitial + 1, $lineCountFinal);
+
+        $lineCountInitial = count(file($file));
+        $this->actingAs($guest)->get(route('welcome'));
+        $lineCountFinal = count(file($file));
+        $this->assertEquals($lineCountInitial + 1, $lineCountFinal);
+    }
 }

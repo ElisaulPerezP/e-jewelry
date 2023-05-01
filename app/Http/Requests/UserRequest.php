@@ -21,7 +21,7 @@ class UserRequest extends FormRequest
             ],
             'email' => [
                 'required',
-                'email',
+                'email:strict',
                 'string',
                 Rule::unique('users')->ignore($this->route('user')->getKey()),
             ],

@@ -1,8 +1,13 @@
-import './bootstrap';
-import {createApp} from 'vue'
+require('./bootstrap');
+//////////////////////////////
 import Alpine from 'alpinejs';
-import App from './App.vue'
 window.Alpine = Alpine;
-
 Alpine.start();
-createApp(App).mount("#app")
+//////////////////////////////
+import { createApp } from "vue";
+import ProductsIndex from './components/products/ProductsIndex';
+
+const app = createApp({});
+
+app.component('product-index', ProductsIndex);
+app.mount('#app');

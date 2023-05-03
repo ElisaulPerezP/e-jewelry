@@ -20,7 +20,9 @@ class CategoriesSeeder extends Seeder
         foreach ($subCategoriesBracelet as $subCategoryBracelet) {
             DB::table('subcategories')->insert([
                 'name' => $subCategoryBracelet,
-                'category_id' => DB::table('categories')->where('name', 'bracelet')->pluck('id')[0],
+                'category_id' => DB::table('categories')
+                    ->where('name', 'bracelet')
+                    ->pluck('id')[0],
 
             ]);
         }
@@ -29,7 +31,9 @@ class CategoriesSeeder extends Seeder
         foreach ($subCategoriesEarrings as $subCategoryEarrings) {
             DB::table('subcategories')->insert([
                 'name' => $subCategoryEarrings,
-                'category_id' => DB::table('categories')->where('name', 'earrings')->pluck('id')[0],
+                'category_id' => DB::table('categories')
+                    ->where('name', 'earrings')
+                    ->pluck('id')[0],
             ]);
         }
 
@@ -37,7 +41,9 @@ class CategoriesSeeder extends Seeder
         foreach ($subCategoriesNeck as $subCategoryNeck) {
             DB::table('subcategories')->insert([
                 'name' => $subCategoryNeck,
-                'category_id' => DB::table('categories')->where('name', 'neck')->pluck('id')[0],
+                'category_id' => DB::table('categories')
+                    ->where('name', 'neck')
+                    ->pluck('id')[0],
             ]);
         }
 
@@ -45,7 +51,9 @@ class CategoriesSeeder extends Seeder
         foreach ($subCategoriesRings as $subCategoryRings) {
             DB::table('subcategories')->insert([
                 'name' => $subCategoryRings,
-                'category_id' => DB::table('categories')->where('name', 'rings')->pluck('id')[0],
+                'category_id' => DB::table('categories')
+                    ->where('name', 'rings')
+                    ->pluck('id')[0],
             ]);
         }
     }

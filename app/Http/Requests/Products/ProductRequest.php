@@ -31,15 +31,9 @@ class ProductRequest extends FormRequest
                 'required',
                 'integer',
             ],
-            'category' => [
-                'required',
-                'integer',
-                'exists:categories,id',
-            ],
             'score' => [
                 'required',
                 'integer',
-                'exists:scores,id',
             ],
             'barCode' => [
                 'required',

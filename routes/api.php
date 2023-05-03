@@ -19,6 +19,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('/tokens/create', function () {
+    if (auth()->user()) {
+        $token = auth()->user()->createToken('apiToken');
+        return ['token' => $token->plainTextToken];
+    }
+    return ['token' => null];
+});
+
 Route::prefix('api')->group(function () {
     Route::get('/products', [ApiProductController::class, 'index'])->name('api.products.index');
     Route::get('/products/{product}', [ApiProductController::class, 'show'])->name('api.products.show');

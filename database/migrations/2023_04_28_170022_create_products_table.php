@@ -12,7 +12,7 @@ return new class() extends Migration {
             $table->string('name')->unique();
             $table->string('description');
             $table->string('price');
-            $table->string('productSubcategory');
+            $table->string('subcategory');
             $table->string('stock');
             $table->string('score')->default(5);
             $table->string('status')->default(true);

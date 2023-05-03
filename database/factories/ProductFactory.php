@@ -15,9 +15,9 @@ class ProductFactory extends Factory
     {
         return [
             'name' => fake()->unique()->name(),
-            'description' => fake()->paragraph(),
+            'description' => fake()->paragraph(3),
             'price' => fake()->randomNumber(6),
-            'productSubcategory' => fake()->numberBetween(1, 30),
+            'subcategory' => fake()->numberBetween(1, 30),
             'stock' => fake()->randomNumber(2),
             'score' => fake()->randomNumber(1),
             'status' => fake()->boolean,

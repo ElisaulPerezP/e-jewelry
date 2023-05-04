@@ -57,7 +57,6 @@ class ApiProductControllerTest extends TestCase
             'barCode' => '1234',
         ]);
 
-
         $productUpdated = Product::findOrFail($product->id);
 
         $response->assertOk();

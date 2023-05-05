@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\Users\UserRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Cache;

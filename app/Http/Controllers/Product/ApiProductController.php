@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Products\ProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Cache;
 
@@ -28,6 +29,43 @@ class ApiProductController extends Controller
         $product->score = $request->score;
         $product->barCode = $request->barCode;
 
+        $product->save();
+
+        Cache::forget('products');
+
+        return new ProductResource($product);
+    }
+    public function show(Product $product): ProductResource
+    {
+        return new ProductResource($product);
+    }
+
+    public function store(ProductRequest $request): ProductResource
+    {
+        $product = new Product();
+        $product->name = $request->name;
+        $product->description = $request->description;
+        $product->price = $request->price;
+        $product->stock = $request->stock;
+        $product->score = $request->score;
+        $product->barCode = $request->barCode;
+
+        $product->save();
+
+        Cache::forget('products');
+
+        return new ProductResource($product);
+    }
+    public function destroy(Product $product): JsonResponse
+    {
+        $product->delete();
+        Cache::forget('products');
+
+        return new JsonResponse(['message'=>'deleted'], 204);
+    }
+    public function changeStatus(Product $product): ProductResource
+    {
+        $product->status = !$product->status;
         $product->save();
 
         Cache::forget('products');

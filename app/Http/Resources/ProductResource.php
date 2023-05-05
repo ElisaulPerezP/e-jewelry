@@ -19,6 +19,7 @@ class ProductResource extends JsonResource
             'score' => $this->score,
             'status' => $this->status,
             'barCode' => $this->barCode,
+            'image' => $this->image,
         ];
     }
 }

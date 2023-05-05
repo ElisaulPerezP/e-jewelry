@@ -40,10 +40,10 @@ class ProductRequest extends FormRequest
                 'integer',
                 Rule::unique('products'),
             ],
-            'product_image' => [
+            'image' => [
                 'file',
                 'mimes:jpeg,bmp,png',
-                'size:4000',
+                'max:4000',
             ],
 
         ];

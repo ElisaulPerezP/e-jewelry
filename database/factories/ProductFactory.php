@@ -21,6 +21,7 @@ class ProductFactory extends Factory
             'score' => fake()->randomNumber(1),
             'status' => fake()->boolean,
             'barCode' => fake()->randomNumber(6),
+            'image' => 'products/muestra.png',
         ];
     }
 }

@@ -5,7 +5,9 @@ namespace Tests\Feature;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -37,6 +39,7 @@ class ApiProductControllerTest extends TestCase
                     'score',
                     'status',
                     'barCode',
+                    'image',
                 ],
             ],
         ]);
@@ -46,6 +49,9 @@ class ApiProductControllerTest extends TestCase
 
     public function testItCanUpdateProduct(): void
     {
+        Storage::fake('public');
+        $file = UploadedFile::fake()->image('test-image.jpg')->size(3500);
+
         $product = Product::factory()->create();
         $admin = User::factory()->create();
         $permission = Permission::findOrCreate('api.update.product');
@@ -59,6 +65,7 @@ class ApiProductControllerTest extends TestCase
             'stock' => '1000',
             'score' => '9',
             'barCode' => '1234',
+            'image' => $file,
         ]);
 
         $productUpdated = Product::findOrFail($product->id);
@@ -73,6 +80,7 @@ class ApiProductControllerTest extends TestCase
         $this->assertEquals('1000', $productUpdated->stock);
         $this->assertEquals('9', $productUpdated->score);
         $this->assertEquals('1234', $productUpdated->barCode);
+        Storage::disk('public')->assertExists($productUpdated->image);
     }
 
     public function testItCanRetrieveAProduct(): void
@@ -104,6 +112,9 @@ class ApiProductControllerTest extends TestCase
 
     public function testItCanCreateProduct(): void
     {
+        Storage::fake('public');
+        $file = UploadedFile::fake()->image('test-image.jpg')->size(3500);
+
         $admin = User::factory()->create();
         $permission = Permission::findOrCreate('api.store.product');
         $role = Role::findOrCreate('admin')->givePermissionTo($permission);
@@ -116,6 +127,7 @@ class ApiProductControllerTest extends TestCase
             'stock' => '1000',
             'score' => '9',
             'barCode' => '1234',
+            'image' => $file,
         ]);
 
         $productCreated = Product::findOrFail($response->json()['data']['id']);
@@ -130,6 +142,7 @@ class ApiProductControllerTest extends TestCase
         $this->assertEquals('1000', $productCreated->stock);
         $this->assertEquals('9', $productCreated->score);
         $this->assertEquals('1234', $productCreated->barCode);
+        Storage::disk('public')->assertExists($productCreated->image);
     }
 
     public function testItCanDeleteProduct(): void

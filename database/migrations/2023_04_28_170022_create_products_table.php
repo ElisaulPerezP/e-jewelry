@@ -16,6 +16,7 @@ return new class() extends Migration {
             $table->unsignedInteger('score')->nullable();
             $table->boolean('status')->default(true);
             $table->string('barCode')->unique();
+            $table->string('image');
             $table->timestamps();
         });
     }

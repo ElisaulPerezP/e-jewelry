@@ -18,5 +18,6 @@ class Product extends Model
         'score',
         'status',
         'barCode',
+        'image',
     ];
 }

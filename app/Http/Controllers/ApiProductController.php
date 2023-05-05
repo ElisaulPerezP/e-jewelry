@@ -14,7 +14,7 @@ class ApiProductController extends Controller
     public function index(): AnonymousResourceCollection
     {
         $products = Cache::rememberForever('products', function () {
-            return Product::select('id', 'name', 'description', 'price', 'stock', 'score', 'status', 'barCode')->get();
+            return Product::select('id', 'name', 'description', 'price', 'stock', 'score', 'status', 'barCode', 'image')->get();
         });
         return ProductResource::collection($products);
     }
@@ -27,6 +27,15 @@ class ApiProductController extends Controller
         $product->stock = $request->stock;
         $product->score = $request->score;
         $product->barCode = $request->barCode;
+
+        if ($request->hasFile('image')) {
+            $name = uuid_create() . '.' . $request->file('image')->extension();
+            $product->image = $request->file('image')->storeAs(
+                'products',
+                $name,
+                'public'
+            );
+        }
 
         $product->save();
 
@@ -48,6 +57,15 @@ class ApiProductController extends Controller
         $product->stock = $request->stock;
         $product->score = $request->score;
         $product->barCode = $request->barCode;
+
+        if ($request->hasFile('image')) {
+            $name = uuid_create() . '.' . $request->file('image')->extension();
+            $product->image = $request->file('image')->storeAs(
+                'products',
+                $name,
+                'public'
+            );
+        }
 
         $product->save();
 

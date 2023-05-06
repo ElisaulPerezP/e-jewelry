@@ -9,5 +9,5 @@ import ProductsIndex from "./components/products/ProductsIndex.vue";
 
 const app = createApp({});
 
-app.component('product-index', ProductsIndex);
+app.component('products-index', ProductsIndex);
 app.mount('#app');

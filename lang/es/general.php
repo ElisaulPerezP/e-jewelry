@@ -3,6 +3,7 @@
 return [
     'dashboard' => 'Vitrina',
     'seeUsers' => 'Usuarios',
+    'seeProducts' => 'Productos',
     'profile' => 'Perfíl',
     'logOut' => 'Cerrar Sesión',
     'logIn' => 'Iniciar Sesión',

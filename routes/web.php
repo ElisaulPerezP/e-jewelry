@@ -26,6 +26,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::put('/users/changeStatus/{user}', [UserController::class, 'changeStatus'])->name('users.changeStatus');
     Route::get('/users/show/{user}', [UserController::class, 'show'])->name('users.show');
     Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/products/show/{productId}', [ProductController::class, 'show'])->name('products.show');
+    Route::get('/products/edit/{productId}', [ProductController::class, 'edit'])->name('products.edit');
 });
 
 require __DIR__ . '/auth.php';

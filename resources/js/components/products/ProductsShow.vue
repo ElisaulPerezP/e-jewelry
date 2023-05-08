@@ -11,25 +11,12 @@
                             <div class="w-full overflow-x-auto">
                                 <table class="w-full text-center border-separate">
                                     <thead>
-                                    <th class="px-4 py-3 border">
-                                        <div class="flex items-center text-sm">
-                                            <tr>
-                                                <td
-                                                    class="text-md font-semibold tracking-wide text-left text-blue-600 uppercase  border-gray-600">
-
-                                                <tr class="px-4 py-3 ">Detalles de producto: </tr><tr class="text-md text-lg">{{product.name}}</tr>
-
-                                                </td>
-                                                <img :src="'../../storage/' + product.image" alt="name" style="width: 25%; max-width: 50%; height: auto;">
-
-                                            </tr>
-
-                                        </div>
-
-                                    </th>
+                                    <tr><th class="px-4 py-3">Detalles de producto: </th></tr>
+                                    <tr><th class="text-md text-lg">{{product.name}}</th></tr>
+                                    <tr><th><img :src="'../../storage/' + product.image" alt="name" class="max-w-xl"></th></tr>
                                     </thead>
                                     <tbody class="bg-white">
-                                    <div class="container">
+
                                         <tr class="text-black-700">
                                             <td class="px-4 py-3 border text-justify">
                                                 <div class="flex items-center text-sm">
@@ -119,14 +106,12 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    </div>
-
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </section>
-                    <button @click="handleClick" class = "inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">Atras</button>
+                    <button @click="back" class = "inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">Atras</button>
                 </div>
             </div>
             <div class="m-4">
@@ -136,7 +121,7 @@
 </template>
 
 <script setup>
-import {defineProps, ref, onMounted, reactive} from 'vue'
+import {defineProps, ref, onMounted} from 'vue'
 import axios from 'axios'
 
 
@@ -155,5 +140,9 @@ onMounted(() => {
             console.log(error);
         });
 })
+
+const back = () => {
+    window.location.href = "/products";
+}
 
 </script>

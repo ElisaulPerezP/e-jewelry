@@ -21,7 +21,9 @@ jobs:
           npm install
           npm run build
       - name: Generate key
-        run: php artisan key:generate
+        run: |
+          php artisan key:generate
+          php artisan passport:keys
       - name: Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
       - name: Create Database

@@ -4,6 +4,7 @@ namespace Tests\Feature\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -23,6 +24,8 @@ class UserControllerTest extends TestCase
         $response = $this->actingAs($admin)->get(route('users.index'));
 
         $this->assertAuthenticated();
+        $this->assertTrue(Cache::has('users'));
+        $this->assertEquals(Cache::get('users'), User::select('id', 'name', 'email', 'status')->paginate(10));
         $response->assertOk();
         $response->assertViewIs('users.index');
         $response->assertViewHas('users');
@@ -42,7 +45,6 @@ class UserControllerTest extends TestCase
 
         $this->assertDatabaseCount('users', 2);
         $this->assertAuthenticated();
-
         $response->assertOk();
         $response->assertViewIs('users.edit');
         $response->assertViewHas('user');
@@ -50,8 +52,11 @@ class UserControllerTest extends TestCase
 
     public function testItCanUpdateUser(): void
     {
-        $user = User::factory()->create();
+        Cache::rememberForever('users', function () {
+            return 'users';
+        });
 
+        $user = User::factory()->create();
         $admin = User::factory()->create();
         $permission = Permission::findOrCreate('update.user');
         $role = Role::findOrCreate('admin')->givePermissionTo($permission);
@@ -64,18 +69,21 @@ class UserControllerTest extends TestCase
 
         $userUpdated = User::findOrFail($user->id);
 
-        $this->assertDatabaseCount('users', 2);
-        $this->assertAuthenticated();
-
         $response->assertRedirect();
+        $this->assertAuthenticated();
+        $this->assertDatabaseCount('users', 2);
+        $this->assertFalse(Cache::has('users'));
         $this->assertEquals('testingName', $userUpdated->name);
         $this->assertEquals('testing@test.com', $userUpdated->email);
     }
 
     public function testItCanChangeUserStatus(): void
     {
-        $user = User::factory()->create();
+        Cache::rememberForever('users', function () {
+            return 'users';
+        });
 
+        $user = User::factory()->create();
         $admin = User::factory()->create();
         $permission = Permission::findOrCreate('changeStatus.user');
         $role = Role::findOrCreate('admin')->givePermissionTo($permission);
@@ -86,6 +94,7 @@ class UserControllerTest extends TestCase
         $userChanged = User::findOrFail($user->id);
 
         $response->assertRedirect();
+        $this->assertFalse(Cache::has('users'));
         $this->assertDatabaseCount('users', 2);
         $this->assertAuthenticated();
         $this->assertEquals(0, $userChanged->status);
@@ -109,7 +118,6 @@ class UserControllerTest extends TestCase
 
         $this->assertDatabaseCount('users', 2);
         $this->assertAuthenticated();
-
         $response->assertOk();
         $response->assertViewIs('users.show');
         $response->assertViewHas('user');
@@ -125,5 +133,26 @@ class UserControllerTest extends TestCase
 
         $this->assertGuest();
         $response->assertRedirect(route('login'));
+    }
+
+    public function testItCanLogAllVisits(): void
+    {
+        $guest = User::factory()->create();
+
+        $admin = User::factory()->create();
+        $permission = Permission::findOrCreate('index.user');
+        $role = Role::findOrCreate('admin')->givePermissionTo($permission);
+        $admin->assignRole($role);
+
+        $file = storage_path('logs/visits.log');
+        $lineCountInitial = count(file($file));
+        $this->actingAs($admin)->get(route('users.index'));
+        $lineCountFinal = count(file($file));
+        $this->assertEquals($lineCountInitial + 1, $lineCountFinal);
+
+        $lineCountInitial = count(file($file));
+        $this->actingAs($guest)->get(route('welcome'));
+        $lineCountFinal = count(file($file));
+        $this->assertEquals($lineCountInitial + 1, $lineCountFinal);
     }
 }

@@ -17,6 +17,12 @@ class PermissionSeeder extends Seeder
         'edit.profile',
         'update.profile',
         'destroy.profile',
+        'api.index.product',
+        'api.update.product',
+        'api.show.product',
+        'api.store.product',
+        'api.destroy.product',
+        'api.changeStatus.product',
     ];
 
     protected const ROLES = [

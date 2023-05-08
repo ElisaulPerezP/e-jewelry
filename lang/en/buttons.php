@@ -1,6 +1,6 @@
 <?php
 
-return[
+return [
     'show' => 'Show',
     'update' => 'Update',
     'enable' => 'Enable',
@@ -12,4 +12,6 @@ return[
     'status' => 'Status',
     'enableStatus' => 'Enable',
     'disableStatus' => 'Disable',
+    'deleteAccount' => 'Delete account',
+
 ];

@@ -4,6 +4,7 @@ namespace Tests\Feature\Auth;
 
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
 
 class RegistrationTest extends TestCase
@@ -19,6 +20,10 @@ class RegistrationTest extends TestCase
 
     public function test_new_users_can_register(): void
     {
+        Cache::rememberForever('users', function () {
+            return 'users';
+        });
+
         $response = $this->post('/register', [
             'name' => 'Test User',
             'email' => 'test@example.com',
@@ -27,6 +32,7 @@ class RegistrationTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
+        $this->assertFalse(Cache::has('users'));
         $response->assertRedirect(RouteServiceProvider::HOME);
     }
 }

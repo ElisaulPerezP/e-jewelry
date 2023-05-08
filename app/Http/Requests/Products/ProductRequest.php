@@ -31,7 +31,6 @@ class ProductRequest extends FormRequest
                 'integer',
             ],
             'score' => [
-                'required',
                 'integer',
             ],
             'barCode' => [

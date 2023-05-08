@@ -72,14 +72,7 @@ class ApiProductController extends Controller
         if ($request->filled('barCode')) {
             $product->barCode = $request->barCode;
         }
-        if ($request->hasFile('image')) {
-            $name = uuid_create() . '.' . $request->file('image')->extension();
-            $product->image = $request->file('image')->storeAs(
-                'products',
-                $name,
-                'public'
-            );
-        }
+        $product->image = 'products/muestra.png';
 
         $product->save();
 

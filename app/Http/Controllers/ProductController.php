@@ -18,4 +18,8 @@ class ProductController extends Controller
     {
         return view('products.edit', compact('productId'));
     }
+    public function create(): View
+    {
+        return view('products.create');
+    }
 }

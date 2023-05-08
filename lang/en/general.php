@@ -3,6 +3,7 @@
 return [
     'dashboard' => 'Dashboard',
     'seeUsers' => 'See Users',
+    'seeProducts' => 'See Products',
     'profile' => 'Profile',
     'logOut' => 'Log Out',
     'logIn' => 'Log In',

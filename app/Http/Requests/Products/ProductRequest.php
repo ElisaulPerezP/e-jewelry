@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Products;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class ProductRequest extends FormRequest
 {
@@ -32,13 +31,11 @@ class ProductRequest extends FormRequest
                 'integer',
             ],
             'score' => [
-                'required',
                 'integer',
             ],
             'barCode' => [
                 'required',
                 'integer',
-                Rule::unique('products'),
             ],
             'image' => [
                 'file',

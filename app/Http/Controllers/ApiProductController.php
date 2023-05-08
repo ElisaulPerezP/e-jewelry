@@ -51,21 +51,28 @@ class ApiProductController extends Controller
     public function store(ProductRequest $request): ProductResource
     {
         $product = new Product();
-        $product->name = $request->name;
-        $product->description = $request->description;
-        $product->price = $request->price;
-        $product->stock = $request->stock;
-        $product->score = $request->score;
-        $product->barCode = $request->barCode;
-
-        if ($request->hasFile('image')) {
-            $name = uuid_create() . '.' . $request->file('image')->extension();
-            $product->image = $request->file('image')->storeAs(
-                'products',
-                $name,
-                'public'
-            );
+        if ($request->filled('name')) {
+            $product->name = $request->name;
         }
+        if ($request->filled('description')) {
+            $product->description = $request->description;
+        }
+        if ($request->filled('price')) {
+            $product->price = $request->price;
+        }
+
+        if ($request->filled('stock')) {
+            $product->stock = $request->stock;
+        }
+
+        if ($request->filled('score')) {
+            $product->score = $request->score;
+        }
+
+        if ($request->filled('barCode')) {
+            $product->barCode = $request->barCode;
+        }
+        $product->image = 'products/muestra.png';
 
         $product->save();
 

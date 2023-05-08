@@ -7,4 +7,12 @@ return [
     'createDate' => 'Create date',
     'updateDate' => 'Update date',
     'verificationMailDate' => 'Verification mail date',
+    'description' => 'Description',
+    'price' => 'Price',
+    'subcategory' => 'Categories',
+    'stock' => 'Stock',
+    'score' => 'Score',
+    'status' => 'Status',
+    'barCode' => 'Bar Code',
+    'image' => 'Image',
 ];

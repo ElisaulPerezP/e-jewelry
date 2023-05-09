@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Storage;
 
 class ProductFactory extends Factory
 {
@@ -13,15 +14,19 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
+        $imageFiles = Storage::allFiles('public/products');
+        $imageCollection = collect($imageFiles);
+        $randomImageName = $imageCollection->random();
+        $randomImageName = basename($randomImageName);
         return [
-            'name' => fake()->unique()->name(),
-            'description' => fake()->paragraph(3),
+            'name' => fake()->unique()->word(),
+            'description' => fake()->sentence(5),
             'price' => fake()->randomNumber(6),
             'stock' => fake()->randomNumber(2),
             'score' => fake()->randomNumber(1),
             'status' => fake()->boolean,
             'barCode' => fake()->randomNumber(6),
-            'image' => 'products/muestra.png',
+            'image' => 'products/' . $randomImageName,
         ];
     }
 }

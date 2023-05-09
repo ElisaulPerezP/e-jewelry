@@ -142,7 +142,7 @@ class ApiProductControllerTest extends TestCase
         $this->assertEquals('1000', $productCreated->stock);
         $this->assertEquals('9', $productCreated->score);
         $this->assertEquals('1234', $productCreated->barCode);
-        //Storage::disk('public')->assertExists($productCreated->image);
+        Storage::disk('public')->assertExists($productCreated->image);
     }
 
     public function testItCanDeleteProduct(): void

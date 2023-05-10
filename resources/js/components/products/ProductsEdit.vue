@@ -12,7 +12,7 @@
                                 <table class="w-full text-center border-separate">
                                     <thead>
                                     <tr>
-                                        <th class="px-4 py-3 text-4xl align-middle ">Edicion de un producto</th>
+                                        <th class="px-4 py-3 text-4xl align-middle text-3xl">Edicion de un producto</th>
                                     </tr>
                                     <tr>
                                         <th class="max-w-md"><img :src="'../../storage/' + product.image" alt="name"
@@ -177,9 +177,11 @@ const handleClick = () => {
     axios.put('/api/products/' + props.product_id, product.value)
         .then(response => {
             product.value = response.data.data;
+            window.location.href = "/products"
         })
         .catch(error => {
             console.log(error)
+            window.alert(error.response.data.message)
         })
 }
 const back = () => {

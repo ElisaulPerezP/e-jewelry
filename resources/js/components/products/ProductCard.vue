@@ -15,13 +15,17 @@
                             >
                                 <div
                                     class="max-w-xl flex items-end justify-end h-56 w-full bg-cover"
+                                    v-if="product.status"
+
                                 >
                                     <img
                                         :src="'/storage/' + product.image"
                                         :alt="product.name"
                                     />
                                 </div>
-                                <div class="px-5 py-3">
+                                <div class="px-5 py-3"
+                                     v-if="product.status"
+                                >
                                     <h3 class="text-gray-700 uppercase">
                                         {{ product.name }}
                                     </h3>

@@ -14,7 +14,7 @@ return new class() extends Migration {
             $table->unsignedInteger('price');
             $table->unsignedInteger('stock')->default(0);
             $table->unsignedInteger('score')->nullable();
-            $table->boolean('status')->default(true);
+            $table->boolean('status')->nullable()->default(true);
             $table->string('barCode')->unique();
             $table->string('image');
             $table->timestamps();

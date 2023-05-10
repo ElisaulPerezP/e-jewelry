@@ -30,6 +30,8 @@ jobs:
         run: |
           mkdir -p database
           touch database/database.sqlite
+      - name: storage link
+        run: php artisan storage:link
       - name: Execute tests
         env:
           DB_CONNECTION: sqlite

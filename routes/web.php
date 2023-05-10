@@ -19,8 +19,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-
 Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/users/{user}', [UserController::class, 'edit'])->name('users.edit');
@@ -30,6 +28,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::get('/products/show/{productId}', [ProductController::class, 'show'])->name('products.show');
     Route::get('/products/edit/{productId}', [ProductController::class, 'edit'])->name('products.edit');
     Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 });
 
 require __DIR__ . '/auth.php';

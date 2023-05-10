@@ -23,7 +23,7 @@
                         </x-nav-link>
                     </div>
                 @endcan
-                @can('api.index.product')
+                @can('index.user')
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                         <x-nav-link :href="route('products.index')" :active="request()->routeIs('dashboard')">
                             {{ trans('general.seeProducts') }}

@@ -27,6 +27,7 @@ class PermissionSeeder extends Seeder
 
     protected const ROLES = [
         'admin',
+        'user'
     ];
     public function run(): void
     {
@@ -40,5 +41,7 @@ class PermissionSeeder extends Seeder
 
         $role = Role::findByName('admin');
         $role->syncPermissions(Permission::all());
+        $roleUser = Role::findByName('user');
+        $roleUser->syncPermissions('api.index.product');
     }
 }

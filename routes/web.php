@@ -21,7 +21,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 
-
 Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/users/{user}', [UserController::class, 'edit'])->name('users.edit');

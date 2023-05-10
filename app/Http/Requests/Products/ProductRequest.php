@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Products;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProductRequest extends FormRequest
 {
@@ -36,6 +37,9 @@ class ProductRequest extends FormRequest
             'barCode' => [
                 'required',
                 'integer',
+                $this->routeIs('api.products.store') ?
+                    Rule::unique('products', 'barCode') :
+                    Rule::unique('products', 'barCode')->ignore($this->route('product')->getKey()),
             ],
             'image' => [
                 'file',

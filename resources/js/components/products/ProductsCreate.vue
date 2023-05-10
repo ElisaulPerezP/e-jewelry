@@ -14,9 +14,22 @@
                                     <div class="container">
                                         <tr>
                                             <td class="px-4 py-3 border">
+                                                    <p class="font-semibold text-black text-md text-lg text-left">
+                                                        <img v-if="imageUrl" :src="imageUrl" alt="Uploaded image">
+                                                    </p>
+                                            </td>
+
+                                            <td class="px-4 py-3 border">
+                                                <div class="flex items-center text-sm">
+                                                    <input type="file" @change="handleFileUpload">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-3 border">
                                                 <div class="flex items-center text-sm">
                                                     <p class="font-semibold text-black text-md text-lg text-left">
-                                                        Nombre aqui:</p>
+                                                        Nombre:</p>
                                                 </div>
                                             </td>
 
@@ -152,14 +165,36 @@ import axios from 'axios'
 
 const product = ref({})
 
+const imageUrl = ref(null)
+
+
+function handleFileUpload(event) {
+    const file = event.target.files[0]
+    const reader = new FileReader()
+    reader.onload = () => {
+        imageUrl.value = reader.result
+    }
+    product.value.image=file
+    reader.readAsDataURL(file)
+}
 const handleClick = () => {
-    axios.post('/../api/products', product.value)
+    const formData = new FormData()
+    formData.append('name', product.value.name)
+    formData.append('description', product.value.description)
+    formData.append('price', product.value.price)
+    formData.append('stock', product.value.stock)
+    formData.append('status', product.value.status)
+    formData.append('barCode', product.value.barCode)
+    formData.append('image', product.value.image)
+
+    axios.post('/api/products', formData)
         .then(response => {
-            product.value = response.data;
+            product.value.value = response.data.data
+            window.location.href = "/products"
         })
         .catch(error => {
-            console.log(error);
-        });
+            console.log(error)
+        })
 }
 const back = () => {
     window.location.href = "/products";

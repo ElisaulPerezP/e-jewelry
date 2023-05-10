@@ -27,7 +27,7 @@ class PermissionSeeder extends Seeder
 
     protected const ROLES = [
         'admin',
-        'user'
+        'user',
     ];
     public function run(): void
     {

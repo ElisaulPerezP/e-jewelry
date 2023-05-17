@@ -18,6 +18,7 @@ class ProductFactory extends Factory
         $imageCollection = collect($imageFiles);
         $randomImageName = $imageCollection->random();
         $randomImageName = basename($randomImageName);
+
         return [
             'name' => fake()->unique()->word(),
             'description' => fake()->sentence(5),

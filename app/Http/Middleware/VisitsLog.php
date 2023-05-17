@@ -25,6 +25,7 @@ class VisitsLog
         );
 
         Log::channel('visits')->info($logMessage);
+
         return $next($request);
     }
 }

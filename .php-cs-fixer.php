@@ -12,7 +12,7 @@ $rules = [
     'blank_line_after_namespace' => true,
     'blank_line_after_opening_tag' => true,
     'blank_line_before_statement' => [
-        'statements' => ['declare'],
+        'statements' => ['return'],
     ],
     'braces' => true,
     'cast_spaces' => [

@@ -16,6 +16,7 @@ class ApiProductController extends Controller
         $products = Cache::rememberForever('products', function () {
             return Product::select('id', 'name', 'description', 'price', 'stock', 'score', 'status', 'barCode', 'image')->get();
         });
+
         return ProductResource::collection($products);
     }
 
@@ -70,6 +71,7 @@ class ApiProductController extends Controller
         }
         $product->save();
         Cache::forget('products');
+
         return new ProductResource($product);
     }
     public function destroy(Product $product): JsonResponse

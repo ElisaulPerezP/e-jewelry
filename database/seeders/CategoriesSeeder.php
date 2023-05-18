@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Product;
+use App\Models\subcategories;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -13,7 +15,7 @@ class CategoriesSeeder extends Seeder
         foreach ($categories as $category) {
             DB::table('categories')->insert([
                 'name' => $category,
-                ]);
+            ]);
         }
 
         $subCategoriesBracelet = require_once __DIR__ . '/data/subCategoryBracelet.php';
@@ -55,6 +57,16 @@ class CategoriesSeeder extends Seeder
                     ->where('name', 'rings')
                     ->pluck('id')[0],
             ]);
+        }
+        $products = Product::pluck('id');
+        $subcategories = subcategories::pluck('id');
+        foreach ($products as $product) {
+            foreach ($subcategories as $subcategory) {
+                DB::table('products_has_subcategories')->insert([
+                    'product_id' => $product,
+                    'subcategory_id' => $subcategory,
+                ]);
+            }
         }
     }
 }

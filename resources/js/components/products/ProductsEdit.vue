@@ -101,18 +101,15 @@
                                             </td>
                                             <td class="px-4 py-3 border">
                                                 <div class="flex items-center text-sm">
-                                                    <p class="font-semibold text-black text-left">{{ product.status }}
+                                                    <p class="font-semibold text-black text-left">{{ product.status ? "ACTIVO" : "INACTIVO" }}
                                                     </p>
                                                 </div>
                                             </td>
                                             <td class="px-4 py-3 border items-center">
-                                                <select v-model="product.status"
-                                                        class="font-arial mb-2 mt-2 border border-gray-400 rounded-lg p-2"
-                                                        style="font-size: 25px">
-                                                    <option disabled value="">Seleccione un elemento</option>
-                                                    <option>1</option>
-                                                    <option>0</option>
-                                                </select>
+                                                <button @click="changeStatus"
+                                                        class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                                                    {{ product.status ? "DESACTIVAR" : "ACTIVAR" }}
+                                                </button>
                                             </td>
                                         </tr>
                                     </div>
@@ -183,6 +180,10 @@ const handleClick = () => {
             console.log(error)
             window.alert(error.response.data.message)
         })
+}
+const changeStatus = () => {
+    product.value.status = !product.value.status;
+    axios.put('/api/products/changeStatus/' + product.value.id)
 }
 const back = () => {
     window.location.href = "/products";

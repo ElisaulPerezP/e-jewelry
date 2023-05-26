@@ -4,10 +4,19 @@
             <div class="p-6 bg-white border-b border-gray-200">
                 <section class="container mx-auto p-6 font-mono">
                     <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
-                        <button @click="newProduct"
-                                class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xl text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                            Nuevo producto
-                        </button>
+                        <div class="py-4 flex justify-between">
+                            <div>
+                                <button @click="newProduct"
+                                        class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xl text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                                    Nuevo producto
+                                </button>
+                            </div>
+                            <div>
+
+                            <paginator @data="handleDataPagination" :currentPage="currentPage"
+                                           :lastPage="receivedLastPage"></paginator>
+                            </div>
+                        </div>
                         <div class="w-full overflow-x-auto">
                             <table class="w-full text-xs border-separate">
                                 <thead class="text-sm">
@@ -109,11 +118,19 @@ import {ref, onMounted} from 'vue'
 import axios from 'axios'
 
 const products = ref([])
+const query = ref("")
+const receivedData = ref("")
+const currentPage = ref(1)
+const receivedCurrentPage = ref(1)
+const receivedFirstPage = ref(1)
+const receivedLastPage = ref(1)
 
 onMounted(() => {
-    axios.get('/api/products',{ params: { searching: "", active_products: 0,  current_page: 2 } })
+    axios.get('/api/products', {params: {searching: "", active_products: 0, current_page: currentPage.value}})
         .then(response => {
             products.value = response.data.data;
+            receivedCurrentPage.value = response.data.meta.current_page
+            receivedLastPage.value = response.data.meta.last_page
         })
         .catch(error => {
             console.log(error);
@@ -132,5 +149,28 @@ const changeStatus = async (product) => {
     product.status = !product.status
     await axios.put('api/products/changeStatus/' + product.id)
 }
+
+const handleDataPagination = (data) => {
+    receivedData.value = data;
+    if (receivedData.value === 'firts_page') {
+        currentPage.value=receivedFirstPage.value
+    } else if (receivedData.value === 'back_page' && currentPage.value !== 1 ) {
+        currentPage.value=currentPage.value - 1
+    } else if (receivedData.value === 'next_page'  && currentPage.value !== receivedLastPage.value) {
+        currentPage.value=currentPage.value + 1
+    } else if (receivedData.value === 'last_page') {
+        currentPage.value=receivedLastPage.value
+    } else {
+    }
+    axios.get('/api/products', {params: {searching: "", active_products: 0, current_page: currentPage.value}})
+        .then(response => {
+            products.value = response.data.data;
+            receivedCurrentPage.value = response.data.meta.current_page
+            receivedLastPage.value = response.data.meta.last_page
+        })
+        .catch(error => {
+            console.log(error);
+        });
+};
 
 </script>

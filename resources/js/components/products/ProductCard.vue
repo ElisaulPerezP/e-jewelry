@@ -51,7 +51,7 @@ const products = ref([])
 const query = ref("")
 
 onMounted(() => {
-    axios.get('/api/products', {params: {searching: "hola"}})
+    axios.get('/api/products', {params: {searching: "", active_products: 1, current_page: currentPage.value}})
         .then(response => {
             products.value = response.data.data;
         })

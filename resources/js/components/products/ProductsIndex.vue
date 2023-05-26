@@ -111,7 +111,7 @@ import axios from 'axios'
 const products = ref([])
 
 onMounted(() => {
-    axios.get('/api/products')
+    axios.get('/api/products',{ params: { searching: "", active_products: 0,  current_page: 2 } })
         .then(response => {
             products.value = response.data.data;
         })

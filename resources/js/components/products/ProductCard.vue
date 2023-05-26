@@ -1,13 +1,19 @@
 <template>
     <div class="max-w-7xl sm:px-6 lg:px-8">
-        <div class="py-4">
-            <input type="text" v-model="query" placeholder="Buscar..."
-                   class="bg-white  shadow-sm sm:rounded-lg">
+        <div class="py-4 flex justify-between">
+            <div>
+                <input type="text" v-model="query" placeholder="Buscar..."
+                       class="bg-white  shadow-sm sm:rounded-lg">
+            </div>
+            <div>
+                <paginator @data="handleDataPagination" :currentPage="currentPage" :lastPage="receivedLastPage"></paginator>
+            </div>
         </div>
         <div class="bg-white  shadow-sm sm:rounded-lg">
             <div class="p-6 bg-white border-b border-gray-200">
                 <div class="my-8">
                     <div class="container mx-auto px-6">
+                        <input type="text" v-model="query" placeholder="Buscar...">
                         <div
                             class="grid gap-6 grid-cols-3 mt-6"
                         >
@@ -46,11 +52,18 @@ import axios from 'axios'
 
 const products = ref([])
 const query = ref("")
+const receivedData = ref("")
+const currentPage = ref(1)
+const receivedCurrentPage = ref(1)
+const receivedFirstPage = ref(1)
+const receivedLastPage = ref(1)
 
 onMounted(() => {
-    axios.get('/api/products', {params: {searching: "hola"}})
+    axios.get('/api/products', {params: {searching: "", active_products: 1, current_page: currentPage.value}})
         .then(response => {
             products.value = response.data.data;
+            receivedCurrentPage.value = response.data.meta.current_page
+            receivedLastPage.value = response.data.meta.last_page
         })
         .catch(error => {
             console.log(error);
@@ -67,4 +80,28 @@ const filteredProducts = computed(() => {
 const sendToCart = async (product) => {
     await axios.put('/api/cart/addProduct/' + product.id)
 }
+
+const handleDataPagination = (data) => {
+    receivedData.value = data;
+    if (receivedData.value === 'firts_page') {
+        currentPage.value=receivedFirstPage.value
+    } else if (receivedData.value === 'back_page' && currentPage.value !== 1 ) {
+        currentPage.value=currentPage.value - 1
+    } else if (receivedData.value === 'next_page'  && currentPage.value !== receivedLastPage.value) {
+        currentPage.value=currentPage.value + 1
+    } else if (receivedData.value === 'last_page') {
+        currentPage.value=receivedLastPage.value
+    } else {
+    }
+    axios.get('/api/products', {params: {searching: "", active_products: 1, current_page: currentPage.value}})
+        .then(response => {
+            products.value = response.data.data;
+            receivedCurrentPage.value = response.data.meta.current_page
+            receivedLastPage.value = response.data.meta.last_page
+        })
+        .catch(error => {
+            console.log(error);
+        });
+};
+
 </script>

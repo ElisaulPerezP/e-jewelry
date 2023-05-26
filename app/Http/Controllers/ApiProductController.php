@@ -6,18 +6,27 @@ use App\Http\Requests\Products\ProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Cache;
 
 class ApiProductController extends Controller
 {
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request): AnonymousResourceCollection
     {
-        $products = Cache::rememberForever('products', function () {
-            return Product::select('id', 'name', 'description', 'price', 'stock', 'score', 'status', 'barCode', 'image')->get();
-        });
+        Cache::forget('products');
+        $perPage = $request->query('per_page', 6);
+        $currentPage = $request->query('current_page', 1);
+        $activeProducts = $request->query('active_products', 1);
+        $activeProducts ?
+        $paginatedProducts = Cache::rememberForever('products', function () use ($currentPage, $perPage) {
+            return Product::where('status', 1)->paginate($perPage, ['id', 'name', 'description', 'price', 'stock', 'score', 'status', 'barCode', 'image'], 'page', $currentPage);
+        }) :
+            $paginatedProducts = Cache::rememberForever('products', function () use ($currentPage, $perPage) {
+                return Product::paginate($perPage, ['id', 'name', 'description', 'price', 'stock', 'score', 'status', 'barCode', 'image'], 'page', $currentPage);
+            });
 
-        return ProductResource::collection($products);
+        return ProductResource::collection($paginatedProducts);
     }
 
     public function update(ProductRequest $request, Product $product): ProductResource

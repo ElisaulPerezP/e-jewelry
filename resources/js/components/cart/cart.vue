@@ -8,7 +8,7 @@
                             <div>
                                 <button @click="newProduct"
                                         class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xl text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                    {{ totalPrice === 0 ? 'selecciona productos para pagar' : 'pagar ahora:'+ ' COP $'+totalPrice}}
+                                    {{ totalPrice === 0 ? 'selecciona productos para pagar' : 'pagar ahora:' + ' COP $' + totalPrice }}
                                 </button>
                             </div>
                         </div>
@@ -33,8 +33,11 @@
 
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-sm">
-                                            <input type="checkbox" :id="'checkbox-' + product.id" v-model="selectedProducts" :value="product">
-                                            <label :for="'checkbox-' + product.id">{{ product.name }} - {{ product.price }}</label>
+                                            <input type="checkbox" :id="'checkbox-' + product.id"
+                                                   v-model="selectedProducts" :value="product">
+                                            <label :for="'checkbox-' + product.id">{{ product.name }} - {{
+                                                    product.price
+                                                }}</label>
 
                                         </div>
                                     </td>
@@ -67,7 +70,8 @@
                                                 :id="'reservar-' + product.id"
                                                 @click="() => updateProductState(product)"
                                                 class="inline-flex items-center px-1 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                            Botón</button>
+                                            Botón
+                                        </button>
                                     </td>
 
                                     <td class="px-4 py-3 border">
@@ -88,7 +92,7 @@
                                         <div class="flex items-center text-sm">
                                             <a :href="'/products/show/' + product.id"
                                                class="inline-flex items-center px-1 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                                <slot><img :src="trashContainer" alt="eliminar"></slot>
+                                                <h>Eliminar</h>
                                             </a>
 
                                         </div>
@@ -113,7 +117,7 @@
                                         <td class="px-4 py-3 border text-xl">
                                             <div>
                                                 <p>
-                                                    {{ totalPrice === 0 ? 'COP $0' : ' COP $'+totalPrice}}
+                                                    {{ totalPrice === 0 ? 'COP $0' : ' COP $' + totalPrice }}
                                                 </p>
                                             </div>
                                         </td>
@@ -121,7 +125,7 @@
                                             <div>
                                                 <button @click="newProduct"
                                                         class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xl text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                                    {{ totalPrice === 0 ? 'NO HA SELECCIONADO PRODUCTOS' : 'PAGAR AHORA'}}
+                                                    {{ totalPrice === 0 ? 'NO HA SELECCIONADO PRODUCTOS' : 'PAGAR AHORA' }}
                                                 </button>
                                             </div>
 
@@ -162,7 +166,7 @@ const props = defineProps({
 })
 onMounted(() => {
     axios.get('' +
-        '/api/cart/'+ props.user_id)
+        '/api/cart/' + props.user_id)
         .then(response => {
             products.value = response.data.data;
         })
@@ -172,9 +176,8 @@ onMounted(() => {
 })
 
 
-
 const updateProductAmount = async (product) => {
-    axios.put('/api/cart/update/'+ product.itemCart_id, product)
+    axios.put('/api/cart/update/' + product.itemCart_id, product)
         .then(response => {
             product.value = response.data.data;
         })
@@ -184,7 +187,7 @@ const updateProductAmount = async (product) => {
 }
 
 const updateProductState = async (product) => {
-    axios.put('/api/cart/update/'+ product.itemCart_id, product)
+    axios.put('/api/cart/update/' + product.itemCart_id, product)
         .then(response => {
             product.value = response.data.data;
         })

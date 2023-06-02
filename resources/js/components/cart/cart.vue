@@ -148,7 +148,6 @@
 <script setup>
 import {defineProps, ref, onMounted, computed} from 'vue'
 import axios from 'axios'
-import trashContainer from '@/assets/trashCaontainer.png';
 
 const products = ref([])
 const query = ref("")

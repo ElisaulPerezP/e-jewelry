@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\User;
 use Illuminate\View\View;
 
@@ -12,5 +11,4 @@ class CartController extends Controller
     {
         return view('cart.index', compact('user'));
     }
-
 }

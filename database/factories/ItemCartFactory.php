@@ -6,7 +6,7 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class CartFactory extends Factory
+class ItemCartFactory extends Factory
 {
     /**
      * Define the model's default state.

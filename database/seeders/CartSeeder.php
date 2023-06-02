@@ -2,14 +2,14 @@
 
 namespace Database\Seeders;
 
-use App\Models\Cart;
+use App\Models\ItemCart;
 use Illuminate\Database\Seeder;
 
 class CartSeeder extends Seeder
 {
     public function run(): void
     {
-        Cart::factory()
+        ItemCart::factory()
             ->count(1000)
             ->create();
     }

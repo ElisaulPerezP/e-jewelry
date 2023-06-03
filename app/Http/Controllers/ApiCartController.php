@@ -51,7 +51,6 @@ class ApiCartController extends Controller
 
     public function store(Product $product): ItemCartResource|string
     {
-
         $itemCart = ItemCart::where('product_id', $product->id)->first();
 
         if (is_null($itemCart)) {

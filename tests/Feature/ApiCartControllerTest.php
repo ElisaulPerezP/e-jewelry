@@ -86,7 +86,6 @@ class ApiCartControllerTest extends TestCase
 
     public function testItCanCreateItemCart(): void
     {
-
         $user = User::factory()->create();
         $product = Product::factory()->create();
 

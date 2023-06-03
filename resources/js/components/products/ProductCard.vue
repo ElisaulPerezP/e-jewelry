@@ -78,7 +78,7 @@ const filteredProducts = computed(() => {
 })
 
 const sendToCart = async (product) => {
-    await axios.put('/api/cart/addProduct/' + product.id)
+    await axios.post('api/cart/' + product.id + '/store')
 }
 
 const handleDataPagination = (data) => {

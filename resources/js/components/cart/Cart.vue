@@ -29,7 +29,7 @@
                                 </tr>
                                 </thead>
                                 <tbody class="bg-white">
-                                <tr class="text-gray-700" v-for="product in products" :key="product.id">
+                                <tr class="text-gray-700" v-for="product in itemsCart" :key="product.id">
 
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-sm">
@@ -149,7 +149,7 @@
 import {defineProps, ref, onMounted, computed} from 'vue'
 import axios from 'axios'
 
-const products = ref([])
+const itemsCart = ref([])
 const query = ref("")
 const receivedData = ref("")
 const selectedProducts = ref([]);
@@ -164,14 +164,9 @@ const props = defineProps({
     }
 })
 onMounted(() => {
-    axios.get('' +
-        '/api/cart/' + props.user_id)
-        .then(response => {
-            products.value = response.data.data;
-        })
-        .catch(error => {
-            console.log(error);
-        });
+    axios.get('/api/cart/' + props.user_id)
+        .then(response => itemsCart.value = response.data.data)
+        .catch(error => console.log(error))
 })
 
 

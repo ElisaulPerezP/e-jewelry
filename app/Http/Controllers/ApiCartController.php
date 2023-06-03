@@ -49,15 +49,21 @@ class ApiCartController extends Controller
         return new ProductResource($product);
     }
 
-    public function store(ItemCartRequest $request): ItemCartResource|string
+    public function store(Product $product): ItemCartResource|string
     {
-        $itemCart = new ItemCart();
-        $itemCart->user_id = auth()->id();
-        $itemCart->product_id = $request->product_id;
-        $itemCart->amount = $request->amount;
-        $itemCart->item_state = $request->item_state;
 
-        $itemCart->save();
+        $itemCart = ItemCart::where('product_id', $product->id)->first();
+
+        if (is_null($itemCart)) {
+            $itemCart = new ItemCart();
+            $itemCart->user_id = auth()->id();
+            $itemCart->product_id = $product->id;
+            $itemCart->amount = 1;
+            $itemCart->item_state = 'in_cart';
+
+            $itemCart->save();
+        }
+
         Cache::forget('cart');
 
         return new ItemCartResource($itemCart);

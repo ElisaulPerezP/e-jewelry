@@ -7,7 +7,7 @@ import ProductsEdit from "./components/products/ProductsEdit.vue";
 import ProductCard from "./components/products/ProductCard.vue";
 import ProductsCreate from "./components/products/ProductsCreate.vue";
 import Paginator from "./components/Paginator.vue";
-import cart from "./components/cart/cart.vue";
+import cart from "./components/cart/Cart.vue";
 
 const app = createApp({});
 

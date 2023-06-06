@@ -149,6 +149,18 @@
             </div>
         </div>
     </div>
+
+    <div v-if="showModal" class="fixed inset-0 flex items-center justify-center">
+        <div class="bg-white p-8 rounded shadow-lg">
+            <h2 class="text-2xl font-bold mb-4">Modal</h2>
+            <p>{{ modalMessage }}</p>
+            <button @click="closeModal"
+                    class="mt-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                Cerrar
+            </button>
+        </div>
+    </div>
+
 </template>
 
 <script setup>
@@ -223,7 +235,12 @@ const updateProductAmount = async (item) => {
             item.value = response.data.data;
         })
         .catch(error => {
-            console.log(error);
+            if (error.response && error.response.data && error.response.data.error) {
+                modalMessage.value = error.response.data.error;
+                showModal.value = true;
+            } else {
+                console.log(error);
+            }
         });
 }
 
@@ -254,9 +271,9 @@ const deleteItemCart = async (item) => {
     location.reload()
 }
 
-const changeStatus = async (product) => {
-    product.status = !product.status
-    await axios.put('api/products/changeStatus/' + product.id)
+const closeModal = () => {
+    location.reload()
+    showModal.value = false;
 }
 
 </script>

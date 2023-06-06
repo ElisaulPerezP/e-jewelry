@@ -20,7 +20,6 @@ Route::put('/cart/{itemCart}/update/state/saved', [ApiCartController::class, 'up
 Route::put('/cart/{itemCart}/update/state/incart', [ApiCartController::class, 'updateItemStateToInCart'])->name('api.cart.update.state.incart')->middleware('auth:api');
 Route::put('/cart/{itemCart}/reset/amount', [ApiCartController::class, 'resetItemAmount'])->name('api.cart.reset.item.amount')->middleware('auth:api');
 
-
 Route::middleware(['auth:api', 'role:admin'])->group(function () {
     Route::get('/products/{product}', [ApiProductController::class, 'show'])->name('api.products.show');
     Route::post('/products', [ApiProductController::class, 'store'])->name('api.products.store');

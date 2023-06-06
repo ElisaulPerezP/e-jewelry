@@ -15,6 +15,7 @@ class ItemCart extends Model
         'product_id',
         'amount',
         'item_state',
+        'expire_date',
     ];
     public function user(): BelongsTo
     {

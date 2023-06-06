@@ -94,10 +94,10 @@
                                     </td>
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-sm">
-                                            <a :href="'/products/show/' + product.id"
-                                               class="inline-flex items-center px-1 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                                <h>Eliminar</h>
-                                            </a>
+                                            <button @click="deleteItemCart(item)"
+                                                    class="inline-flex items-center px-1 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                                                Borrar
+                                            </button>
 
                                         </div>
                                     </td>
@@ -246,6 +246,12 @@ const totalPrice = computed(() => {
 });
 const back = () => {
     window.location.href = window.history.back();
+}
+const deleteItemCart = async (item) => {
+    axios.delete('/api/cart/' + item.itemCart_id + '/delete')
+        .then()
+        .catch(error => console.log(error))
+    location.reload()
 }
 
 const changeStatus = async (product) => {

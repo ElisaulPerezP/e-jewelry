@@ -104,4 +104,11 @@ const handleDataPagination = (data) => {
         });
 };
 
+const goToCart = () => {
+    window.location.href = window.location.href = "/cart/" + props.user_id;
+}
+const back = () => {
+    window.location.href = window.history.back();
+}
+
 </script>

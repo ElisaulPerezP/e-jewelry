@@ -11,10 +11,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/products', [ApiProductController::class, 'index'])->name('api.products.index');
 
-Route::get('/cart/{user}', [ApiCartController::class, 'index'])->name('api.cart.index');
-Route::put('/cart/{itemCart}/update', [ApiCartController::class, 'update'])->name('api.cart.update');
-Route::post('/cart/{product}/store', [ApiCartController::class, 'store'])->name('api.cart.store')->middleware('auth:api');
-Route::delete('/cart/{itemCart}/delete', [ApiCartController::class, 'destroy'])->name('api.cart.destroy');
+Route::get('/cart/{user}', [ApiCartController::class, 'index'])->name('api.cart.index')->middleware('auth:api');
+Route::put('/cart/{itemCart}/update/amount', [ApiCartController::class, 'updateAmount'])->name('api.cart.update.amount')->middleware('auth:api');
+Route::post('/cart/{product}/store', [ApiCartController::class, 'store'])->name('api.cart.store')->middleware('auth:api', 'auth');
+Route::delete('/cart/{itemCart}/delete', [ApiCartController::class, 'destroy'])->name('api.cart.destroy')->middleware('auth:api');
+Route::put('/cart/{itemCart}/update/date', [ApiCartController::class, 'updateExpireDate'])->name('api.cart.update.date')->middleware('auth:api');
+Route::put('/cart/{itemCart}/update/state/saved', [ApiCartController::class, 'updateItemStateToSaved'])->name('api.cart.update.state.saved')->middleware('auth:api');
+Route::put('/cart/{itemCart}/update/state/incart', [ApiCartController::class, 'updateItemStateToInCart'])->name('api.cart.update.state.incart')->middleware('auth:api');
+Route::put('/cart/{itemCart}/reset/amount', [ApiCartController::class, 'resetItemAmount'])->name('api.cart.reset.item.amount')->middleware('auth:api');
+
 
 Route::middleware(['auth:api', 'role:admin'])->group(function () {
     Route::get('/products/{product}', [ApiProductController::class, 'show'])->name('api.products.show');

@@ -169,7 +169,6 @@ import axios from 'axios'
 
 const itemsCart = ref([])
 const query = ref("")
-const receivedData = ref("")
 const selectedProducts = ref([]);
 const open = ref(false)
 const showModal = ref(false);
@@ -254,13 +253,7 @@ const updateProductExpireDate = async (item) => {
         });
 }
 
-const totalPrice = computed(() => {
-    let total = 0;
-    for (const product of selectedProducts.value) {
-        total += product.products_price * product.amount;
-    }
-    return total;
-});
+
 const back = () => {
     window.location.href = window.history.back();
 }

@@ -18,6 +18,7 @@ class ItemCartResource extends JsonResource
             'product_image' => $this->product->image,
             'product_name' => $this->product->name,
             'products_price' => $this->product->price,
+            'expire_date'=> $this->expire_date,
         ];
     }
 }

@@ -32,6 +32,11 @@ class ItemCartRequest extends FormRequest
                 'required',
                 Rule::in(['in_cart', 'saved']),
             ],
+            'expire_date'=> [
+                    'required',
+                    'integer',
+                    'min:0',
+                ],
          ];
     }
 }

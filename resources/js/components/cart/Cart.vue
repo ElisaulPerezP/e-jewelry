@@ -52,18 +52,18 @@
 
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-sm">
-                                            <p class="font-semibold text-black">{{ product.product_name }}</p>
+                                            <p class="font-semibold text-black">{{ item.product_name }}</p>
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 border">
-                                        <input type="number" v-model="product.amount"
-                                               @change="() => updateProductAmount(product)"
+                                        <input type="number" v-model="item.amount"
+                                               @change="updateProductAmount(item)"
                                                placeholder="Cantidad"
                                                class="mb-2 mt-2 border border-gray-400 rounded-lg p-2">
                                     </td>
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-xs">
-                                            <p class="font-semibold text-black">{{ product.products_price }}
+                                            <p class="font-semibold text-black">{{ item.products_price }}
                                             </p>
                                         </div>
                                     </td>
@@ -84,7 +84,7 @@
                                     </td>
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-sm">
-                                            <a :href="'/products/show/' + product.product_id"
+                                            <a :href="'/products/show/' + item.product_id"
                                                class="inline-flex items-center px-1 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                                                 <slot>...</slot>
                                             </a>
@@ -184,17 +184,17 @@ onMounted(() => {
 const updateProductAmount = async (product) => {
     axios.put('/api/cart/update/' + product.itemCart_id, product)
         .then(response => {
-            product.value = response.data.data;
+            item.value = response.data.data;
         })
         .catch(error => {
             console.log(error);
         });
 }
 
-const updateProductState = async (product) => {
-    axios.put('/api/cart/update/' + product.itemCart_id, product)
+const updateProductExpireDate = async (item) => {
+    axios.put('/api/cart/' + item.itemCart_id + '/update/date', item)
         .then(response => {
-            product.value = response.data.data;
+            item.value = response.data.data;
         })
         .catch(error => {
             console.log(error);

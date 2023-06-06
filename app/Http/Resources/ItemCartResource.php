@@ -11,7 +11,7 @@ class ItemCartResource extends JsonResource
     {
         return [
             'itemCart_id' => $this->id,
-            'user_id' => $this->user_id,
+            'user_id' => auth()->user()->id,
             'product_id' => $this->product_id,
             'amount' => $this->amount,
             'item_state' => $this->item_state,

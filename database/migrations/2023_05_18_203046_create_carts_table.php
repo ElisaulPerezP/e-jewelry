@@ -16,6 +16,7 @@ return new class() extends Migration {
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->integer('amount');
             $table->enum('item_state', ['in_cart', 'saved']);
+            $table->integer('expire_date')->nullable();
             $table->timestamps();
         });
     }

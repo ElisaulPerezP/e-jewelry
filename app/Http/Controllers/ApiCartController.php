@@ -55,8 +55,6 @@ class ApiCartController extends Controller
         return new ItemCartResource($itemCart);
     }
 
-
-
     public function updateItemStateToInCart(ItemCart $itemCart): ItemCartResource|string
     {
         $itemCart->item_state = 'in_cart';

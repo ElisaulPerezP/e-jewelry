@@ -45,8 +45,8 @@
                                     </td>
                                     <div class="max-w-xs">
                                         <img
-                                            :src="'/storage/' + product.product_image"
-                                            :alt="product.name"
+                                            :src="'/storage/' + item.product_image"
+                                            :alt="item.name"
                                         />
                                     </div>
 

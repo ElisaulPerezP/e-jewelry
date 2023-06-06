@@ -68,11 +68,12 @@
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 border">
+                                        Este artículo será retirado en: {{ item.minutesToExpire }} minutos
                                         <button type="button"
-                                                :id="'reservar-' + product.id"
-                                                @click="() => updateProductState(product)"
+                                                :id="'reservar-' + item.id"
+                                                @click="item.minutesToExpire === 0 ? updateProductExpireDate(item) : saveItem(item)"
                                                 class="inline-flex items-center px-1 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                            Botón
+                                            {{item.minutesToExpire === 0 ? 'Tomar de nuevo': 'Guardar producto'}}
                                         </button>
                                     </td>
 
@@ -179,12 +180,44 @@ const totalPrice = computed(() => {
 onMounted(() => {
     axios.get('/api/cart/' + props.user_id)
         .then(response => itemsCart.value = response.data.data)
-        .catch(error => console.log(error))
+        .catch(error => console.log(error));
+    setInterval(updateExpireTimes, 1000);
 })
 
 
-const updateProductAmount = async (product) => {
-    axios.put('/api/cart/update/' + product.itemCart_id, product)
+const updateExpireTimes = () => {
+    const currentTime = Math.floor(Date.now() / 1000);
+
+    for (const item of itemsCart.value) {
+        if(item.expire_date - currentTime > 0) {
+            const differenceInSeconds = item.expire_date - currentTime;
+            const differenceInMinutes = Math.ceil(differenceInSeconds / 60);
+            item.minutesToExpire = differenceInMinutes;
+        }else if(item.expire_date - currentTime < 0 && item.minutesToExpire != 0){
+            item.minutesToExpire = 0;
+            resetItemStock(item);
+        }
+    }
+};
+
+
+const saveItem = async (item) => {
+    axios.put('/api/cart/' + item.itemCart_id + '/update/state/saved');
+    location.reload();
+}
+
+const resetItemStock = async (item) => {
+    axios.put('/api/cart/' + item.itemCart_id + '/reset/amount')
+        .then(response => {
+            item.value = response.data.data;
+        })
+        .catch(error => {
+            console.log(error);
+        })
+}
+
+const updateProductAmount = async (item) => {
+    axios.put('/api/cart/' + item.itemCart_id + '/update/amount', item)
         .then(response => {
             item.value = response.data.data;
         })

@@ -171,9 +171,9 @@ const itemsCart = ref([])
 const query = ref("")
 const receivedData = ref("")
 const selectedProducts = ref([]);
-const receivedCurrentPage = ref(1)
-const receivedFirstPage = ref(1)
-const receivedLastPage = ref(1)
+const open = ref(false)
+const showModal = ref(false);
+const modalMessage = ref('');
 
 const props = defineProps({
     user_id: {

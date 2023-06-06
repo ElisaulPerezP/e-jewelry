@@ -8,7 +8,9 @@
                             <div>
                                 <button @click="newProduct"
                                         class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xl text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                    {{ totalPrice === 0 ? 'selecciona productos para pagar' : 'pagar ahora:' + ' COP $' + totalPrice }}
+                                    {{
+                                        totalPrice === 0 ? 'selecciona productos para pagar' : 'pagar ahora:' + ' COP $' + totalPrice
+                                    }}
                                 </button>
                             </div>
                         </div>
@@ -29,14 +31,14 @@
                                 </tr>
                                 </thead>
                                 <tbody class="bg-white">
-                                <tr class="text-gray-700" v-for="product in itemsCart" :key="product.id">
+                                <tr class="text-gray-700" v-for="item in itemsCart" :key="item.id">
 
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-sm">
-                                            <input type="checkbox" :id="'checkbox-' + product.id"
-                                                   v-model="selectedProducts" :value="product">
-                                            <label :for="'checkbox-' + product.id">{{ product.name }} - {{
-                                                    product.price
+                                            <input type="checkbox" :id="'checkbox-' + item.id"
+                                                   v-model="selectedProducts" :value="item">
+                                            <label :for="'checkbox-' + item.id">{{ item.name }} - {{
+                                                    item.price
                                                 }}</label>
 
                                         </div>
@@ -163,6 +165,15 @@ const props = defineProps({
         required: true
     }
 })
+
+const totalPrice = computed(() => {
+    let total = 0;
+    for (const product of selectedProducts.value) {
+        total += product.products_price * product.amount;
+    }
+    return total;
+});
+
 onMounted(() => {
     axios.get('/api/cart/' + props.user_id)
         .then(response => itemsCart.value = response.data.data)

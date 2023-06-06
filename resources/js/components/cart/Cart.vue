@@ -79,7 +79,8 @@
 
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-sm">
-                                            <p class="font-semibold text-black">{{ product.item_state }}
+                                            <p class="font-semibold text-black">
+                                                {{ item.item_state === 'saved' ? 'GUARDADO, se enviaran mensajes recordatorios':  item.item_state === 'in_cart' ? 'El producto esta en el carrito' : item.item_state === 'in_order'? 'Existe una orden de compra': 'indeterminado'}}
                                             </p>
                                         </div>
                                     </td>

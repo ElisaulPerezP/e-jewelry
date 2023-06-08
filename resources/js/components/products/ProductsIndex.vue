@@ -138,7 +138,7 @@ onMounted(() => {
 })
 
 const back = () => {
-    window.location.href = "/dashboard";
+    window.location.href = window.history.back();
 }
 
 const newProduct = () => {

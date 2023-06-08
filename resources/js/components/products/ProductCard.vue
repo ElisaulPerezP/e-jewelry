@@ -13,6 +13,7 @@
             <div class="p-6 bg-white border-b border-gray-200">
                 <div class="my-8">
                     <div class="container mx-auto px-6">
+                        <input type="text" v-model="query" placeholder="Buscar...">
                         <div
                             class="grid gap-6 grid-cols-3 mt-6"
                         >
@@ -30,10 +31,11 @@
                                 <span class="text-gray-600 mt-2 text-xl uppercase">{{ product.name }}</span>
                                 <div class="flex justify-between">
                                     <span class="text-gray-500 mt-2">COP $ {{ product.price }}</span>
-                                    <button @click="sendToCart(product)"
+                                    <button @click="!product.inCart ? sendToCart(product) : goToCart()"
                                             class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                        CARRITO
+                                        {{!product.inCart ? "COLOCAR EN EL CARRITO" : "VER EN EL CARRITO"}}
                                     </button>
+
                                 </div>
                             </div>
                         </div>
@@ -45,7 +47,8 @@
 </template>
 
 <script setup>
-import {ref, onMounted, computed} from 'vue'
+
+import {defineProps, ref, onMounted, computed} from 'vue'
 import axios from 'axios'
 
 const products = ref([])
@@ -55,6 +58,16 @@ const currentPage = ref(1)
 const receivedCurrentPage = ref(1)
 const receivedFirstPage = ref(1)
 const receivedLastPage = ref(1)
+const itemsCart = ref([])
+
+
+const props = defineProps({
+    user_id: {
+        type: Number,
+        required: false
+    }
+})
+
 
 onMounted(() => {
     axios.get('/api/products', {params: {searching: "", active_products: 1, current_page: currentPage.value}})
@@ -66,17 +79,35 @@ onMounted(() => {
         .catch(error => {
             console.log(error);
         });
+
+if (props.user_id !== null) {
+    axios.get('/api/cart/' + props.user_id)
+        .then(response => itemsCart.value = response.data.data)
+        .catch(error => console.log(error));
+}
+
 })
 
+const inCartProducts = computed(() => {
+    return products.value.map(product => {
+
+        const inCart = itemsCart.value.some(item => item.product_id === product.id);
+
+        return { ...product, inCart: inCart };
+    });
+});
+
+
 const filteredProducts = computed(() => {
-    return products.value.filter(product => (
+    return inCartProducts.value.filter(product => (
             product.name.toLowerCase().includes(query.value.toLowerCase()) ||
             product.description.toLowerCase().includes(query.value.toLowerCase())) &&
         product.status === 1)
 })
 
 const sendToCart = async (product) => {
-    await axios.put('/api/cart/addProduct/' + product.id)
+    await axios.post('api/cart/' + product.id + '/store')
+    location.reload()
 }
 
 const handleDataPagination = (data) => {
@@ -101,5 +132,12 @@ const handleDataPagination = (data) => {
             console.log(error);
         });
 };
+
+const goToCart = () => {
+    window.location.href = window.location.href = "/cart/" + props.user_id;
+}
+const back = () => {
+    window.location.href = window.history.back();
+}
 
 </script>

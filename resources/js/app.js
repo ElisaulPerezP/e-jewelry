@@ -7,7 +7,7 @@ import ProductsEdit from "./components/products/ProductsEdit.vue";
 import ProductCard from "./components/products/ProductCard.vue";
 import ProductsCreate from "./components/products/ProductsCreate.vue";
 import Paginator from "./components/Paginator.vue";
-
+import cart from "./components/cart/Cart.vue";
 
 const app = createApp({});
 
@@ -16,5 +16,7 @@ app.component('products-show', ProductsShow);
 app.component('products-edit', ProductsEdit);
 app.component('product-card', ProductCard);
 app.component('products-create', ProductsCreate);
+app.component('cart-index', cart);
+
 app.component('paginator', Paginator);
 app.mount('#app');

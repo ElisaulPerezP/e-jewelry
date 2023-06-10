@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -17,9 +16,14 @@ class OrderFactory extends Factory
     {
         return [
             'user_id' => random_int(1, User::count()),
-            'product_id'=> random_int(1, Product::count()),
-            'amount'=> $this->faker->randomNumber(2),
-            'item_state' => $this->faker->randomElement(['processing', 'reject', 'approved']),
-        ];
+            'payment_reference' => uuid_create(),
+            'description' => fake()->sentence(5),
+            'total' => fake()->randomNumber(6),
+            'currency' => $this->faker->randomElement(['USD', 'COP']),
+            'order_state' => $this->faker->randomElement(['processing', 'reject', 'approved']),
+            'expiration' => date('c'),
+            'return_url' => 'http:/test',
+            'process_url' => null,
+             ];
     }
 }

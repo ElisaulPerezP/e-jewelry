@@ -5,13 +5,21 @@
                 <section class="container mx-auto p-6 font-mono">
                     <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
                         <div class="py-4 flex justify-between">
-                            <div>
-                                <button @click="newProduct"
+                            <div class="py-4 flex justify-between">
+                                <div class="py-4 flex justify-between">
+                                <button @click="pagar"
                                         class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xl text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                                     {{
                                         totalPrice === 0 ? 'selecciona productos para pagar' : 'pagar ahora:' + ' COP $' + totalPrice
                                     }}
                                 </button>
+                                </div>
+                                <div class="py-4 flex justify-between">
+                                <button @click="seeOrders"
+                                        class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xl text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                                        Ver ordenes
+                                </button>
+                                </div>
                             </div>
                         </div>
                         <div class="w-full overflow-x-auto">
@@ -127,7 +135,7 @@
                                         </td>
                                         <td class="px-4 py-3 border">
                                             <div>
-                                                <button @click="newProduct"
+                                                <button @click="pagar"
                                                         class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xl text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                                                     {{
                                                         totalPrice === 0 ? 'NO HA SELECCIONADO PRODUCTOS' : 'PAGAR AHORA'
@@ -267,6 +275,16 @@ const deleteItemCart = async (item) => {
 const closeModal = () => {
     location.reload()
     showModal.value = false;
+}
+
+const pagar = () => {
+    console.log(selectedProducts);
+    axios.post('/api/order/create/', {'items_cart' : selectedProducts.value})
+       .then((response) => window.location.href = response.data.data.process_url)
+}
+
+const seeOrders = () => {
+    window.location.href = '/order';
 }
 
 </script>

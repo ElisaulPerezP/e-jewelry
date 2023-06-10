@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -15,6 +16,9 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/cart/{user}', [CartController::class, 'index'])->middleware(['auth', 'verified'])->name('cart');
+
+Route::get('/order', [OrderController::class, 'index'])->middleware(['auth', 'verified'])->name('orders');
+Route::get('/order/{order}/show', [OrderController::class, 'show'])->middleware(['auth', 'verified'])->name('orders.show');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApiCartController;
+use App\Http\Controllers\ApiOrderController;
 use App\Http\Controllers\ApiProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,10 @@ Route::put('/cart/{itemCart}/update/date', [ApiCartController::class, 'updateExp
 Route::put('/cart/{itemCart}/update/state/saved', [ApiCartController::class, 'updateItemStateToSaved'])->name('api.cart.update.state.saved')->middleware('auth:api');
 Route::put('/cart/{itemCart}/update/state/incart', [ApiCartController::class, 'updateItemStateToInCart'])->name('api.cart.update.state.incart')->middleware('auth:api');
 Route::put('/cart/{itemCart}/reset/amount', [ApiCartController::class, 'resetItemAmount'])->name('api.cart.reset.item.amount')->middleware('auth:api');
+
+Route::get('/order/', [ApiOrderController::class, 'index'])->name('api.order.index')->middleware('auth:api');
+Route::post('/order/create/', [ApiOrderController::class, 'store'])->name('api.order.store')->middleware('auth:api');
+Route::get('/order/{order}/checkStatus', [ApiOrderController::class, 'checkStatus'])->name('api.order.show')->middleware('auth:api');
 
 Route::middleware(['auth:api', 'role:admin'])->group(function () {
     Route::get('/products/{product}', [ApiProductController::class, 'show'])->name('api.products.show');

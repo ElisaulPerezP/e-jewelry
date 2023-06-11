@@ -34,22 +34,25 @@ class ApiOrderController extends Controller
 
     public function store(Request $request): OrderResource
     {
-        $total = 0;
-        $description = '';
-        foreach ($request->items_cart as $item) {
-            $product = Product::find($item['product_id']);
-            $total += $item['amount'] * $product->price;
-            $description .= $product->name . ', ';
-        }
+
+        $itemsCart = ItemCart::where('state', 'selected')
+            ->where('user_id', auth()->user()->id)
+            ->get();
+
         $order = new Order();
+
+        foreach ($itemsCart as $itemCart) {
+            $itemCart->state = 'in_order';
+            $itemCart->order_id = $order->id;
+            $itemCart->save();
+            $order->total += $itemCart->amount * $itemCart->product->price;
+        }
+
         $order->user_id = auth()->user()->id;
-        $order->payment_reference = uuid_create();
-        $order->description = 'Los productos que esta pagando son: ' . $description;
-        $order->total = $total;
+        $order->reference = uuid_create();
         $order->currency = 'COP';
-        $order->order_state = 'processing';
-        $order->expiration = date('c', strtotime(date('c') . ' + 1 hour'));
-        $order->return_url = 'http://127.0.0.1:8000/order/state/' . $order->payment_reference;
+        $order->state = 'pending';
+        $order->return_url = 'http://127.0.0.1:8000/order/state/' . $order->reference;
         $order->save();
 
         $service = new PlaceToPayPayment();

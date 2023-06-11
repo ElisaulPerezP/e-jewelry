@@ -23,63 +23,20 @@ class ApiCartController extends Controller
         return ItemCartResource::collection($itemsCart);
     }
 
-    public function update(ItemCartRequest $request, ItemCart $itemCart): ItemCartResource|string
+    public function store(Product $product): ItemCartResource
     {
-        if ($itemCart->product()->first()->stock < $request->amount - $itemCart->amount) {
-            return response(['error' => 'No hay suficiente stock disponible'], 422);
-        }
+        $itemCart = new ItemCart();
+        $itemCart->user_id = auth()->user()->id;
+        $itemCart->product_id = $product->id;
+        $itemCart->amount = 1;
+        $itemCart->state = 'in_cart';
+        $itemCart->save();
 
-        $product = Product::find($itemCart->product->id);
-        $product->stock -= ($request->amount - $itemCart->amount);
+        $product->stock--;
         $product->save();
 
-        $itemCart->user_id = $request->user_id;
-        $itemCart->product_id = $request->product_id;
-        $itemCart->amount = $request->amount;
-        $itemCart->item_state = $request->item_state;
-        $itemCart->save();
-
         Cache::forget('cart');
-
-        return new ItemCartResource($itemCart);
-    }
-
-    public function updateItemStateToSaved(ItemCart $itemCart): ItemCartResource|string
-    {
-        $itemCart->item_state = 'saved';
-        $itemCart->save();
-
-        Cache::forget('cart');
-
-        return new ItemCartResource($itemCart);
-    }
-
-    public function updateItemStateToInCart(ItemCart $itemCart): ItemCartResource|string
-    {
-        $itemCart->item_state = 'in_cart';
-        $itemCart->save();
-
-        Cache::forget('cart');
-
-        return new ItemCartResource($itemCart);
-    }
-    public function updateItemStateToInOrder(ItemCart $itemCart): ItemCartResource|string
-    {
-        $itemCart->item_state = 'in_order';
-        $itemCart->save();
-
-        Cache::forget('cart');
-
-        return new ItemCartResource($itemCart);
-    }
-    public function updateExpireDate(ItemCart $itemCart): ItemCartResource|string
-    {
-        $now = time();
-        $expireUnixDate = $now + 3600 * 2;
-        $itemCart->expire_date = $expireUnixDate;
-        $itemCart->save();
-
-        Cache::forget('cart');
+        Cache::forget('products');
 
         return new ItemCartResource($itemCart);
     }

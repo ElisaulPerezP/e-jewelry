@@ -11,9 +11,7 @@
                             <div class="w-full overflow-x-auto">
                                 <table class="w-full text-center border-separate">
                                     <thead>
-                                    <tr><th class="px-4 py-3">Detalles de la orden de pago: </th></tr>
-                                    <tr><th class="text-md text-lg">{{ order.name }}</th></tr>
-                                    <tr><th><img :src="'../../storage/' + order.image" alt="name" class="max-w-xl"></th></tr>
+                                    <tr><th class="px-4 py-3 text-center ">Detalles de la orden de pago: </th></tr>
                                     </thead>
                                     <tbody class="bg-white">
 
@@ -25,7 +23,7 @@
                                             </td>
                                             <td class="px-4 py-3 border">
                                                 <div class="flex items-center text-sm">
-                                                    <p class="font-semibold text-black text-left">{{ order.id }}</p>
+                                                    <p class="font-semibold text-black text-left">{{ order.reference }}</p>
                                                 </div>
                                             </td>
                                         </tr>
@@ -33,13 +31,6 @@
                                             <td class="px-4 py-3 border">
                                                 <div class="flex items-center text-sm">
                                                     <p class="font-semibold text-black text-md text-lg text-left">Descripcion</p>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 border">
-                                                <div class="flex items-center text-sm">
-                                                    <p class="font-semibold text-black text-left">{{
-                                                            order.description
-                                                        }}</p>
                                                 </div>
                                             </td>
                                         </tr>
@@ -59,12 +50,12 @@
                                         <tr>
                                             <td class="px-4 py-3 border">
                                                 <div class="flex items-center text-sm">
-                                                    <p class="font-semibold text-black text-md text-lg text-left">Stock</p>
+                                                    <p class="font-semibold text-black text-md text-lg text-left">Estado</p>
                                                 </div>
                                             </td>
                                             <td class="px-4 py-3 border">
                                                 <div class="flex items-center text-sm">
-                                                    <p class="font-semibold text-black text-left">{{ order.stock }}
+                                                    <p class="font-semibold text-black text-left">{{ order.state }}
                                                     </p>
                                                 </div>
                                             </td>
@@ -72,42 +63,22 @@
                                         <tr>
                                             <td class="px-4 py-3 border">
                                                 <div class="flex items-center text-sm">
-                                                    <p class="font-semibold text-black text-md text-lg text-left">score</p>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 border">
-                                                <div class="flex items-center text-sm">
-                                                    <p class="font-semibold text-black text-left">{{ order.score }}
-                                                    </p>
+                                                    <p class="font-semibold text-black text-md text-lg text-left">Fecha de expiracion</p>
                                                 </div>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="px-4 py-3 border">
                                                 <div class="flex items-center text-sm">
-                                                    <p class="font-semibold text-black text-md text-lg text-left">Enabling</p>
+                                                    <p class="font-semibold text-black text-md text-lg text-left">Reintentar el pago</p>
                                                 </div>
                                             </td>
-                                            <td class="px-4 py-3 border">
-                                                <div class="flex items-center text-sm">
-                                                    <p class="font-semibold text-black text-left">{{ order.status }}
-                                                    </p>
-                                                </div>
+                                            <td class="px-4 py-3 border"
+                                                v-if="order.state === 'rejected'">
+                                                <button @click="retryPay" class = "inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">Reintentar el pago ahora</button>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td class="px-4 py-3 border">
-                                                <div class="flex items-center text-sm">
-                                                    <h1 class="font-semibold text-black text-md text-lg text-left">Codigo de barras</h1>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 border">
-                                                <div class="flex items-center text-sm">
-                                                    <p class="font-semibold text-black text-left">{{ order.barCode }}
-                                                    </p>
-                                                </div>
-                                            </td>
-                                        </tr>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -144,19 +115,22 @@ const props = defineProps({
 onMounted(() => {
     axios.get('/api/order/' + props.order_id + '/checkStatus')
         .then(response => {
-            order.value = response.data.data;
+            order.value = response.data.data
         })
         .catch(error => {
-            console.log(error);
+            console.log(error)
         });
 })
 
 const back = () => {
-    window.location.href = "/products";
+    window.location.href = "/products"
+}
+const retryPay = () => {
+
 }
 
 const edit = () => {
-    window.location.href = "/products";
+    window.location.href = "/products"
 }
 
 </script>

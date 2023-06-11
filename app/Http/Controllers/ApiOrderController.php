@@ -70,10 +70,8 @@ class ApiOrderController extends Controller
         if ($order->order_state === 'processing') {
             $service = new PlaceToPayPayment();
             $service->getRequestInformation($order);
-
-            return new OrderResource($order);
-        } else {
-            return new OrderResource($order);
         }
+
+        return new OrderResource($order);
     }
 }

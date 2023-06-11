@@ -10,6 +10,8 @@ class ItemCart extends Model
 {
     use HasFactory;
 
+    protected $table = 'items_cart';
+
     protected $fillable = [
         'user_id',
         'product_id',
@@ -17,6 +19,12 @@ class ItemCart extends Model
         'state',
         'order_id',
     ];
+
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class, 'order_id');
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -25,9 +33,5 @@ class ItemCart extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class, 'product_id');
-    }
-    public function orders()
-    {
-        return $this->belongsTo(Order::class, 'order_id');
     }
 }

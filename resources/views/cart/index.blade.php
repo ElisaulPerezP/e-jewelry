@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-12" id="app">
-        <cart-index :user_id="{{$user->id}}">
+        <cart-index>
         </cart-index>
     </div>
 

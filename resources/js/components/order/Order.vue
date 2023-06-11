@@ -46,9 +46,9 @@
 
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-sm">
-                                            <button @click="order.order_state === 'reject' ? retryPay(order) : order.order_state === 'processing' ? detail(order.id) : back"
+                                            <button @click="detail(order.id)"
                                                     class="inline-flex items-center px-1 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                                <slot>{{order.order_state === 'reject' ? 'pagar de nuevo' : 'ver detalles' }}</slot>
+                                                <slot> ver detalles</slot>
                                             </button>
                                         </div>
                                     </td>
@@ -91,31 +91,31 @@ import axios from 'axios'
 const orders = ref([])
 const query = ref("")
 const open = ref(false)
-const showModal = ref(false);
-const modalMessage = ref('');
+const showModal = ref(false)
+const modalMessage = ref('')
 
 
 onMounted(() => {
     axios.get('/api/order/')
         .then(response => orders.value = response.data.data)
-        .catch(error => console.log(error));
+        .catch(error => console.log(error))
 })
 
 const back = () => {
-    window.location.href = window.history.back();
+    window.location.href = window.history.back()
 }
 
 const detail = (id) => {
-    window.location.href = '/order/' + id + '/show';
+    window.location.href = '/order/' + id + '/show'
 }
 
 const closeModal = () => {
     location.reload()
-    showModal.value = false;
+    showModal.value = false
 }
 
 const retryPay = (order) => {
-    window.location.href = order.process_url;
+    window.location.href = order.process_url
 }
 
 </script>

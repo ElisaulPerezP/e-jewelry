@@ -23,7 +23,7 @@ class ProductFactory extends Factory
             'name' => fake()->unique()->word(),
             'description' => fake()->sentence(5),
             'price' => fake()->randomNumber(6),
-            'stock' => fake()->randomNumber(2),
+            'stock' => 1000,
             'score' => fake()->randomNumber(1),
             'status' => fake()->boolean,
             'barCode' => fake()->randomNumber(6),

@@ -10,8 +10,8 @@ return new class() extends Migration {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->string('reference')->nullable();
-            $table->integer('total');
+            $table->string('reference');
+            $table->integer('total')->nullable();
             $table->string('currency');
             $table->enum('state', ['pending', 'rejected', 'approved']);
             $table->string('return_url');

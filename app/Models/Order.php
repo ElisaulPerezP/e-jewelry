@@ -15,7 +15,7 @@ class Order extends Model
         'reference',
         'total',
         'currency',
-        'order_state',
+        'state',
         'return_url',
         'process_url',
         'request_id',
@@ -31,12 +31,20 @@ class Order extends Model
         $this->order_state = 'rejected';
         $this->save();
     }
+
+    public function setTotal()
+    {
+        foreach ($this->cartItems as $cartItem) {
+            $this->total += $cartItem->amount * $cartItem->product->price;
+        }
+        $this->save();
+    }
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-    public function itemsCart(): HasMany
+    public function cartItems(): HasMany
     {
-        return $this->hasMany(ItemCart::class, 'itemCart_id');
+        return $this->hasMany(CartItem::class);
     }
 }

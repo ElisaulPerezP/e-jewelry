@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Http;
 
-use App\Models\ItemCart;
+use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
@@ -19,7 +19,7 @@ class ApiOrderControllerTest extends TestCase
     {
         $admin = User::factory()->create();
         $product = Product::factory()->create();
-        $itemCart = ItemCart::factory()->create([
+        $cartItem = CartItem::factory()->create([
             'user_id' => $admin->id,
             'product_id' => $product->id,
             'amount' => 10,
@@ -31,7 +31,7 @@ class ApiOrderControllerTest extends TestCase
         Order::factory()->create([
             'user_id' => $admin->id,
             'reference' => 1,
-            'total' => $product->price * $itemCart->amount,
+            'total' => $product->price * $cartItem->amount,
             'currency' => 'COP',
             'state' => 'pending',
             'return_url' => 'http:/test',
@@ -64,8 +64,8 @@ class ApiOrderControllerTest extends TestCase
         $user = User::factory()->create();
         $product1 = Product::factory()->create(['price' => 10000]);
         $product2 = Product::factory()->create(['price' => 20000]);
-        ItemCart::factory()->create(['user_id' => $user->id, 'amount' => 1, 'product_id' => $product1->id, 'state'=>'selected']);
-        ItemCart::factory()->create(['user_id' => $user->id, 'amount' => 2, 'product_id' => $product2->id, 'state'=>'selected']);
+        CartItem::factory()->create(['user_id' => $user->id, 'amount' => 1, 'product_id' => $product1->id, 'state'=>'selected']);
+        CartItem::factory()->create(['user_id' => $user->id, 'amount' => 2, 'product_id' => $product2->id, 'state'=>'selected']);
         $response = $this->actingAs($user, 'api')->postJson(route('api.order.store'));
 
         $orderCreated = Order::findOrFail($response->json()['data']['id']);
@@ -79,8 +79,8 @@ class ApiOrderControllerTest extends TestCase
         $user = User::factory()->create();
         $product1 = Product::factory()->create(['price' => 10000]);
         $product2 = Product::factory()->create(['price' => 20000]);
-        ItemCart::factory()->create(['user_id' => $user->id, 'amount' => 1, 'product_id' => $product1->id, 'state' => 'selected']);
-        ItemCart::factory()->create(['user_id' => $user->id, 'amount' => 2, 'product_id' => $product2->id, 'state' => 'selected']);
+        CartItem::factory()->create(['user_id' => $user->id, 'amount' => 1, 'product_id' => $product1->id, 'state' => 'selected']);
+        CartItem::factory()->create(['user_id' => $user->id, 'amount' => 2, 'product_id' => $product2->id, 'state' => 'selected']);
         $response = $this->actingAs($user, 'api')->postJson(route('api.order.store'));
 
         $orderCreated = Order::findOrFail($response->json()['data']['id']);

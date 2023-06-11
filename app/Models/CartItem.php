@@ -6,11 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ItemCart extends Model
+class CartItem extends Model
 {
     use HasFactory;
-
-    protected $table = 'items_cart';
 
     protected $fillable = [
         'user_id',

@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests\ItemCart;
+namespace App\Http\Requests\CartItem;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class AmountItemCartRequest extends FormRequest
+class StateCartItemRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -14,10 +15,9 @@ class AmountItemCartRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'amount' => [
+            'state' => [
                 'required',
-                'integer',
-                'min:0',
+                Rule::in(['in_cart', 'in_order', 'selected']),
             ],
          ];
     }

@@ -11,13 +11,13 @@ Route::middleware('auth:api')->name('api.')->group(function () {
     Route::prefix('/cart')->name('cart.')->group(function () {
         Route::get('/', [ApiCartController::class, 'index'])
             ->name('index');
-        Route::put('/{itemCart}/setAmount', [ApiCartController::class, 'setAmount'])
+        Route::put('/{cartItem}/setAmount', [ApiCartController::class, 'setAmount'])
             ->name('setAmount');
         Route::post('/{product}/store', [ApiCartController::class, 'store'])
             ->name('store')->middleware('auth');
-        Route::delete('/{itemCart}/delete', [ApiCartController::class, 'destroy'])
+        Route::delete('/{cartItem}/delete', [ApiCartController::class, 'destroy'])
             ->name('destroy');
-        Route::put('/{itemCart}/changeState', [ApiCartController::class, 'changeState'])
+        Route::put('/{cartItem}/changeState', [ApiCartController::class, 'changeState'])
             ->name('update.state.saved');
     });
 

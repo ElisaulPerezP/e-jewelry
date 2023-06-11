@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ItemCart\AmountItemCartRequest;
-use App\Http\Requests\ItemCart\StateItemCartRequest;
-use App\Http\Resources\ItemCartResource;
-use App\Models\ItemCart;
+use App\Http\Requests\CartItem\AmountCartItemRequest;
+use App\Http\Requests\CartItem\StateCartItemRequest;
+use App\Http\Resources\CartItemResource;
+use App\Models\CartItem;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -17,20 +17,20 @@ class ApiCartController extends Controller
     {
         Cache::forget('cart');
         $itemsCart = Cache::rememberForever('cart', function () {
-            return auth()->user()->itemsCart->where('state', 'selected', 'in_cart');
+            return auth()->user()->cartItems->where('state', 'selected', 'in_cart');
         });
 
-        return ItemCartResource::collection($itemsCart);
+        return CartItemResource::collection($itemsCart);
     }
 
-    public function store(Product $product): ItemCartResource
+    public function store(Product $product): CartItemResource
     {
-        $itemCart = new ItemCart();
-        $itemCart->user_id = auth()->user()->id;
-        $itemCart->product_id = $product->id;
-        $itemCart->amount = 1;
-        $itemCart->state = 'in_cart';
-        $itemCart->save();
+        $cartItem = new CartItem();
+        $cartItem->user_id = auth()->user()->id;
+        $cartItem->product_id = $product->id;
+        $cartItem->amount = 1;
+        $cartItem->state = 'in_cart';
+        $cartItem->save();
 
         $product->stock--;
         $product->save();
@@ -38,47 +38,47 @@ class ApiCartController extends Controller
         Cache::forget('cart');
         Cache::forget('products');
 
-        return new ItemCartResource($itemCart);
+        return new CartItemResource($cartItem);
     }
 
-    public function changeState(StateItemCartRequest $request, ItemCart $itemCart): ItemCartResource
+    public function changeState(StateCartItemRequest $request, CartItem $cartItem): CartItemResource
     {
-        $itemCart->state = $request->state;
-        $itemCart->save();
+        $cartItem->state = $request->state;
+        $cartItem->save();
 
         Cache::forget('cart');
 
-        return new ItemCartResource($itemCart);
+        return new CartItemResource($cartItem);
     }
 
-    public function setAmount(AmountItemCartRequest $request, ItemCart $itemCart): ItemCartResource|JsonResponse
+    public function setAmount(AmountCartItemRequest $request, CartItem $cartItem): CartItemResource|JsonResponse
     {
-        $product = $itemCart->product;
-        if ($product->stock < $request->amount - $itemCart->amount) {
+        $product = $cartItem->product;
+        if ($product->stock < $request->amount - $cartItem->amount) {
             return response()->json(['error' => 'Lo sentimos, hay '
-                . $product->stock + $itemCart->amount
+                . $product->stock + $cartItem->amount
                 . ' disponibles'], 422);
         }
 
-        $product->stock -= ($request->amount - $itemCart->amount);
+        $product->stock -= ($request->amount - $cartItem->amount);
         $product->save();
 
-        $itemCart->amount = $request->amount;
-        $itemCart->save();
+        $cartItem->amount = $request->amount;
+        $cartItem->save();
 
         Cache::forget('cart');
         Cache::forget('products');
 
-        return new ItemCartResource($itemCart);
+        return new CartItemResource($cartItem);
     }
 
-    public function destroy(ItemCart $itemCart): JsonResponse
+    public function destroy(CartItem $cartItem): JsonResponse
     {
-        $product = $itemCart->product;
-        $product->stock += $itemCart->amount;
+        $product = $cartItem->product;
+        $product->stock += $cartItem->amount;
         $product->save();
 
-        $itemCart->delete();
+        $cartItem->delete();
 
         Cache::forget('cart');
         Cache::forget('products');

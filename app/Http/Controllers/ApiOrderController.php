@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Payment\request\OrderRequest;
 use App\Http\Resources\OrderResource;
-use App\Models\ItemCart;
+use App\Models\CartItem;
 use App\Models\Order;
 use Exception;
 use Illuminate\Http\Request;
@@ -34,18 +34,11 @@ class ApiOrderController extends Controller
 
     public function store(Request $request): OrderResource
     {
-        $itemsCart = ItemCart::where('state', 'selected')
+        $cartItems = CartItem::where('state', 'selected')
             ->where('user_id', auth()->user()->id)
             ->get();
 
         $order = new Order();
-
-        foreach ($itemsCart as $itemCart) {
-            $itemCart->state = 'in_order';
-            $itemCart->order_id = $order->id;
-            $itemCart->save();
-            $order->total += $itemCart->amount * $itemCart->product->price;
-        }
 
         $order->user_id = auth()->user()->id;
         $order->reference = uuid_create();
@@ -53,6 +46,14 @@ class ApiOrderController extends Controller
         $order->state = 'pending';
         $order->return_url = 'http://127.0.0.1:8000/order/state/' . $order->reference;
         $order->save();
+
+        foreach ($cartItems as $cartItem) {
+            $cartItem->state = 'in_order';
+            $cartItem->order_id = $order->id;
+            $cartItem->save();
+        }
+
+        $order->setTotal();
 
         $service = new PlaceToPayPayment();
         $order = $service->pay($order, $request->ip(), $request->userAgent());

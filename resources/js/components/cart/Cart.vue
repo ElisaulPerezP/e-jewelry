@@ -37,44 +37,44 @@
                                 </tr>
                                 </thead>
                                 <tbody class="bg-white">
-                                <tr class="text-gray-700" v-for="itemCart in itemsCart" :key="itemCart.id">
+                                <tr class="text-gray-700" v-for="CartItem in CartItems" :key="CartItem.id">
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-sm">
                                             <input
                                                 type="checkbox"
-                                                v-model="itemCart.state"
+                                                v-model="CartItem.state"
                                                 true-value="selected"
                                                 false-value="in_cart"
-                                                @change="changeState(itemCart)" >
+                                                @change="changeState(CartItem)" >
                                         </div>
                                     </td>
                                     <div class="max-w-xs">
                                         <img
-                                            :src="'/storage/' + itemCart.product_image"
-                                            :alt="itemCart.name"
+                                            :src="'/storage/' + CartItem.product_image"
+                                            :alt="CartItem.name"
                                         />
                                     </div>
 
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-sm">
-                                            <p class="font-semibold text-black">{{ itemCart.product_name }}</p>
+                                            <p class="font-semibold text-black">{{ CartItem.product_name }}</p>
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 border">
-                                        <input type="number" v-model="itemCart.amount"
-                                               @change="setAmount(itemCart)"
+                                        <input type="number" v-model="CartItem.amount"
+                                               @change="setAmount(CartItem)"
                                                placeholder="Cantidad"
                                                class="mb-2 mt-2 border border-gray-400 rounded-lg p-2">
                                     </td>
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-xs">
-                                            <p class="font-semibold text-black">{{ itemCart.product_price }}
+                                            <p class="font-semibold text-black">{{ CartItem.product_price }}
                                             </p>
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-sm">
-                                            <a :href="'/products/' + itemCart.product_id"
+                                            <a :href="'/products/' + CartItem.product_id"
                                                class="inline-flex items-center px-1 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                                                 <slot>...</slot>
                                             </a>
@@ -82,7 +82,7 @@
                                     </td>
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-sm">
-                                            <button @click="deleteItemCart(itemCart)"
+                                            <button @click="deleteItemCart(CartItem)"
                                                     class="inline-flex items-center px-1 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                                                 Borrar
                                             </button>
@@ -155,7 +155,7 @@
 import {ref, onMounted, computed} from 'vue'
 import axios from 'axios'
 
-const itemsCart = ref([])
+const CartItems = ref([])
 const query = ref("")
 const open = ref(false)
 const showModal = ref(false)
@@ -163,9 +163,9 @@ const modalMessage = ref('')
 
 const totalPrice = computed(() => {
     let total = 0
-        itemsCart.value.map(itemCart => {
-            if (itemCart.state === 'selected') {
-                total += itemCart.product_price * itemCart.amount
+        CartItems.value.map(CartItem => {
+            if (CartItem.state === 'selected') {
+                total += CartItem.product_price * CartItem.amount
             }
         })
     return total
@@ -173,26 +173,26 @@ const totalPrice = computed(() => {
 
 onMounted(() => {
     axios.get('/api/cart/')
-        .then(response => itemsCart.value = response.data.data)
+        .then(response => CartItems.value = response.data.data)
         .catch(error => console.log(error))
 })
 
-const changeState = itemCart => {
-    axios.put('/api/cart/' + itemCart.id + '/changeState', {'state': itemCart.state})
+const changeState = CartItem => {
+    axios.put('/api/cart/' + CartItem.id + '/changeState', {'state': CartItem.state})
         .catch(error => console.log(error))
 }
 
-const setAmount = async itemCart => {
-    axios.put('/api/cart/' + itemCart.id + '/setAmount', {'amount': itemCart.amount})
-        .then(response => itemCart.value = response.data.data)
+const setAmount = async CartItem => {
+    axios.put('/api/cart/' + CartItem.id + '/setAmount', {'amount': CartItem.amount})
+        .then(response => CartItem.value = response.data.data)
         .catch(error => console.log(error))
 }
 const back = () => {
     window.location.href = window.history.back()
 }
-const deleteItemCart = async (itemCart) => {
-    axios.delete('/api/cart/' + itemCart.id + '/delete')
-        .then(() => itemsCart.value.splice(itemsCart.value.indexOf(itemCart), 1))
+const deleteItemCart = async (CartItem) => {
+    axios.delete('/api/cart/' + CartItem.id + '/delete')
+        .then(() => CartItems.value.splice(CartItems.value.indexOf(CartItem), 1))
         .catch(error => console.log(error))
 }
 

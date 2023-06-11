@@ -22,11 +22,11 @@ class ApiOrderController extends Controller
         return OrderResource::collection($orders);
     }
 
-    public function update(OrderRequest $request): OrderResource|string
+    public function update(OrderRequest $request, Order $order): OrderResource|string
     {
-        $order = Order::find($request->order_id);
-        $order->order_state = $request->order_state;
+        $order->state = $request->state;
         $order->save();
+
         Cache::forget('orders');
 
         return new OrderResource($order);

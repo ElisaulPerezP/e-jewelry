@@ -65,7 +65,7 @@ class ApiOrderController extends Controller
     /**
      * @throws Exception
      */
-    public function checkStatus(Order $order): OrderResource|string
+    public function checkStatus(Order $order): OrderResource
     {
         if ($order->order_state === 'processing') {
             $service = new PlaceToPayPayment();

@@ -50,15 +50,16 @@ class ApiCartController extends Controller
 
         return new ItemCartResource($itemCart);
     }
-    public function updateAmount(ItemCartRequest $request, ItemCart $itemCart): ItemCartResource|JsonResponse
+
+    public function setAmount(AmountItemCartRequest $request, ItemCart $itemCart): ItemCartResource|JsonResponse
     {
-        if ($itemCart->product()->first()->stock < $request->amount - $itemCart->amount) {
+        $product = $itemCart->product;
+        if ($product->stock < $request->amount - $itemCart->amount) {
             return response()->json(['error' => 'Lo sentimos, hay '
-                . $itemCart->product()->first()->stock + $itemCart->amount
+                . $product->stock + $itemCart->amount
                 . ' disponibles'], 422);
         }
 
-        $product = Product::find($itemCart->product->id);
         $product->stock -= ($request->amount - $itemCart->amount);
         $product->save();
 
@@ -66,6 +67,7 @@ class ApiCartController extends Controller
         $itemCart->save();
 
         Cache::forget('cart');
+        Cache::forget('products');
 
         return new ItemCartResource($itemCart);
     }

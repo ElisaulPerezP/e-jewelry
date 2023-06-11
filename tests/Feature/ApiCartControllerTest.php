@@ -26,7 +26,7 @@ class ApiCartControllerTest extends TestCase
             'user_id' => $admin->id,
             'product_id' => $product->id,
             'amount' => 10,
-            'item_state' => 'in_cart',
+            'state' => 'in_cart',
         ]);
 
         $response = $this->actingAs($admin, 'api')->getJson(route('api.cart.index', $admin));
@@ -38,10 +38,10 @@ class ApiCartControllerTest extends TestCase
                 '*' => [
                     'user_id',
                     'amount',
-                    'item_state',
+                    'state',
                     'product_image',
                     'product_name',
-                    'products_price',
+                    'product_price',
                 ],
             ],
         ]);
@@ -54,132 +54,70 @@ class ApiCartControllerTest extends TestCase
     {
         $product = Product::factory()->create();
         $admin = User::factory()->create();
-        $permission = Permission::findOrCreate('api.cart.update.amount');
+        $permission = Permission::findOrCreate('api.cart.setAmount');
         $role = Role::findOrCreate('admin')->givePermissionTo($permission);
         $admin->assignRole($role);
         $itemCart = ItemCart::factory()->create([
             'user_id' => $admin->id,
             'product_id' => $product->id,
             'amount' => 10,
-            'item_state' => 'in_cart',
-            'expire_date' => 0,
+            'state' => 'in_cart',
+
         ]);
 
-        $response = $this->actingAs($admin, 'api')->putJson(route('api.cart.update.amount', $itemCart), [
+        $response = $this->actingAs($admin, 'api')->putJson(route('api.cart.setAmount', $itemCart), [
             'user_id' => $itemCart->user_id,
-            'product_id'=> $itemCart->product_id,
+            'product_id' => $itemCart->product_id,
             'amount' => 11,
-            'item_state'=> $itemCart->item_state,
-            'expire_date' => 0,
+            'state' => $itemCart->state,
+
         ]);
 
         $productUpdated = ItemCart::findOrFail($itemCart->id);
 
         $response->assertOk();
 
-        $this->assertDatabaseCount('item_carts', 1);
+        $this->assertDatabaseCount('items_cart', 1);
         $this->assertFalse(Cache::has('cart'));
 
         $this->assertEquals($admin->id, $productUpdated->user_id);
         $this->assertEquals($product->id, $productUpdated->product_id);
         $this->assertEquals('11', $productUpdated->amount);
-        $this->assertEquals('in_cart', $productUpdated->item_state);
+        $this->assertEquals('in_cart', $productUpdated->state);
     }
 
-    public function testUpdateCartItemStatusInCart(): void
+    public function testUpdateCartItemStateToInCart(): void
     {
         $product = Product::factory()->create();
         $admin = User::factory()->create();
-        $permission = Permission::findOrCreate('api.cart.update.state.incart');
+        $permission = Permission::findOrCreate('api.cart.changeState');
         $role = Role::findOrCreate('admin')->givePermissionTo($permission);
         $admin->assignRole($role);
         $itemCart = ItemCart::factory()->create([
             'user_id' => $admin->id,
             'product_id' => $product->id,
             'amount' => 10,
-            'item_state' => 'saved',
-            'expire_date' => 0,
+            'state' => 'selected',
         ]);
+        $options = ['in_cart', 'in_order', 'selected'];
 
-        $response = $this->actingAs($admin, 'api')->putJson(route('api.cart.update.state.incart', $itemCart));
+        foreach ($options as $option) {
+            $response = $this->actingAs($admin, 'api')->putJson(route('api.cart.update.state.saved', $itemCart->id), ['state' => $option]);
 
-        $productUpdated = ItemCart::findOrFail($itemCart->id);
+            $productUpdated = ItemCart::findOrFail($itemCart->id);
 
-        $response->assertOk();
+            $response->assertOk();
 
-        $this->assertDatabaseCount('item_carts', 1);
-        $this->assertFalse(Cache::has('cart'));
+            $this->assertDatabaseCount('items_cart', 1);
+            $this->assertFalse(Cache::has('cart'));
 
-        $this->assertEquals($admin->id, $productUpdated->user_id);
-        $this->assertEquals($product->id, $productUpdated->product_id);
-        $this->assertEquals($itemCart->amount, $productUpdated->amount);
-        $this->assertEquals('in_cart', $productUpdated->item_state);
+            $this->assertEquals($admin->id, $productUpdated->user_id);
+            $this->assertEquals($product->id, $productUpdated->product_id);
+            $this->assertEquals($itemCart->amount, $productUpdated->amount);
+            $this->assertEquals($option, $productUpdated->state);
+        }
     }
 
-    public function testUpdateCartItemStatusSaved(): void
-    {
-        $product = Product::factory()->create();
-        $admin = User::factory()->create();
-        $permission = Permission::findOrCreate('api.cart.update.state.saved');
-        $role = Role::findOrCreate('admin')->givePermissionTo($permission);
-        $admin->assignRole($role);
-        $itemCart = ItemCart::factory()->create([
-            'user_id' => $admin->id,
-            'product_id' => $product->id,
-            'amount' => 10,
-            'item_state' => 'in_cart',
-            'expire_date' => 0,
-        ]);
-
-        $response = $this->actingAs($admin, 'api')->putJson(route('api.cart.update.state.saved', $itemCart));
-
-        $productUpdated = ItemCart::findOrFail($itemCart->id);
-
-        $response->assertOk();
-
-        $this->assertDatabaseCount('item_carts', 1);
-        $this->assertFalse(Cache::has('cart'));
-
-        $this->assertEquals($admin->id, $productUpdated->user_id);
-        $this->assertEquals($product->id, $productUpdated->product_id);
-        $this->assertEquals($itemCart->amount, $productUpdated->amount);
-        $this->assertEquals('saved', $productUpdated->item_state);
-    }
-    public function testUpdateCartItemExpireDate(): void
-    {
-        $product = Product::factory()->create();
-        $admin = User::factory()->create();
-        $permission = Permission::findOrCreate('api.cart.update.date');
-        $role = Role::findOrCreate('admin')->givePermissionTo($permission);
-        $admin->assignRole($role);
-        $itemCart = ItemCart::factory()->create([
-            'user_id' => $admin->id,
-            'product_id' => $product->id,
-            'amount' => 10,
-            'item_state' => 'in_cart',
-            'expire_date' => 0,
-        ]);
-
-        $response = $this->actingAs($admin, 'api')->putJson(route('api.cart.update.date', $itemCart), [
-            'user_id' => $itemCart->user_id,
-            'product_id' => $itemCart->product_id,
-            'amount' => $itemCart->amount,
-            'item_state' => $itemCart->item_state,
-        ]);
-
-        $productUpdated = ItemCart::findOrFail($itemCart->id);
-
-        $response->assertOk();
-
-        $this->assertDatabaseCount('item_carts', 1);
-        $this->assertFalse(Cache::has('cart'));
-
-        $this->assertEquals($admin->id, $productUpdated->user_id);
-        $this->assertEquals($product->id, $productUpdated->product_id);
-        $this->assertEquals($itemCart->amount, $productUpdated->amount);
-        $this->assertEquals($itemCart->item_state, $productUpdated->item_state);
-        $this->assertEquals(time() + 3600 * 2, $productUpdated->expire_date);
-    }
     public function testItCanCreateItemCart(): void
     {
         $user = User::factory()->create();
@@ -187,13 +125,13 @@ class ApiCartControllerTest extends TestCase
 
         $response = $this->actingAs($user, 'api')->postJson(route('api.cart.store', $user->id));
 
-        $itemCartCreated = ItemCart::findOrFail($response->json()['data']['itemCart_id']);
+        $itemCartCreated = ItemCart::findOrFail($response->json()['data']['id']);
 
         $response->assertCreated();
-        $this->assertDatabaseCount('item_carts', 1);
+        $this->assertDatabaseCount('items_cart', 1);
         $this->assertEquals($user->id, $itemCartCreated->user_id);
         $this->assertEquals($product->id, $itemCartCreated->product_id);
-        $this->assertEquals('in_cart', $itemCartCreated->item_state);
+        $this->assertEquals('in_cart', $itemCartCreated->state);
     }
 
     public function testItCanDeleteItemCart(): void
@@ -204,21 +142,21 @@ class ApiCartControllerTest extends TestCase
         $admin->assignRole($role);
         $product = Product::factory()->create();
 
-        $this->assertDatabaseCount('item_carts', 0);
+        $this->assertDatabaseCount('items_cart', 0);
 
         $itemCart = ItemCart::factory()->create([
             'user_id' => $admin->id,
             'product_id' => $product->id,
             'amount' => 10,
-            'item_state' => 'in_cart',
+            'state' => 'in_cart',
         ]);
 
-        $this->assertDatabaseCount('item_carts', 1);
+        $this->assertDatabaseCount('items_cart', 1);
 
         $response = $this->actingAs($admin, 'api')->deleteJson(route('api.cart.destroy', $itemCart));
 
         $response->assertStatus(204);
-        $this->assertDatabaseCount('item_carts', 0);
+        $this->assertDatabaseCount('items_cart', 0);
         $this->assertFalse(Cache::has('cart'));
     }
 }

@@ -74,8 +74,14 @@ class ApiCartController extends Controller
 
     public function destroy(ItemCart $itemCart): JsonResponse
     {
+        $product = $itemCart->product;
+        $product->stock += $itemCart->amount;
+        $product->save();
+
         $itemCart->delete();
+
         Cache::forget('cart');
+        Cache::forget('products');
 
         return new JsonResponse(['message' => 'deleted'], 204);
     }

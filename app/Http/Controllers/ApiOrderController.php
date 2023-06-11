@@ -67,7 +67,7 @@ class ApiOrderController extends Controller
      */
     public function checkStatus(Order $order): OrderResource
     {
-        if ($order->order_state === 'processing') {
+        if ($order->state === 'pending') {
             $service = new PlaceToPayPayment();
             $service->getRequestInformation($order);
         }

@@ -20,6 +20,7 @@ class PlaceToPayPayment extends Controller
         if ($result->ok()) {
             $order->request_id = $result->json()['requestId'];
             $order->process_url = $result->json()['processUrl'];
+            $order->state = 'pending';
             $order->save();
 
             return $order;

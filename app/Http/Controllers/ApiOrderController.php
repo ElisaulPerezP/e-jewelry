@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Payment\request\OrderRequest;
 use App\Http\Resources\OrderResource;
+use App\Models\ItemCart;
 use App\Models\Order;
-use App\Models\Product;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -15,10 +15,8 @@ class ApiOrderController extends Controller
 {
     public function index(): AnonymousResourceCollection
     {
-        $user = auth()->user();
-        Cache::forget('orders');
-        $orders = Cache::rememberForever('orders', function () use ($user) {
-            return $user->Orders()->get();
+        $orders = Cache::rememberForever('orders', function () {
+            return auth()->user()->orders;
         });
 
         return OrderResource::collection($orders);

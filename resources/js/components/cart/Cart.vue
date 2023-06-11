@@ -7,7 +7,7 @@
                         <div class="py-4 flex justify-between">
                             <div class="py-4 flex justify-between">
                                 <div class="py-4 flex justify-between">
-                                <button @click="pagar"
+                                <button @click="pay"
                                         class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xl text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                                     {{
                                         totalPrice === 0 ? 'selecciona productos para pagar' : 'pagar ahora:' + ' COP $' + totalPrice
@@ -32,69 +32,49 @@
                                     <th class="px-4 py-3">{{ ('nombre') }}</th>
                                     <th class="px-4 py-3">{{ ('cantidad') }}</th>
                                     <th class="px-4 py-3">{{ ('precio') }}</th>
-                                    <th class="px-4 py-3">{{ ('reserva') }}</th>
-                                    <th class="px-4 py-3">{{ ('estado') }}</th>
                                     <th class="px-4 py-3">{{ ('detalle') }}</th>
                                     <th class="px-4 py-3">{{ ('eliminar') }}</th>
                                 </tr>
                                 </thead>
                                 <tbody class="bg-white">
-                                <tr class="text-gray-700" v-for="item in itemsCart" :key="item.id">
-
+                                <tr class="text-gray-700" v-for="itemCart in itemsCart" :key="itemCart.id">
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-sm">
-                                            <input type="checkbox" :id="'checkbox-' + item.id"
-                                                   v-model="selectedProducts" :value="item">
-                                            <label :for="'checkbox-' + item.id">{{ item.name }} - {{
-                                                    item.price
-                                                }}</label>
-
+                                            <input
+                                                type="checkbox"
+                                                v-model="itemCart.state"
+                                                true-value="selected"
+                                                false-value="in_cart"
+                                                @change="changeState(itemCart)" >
                                         </div>
                                     </td>
                                     <div class="max-w-xs">
                                         <img
-                                            :src="'/storage/' + item.product_image"
-                                            :alt="item.name"
+                                            :src="'/storage/' + itemCart.product_image"
+                                            :alt="itemCart.name"
                                         />
                                     </div>
 
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-sm">
-                                            <p class="font-semibold text-black">{{ item.product_name }}</p>
+                                            <p class="font-semibold text-black">{{ itemCart.product_name }}</p>
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 border">
-                                        <input type="number" v-model="item.amount"
-                                               @change="updateProductAmount(item)"
+                                        <input type="number" v-model="itemCart.amount"
+                                               @change="setAmount(itemCart)"
                                                placeholder="Cantidad"
                                                class="mb-2 mt-2 border border-gray-400 rounded-lg p-2">
                                     </td>
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-xs">
-                                            <p class="font-semibold text-black">{{ item.products_price }}
-                                            </p>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-3 border">
-                                        Este artículo será retirado en: {{ item.minutesToExpire }} minutos
-                                        <button type="button"
-                                                :id="'reservar-' + item.id"
-                                                @click="item.minutesToExpire === 0 ? updateProductExpireDate(item) : saveItem(item)"
-                                                class="inline-flex items-center px-1 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                            {{item.minutesToExpire === 0 ? 'Tomar de nuevo': 'Guardar producto'}}
-                                        </button>
-                                    </td>
-
-                                    <td class="px-4 py-3 border">
-                                        <div class="flex items-center text-sm">
-                                            <p class="font-semibold text-black">
-                                                {{ item.item_state === 'saved' ? 'GUARDADO, se enviaran mensajes recordatorios':  item.item_state === 'in_cart' ? 'El producto esta en el carrito' : item.item_state === 'in_order'? 'Existe una orden de compra': 'indeterminado'}}
+                                            <p class="font-semibold text-black">{{ itemCart.product_price }}
                                             </p>
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-sm">
-                                            <a :href="'/products/show/' + item.product_id"
+                                            <a :href="'/products/' + itemCart.product_id"
                                                class="inline-flex items-center px-1 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                                                 <slot>...</slot>
                                             </a>
@@ -102,7 +82,7 @@
                                     </td>
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-sm">
-                                            <button @click="deleteItemCart(item)"
+                                            <button @click="deleteItemCart(itemCart)"
                                                     class="inline-flex items-center px-1 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                                                 Borrar
                                             </button>
@@ -135,7 +115,7 @@
                                         </td>
                                         <td class="px-4 py-3 border">
                                             <div>
-                                                <button @click="pagar"
+                                                <button @click="pay"
                                                         class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xl text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                                                     {{
                                                         totalPrice === 0 ? 'NO HA SELECCIONADO PRODUCTOS' : 'PAGAR AHORA'
@@ -172,119 +152,62 @@
 </template>
 
 <script setup>
-import {defineProps, ref, onMounted, computed} from 'vue'
+import {ref, onMounted, computed} from 'vue'
 import axios from 'axios'
 
 const itemsCart = ref([])
 const query = ref("")
-const selectedProducts = ref([]);
 const open = ref(false)
-const showModal = ref(false);
-const modalMessage = ref('');
-
-const props = defineProps({
-    user_id: {
-        type: Number,
-        required: true
-    }
-})
+const showModal = ref(false)
+const modalMessage = ref('')
 
 const totalPrice = computed(() => {
-    let total = 0;
-    for (const product of selectedProducts.value) {
-        total += product.products_price * product.amount;
-    }
-    return total;
+    let total = 0
+        itemsCart.value.map(itemCart => {
+            if (itemCart.state === 'selected') {
+                total += itemCart.product_price * itemCart.amount
+            }
+        })
+    return total
 });
 
 onMounted(() => {
-    axios.get('/api/cart/' + props.user_id)
+    axios.get('/api/cart/')
         .then(response => itemsCart.value = response.data.data)
-        .catch(error => console.log(error));
-    setInterval(updateExpireTimes, 1000);
+        .catch(error => console.log(error))
 })
 
-
-const updateExpireTimes = () => {
-    const currentTime = Math.floor(Date.now() / 1000);
-
-    for (const item of itemsCart.value) {
-        if(item.expire_date - currentTime > 0) {
-            const differenceInSeconds = item.expire_date - currentTime;
-            const differenceInMinutes = Math.ceil(differenceInSeconds / 60);
-            item.minutesToExpire = differenceInMinutes;
-        }else if(item.expire_date - currentTime < 0 && item.minutesToExpire != 0){
-            item.minutesToExpire = 0;
-            resetItemStock(item);
-        }
-    }
-};
-
-
-const saveItem = async (item) => {
-    axios.put('/api/cart/' + item.itemCart_id + '/update/state/saved');
-    location.reload();
-}
-
-const resetItemStock = async (item) => {
-    axios.put('/api/cart/' + item.itemCart_id + '/reset/amount')
-        .then(response => {
-            item.value = response.data.data;
-        })
-        .catch(error => {
-            console.log(error);
-        })
-}
-
-const updateProductAmount = async (item) => {
-    axios.put('/api/cart/' + item.itemCart_id + '/update/amount', item)
-        .then(response => {
-            item.value = response.data.data;
-        })
-        .catch(error => {
-            if (error.response && error.response.data && error.response.data.error) {
-                modalMessage.value = error.response.data.error;
-                showModal.value = true;
-            } else {
-                console.log(error);
-            }
-        });
-}
-
-const updateProductExpireDate = async (item) => {
-    axios.put('/api/cart/' + item.itemCart_id + '/update/date', item)
-        .then(response => {
-            item.value = response.data.data;
-        })
-        .catch(error => {
-            console.log(error);
-        });
-}
-
-
-const back = () => {
-    window.location.href = window.history.back();
-}
-const deleteItemCart = async (item) => {
-    axios.delete('/api/cart/' + item.itemCart_id + '/delete')
-        .then()
+const changeState = itemCart => {
+    axios.put('/api/cart/' + itemCart.id + '/changeState', {'state': itemCart.state})
         .catch(error => console.log(error))
-    location.reload()
+}
+
+const setAmount = async itemCart => {
+    axios.put('/api/cart/' + itemCart.id + '/setAmount', {'amount': itemCart.amount})
+        .then(response => itemCart.value = response.data.data)
+        .catch(error => console.log(error))
+}
+const back = () => {
+    window.location.href = window.history.back()
+}
+const deleteItemCart = async (itemCart) => {
+    axios.delete('/api/cart/' + itemCart.id + '/delete')
+        .then(() => itemsCart.value.splice(itemsCart.value.indexOf(itemCart), 1))
+        .catch(error => console.log(error))
 }
 
 const closeModal = () => {
     location.reload()
-    showModal.value = false;
+    showModal.value = false
 }
 
-const pagar = () => {
-    console.log(selectedProducts);
-    axios.post('/api/order/create/', {'items_cart' : selectedProducts.value})
-       .then((response) => window.location.href = response.data.data.process_url)
+const pay = () => {
+    axios.post('/api/order/create/')
+       .then(response => window.location.href = response.data.data.process_url)
 }
 
 const seeOrders = () => {
-    window.location.href = '/order';
+    window.location.href = '/order'
 }
 
 </script>

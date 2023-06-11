@@ -71,31 +71,6 @@ class ApiCartController extends Controller
 
         return new ItemCartResource($itemCart);
     }
-    public function show(Product $product): ProductResource
-    {
-        return new ProductResource($product);
-    }
-
-    public function store(Product $product): ItemCartResource|string
-    {
-        $itemCart = ItemCart::where('product_id', $product->id)->where('user_id', auth()->user()->id)->first();
-
-        if (is_null($itemCart)) {
-            $now = time();
-            $expireUnixDate = $now + 3600 * 2;
-            $itemCart = new ItemCart();
-            $itemCart->user_id = auth()->user()->id;
-            $itemCart->product_id = $product->id;
-            $itemCart->amount = 1;
-            $itemCart->item_state = 'in_cart';
-            $itemCart->expire_date = $expireUnixDate;
-
-            $itemCart->save();
-            Cache::forget('cart');
-        }
-
-        return new ItemCartResource($itemCart);
-    }
 
     public function destroy(ItemCart $itemCart): JsonResponse
     {

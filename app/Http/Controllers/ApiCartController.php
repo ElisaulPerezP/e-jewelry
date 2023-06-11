@@ -41,13 +41,9 @@ class ApiCartController extends Controller
         return new ItemCartResource($itemCart);
     }
 
-    public function resetItemAmount(ItemCart $itemCart): ItemCartResource|JsonResponse
+    public function changeState(StateItemCartRequest $request, ItemCart $itemCart): ItemCartResource
     {
-        $product = Product::find($itemCart->product->id);
-        $product->stock += $itemCart->amount;
-        $product->save();
-
-        $itemCart->amount = 0;
+        $itemCart->state = $request->state;
         $itemCart->save();
 
         Cache::forget('cart');

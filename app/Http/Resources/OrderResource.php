@@ -11,12 +11,10 @@ class OrderResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'payment_reference' => $this->payment_reference,
-            'description' => $this->description,
+            'reference' => $this->reference,
             'total' => $this->total,
             'currency' => $this->currency,
             'order_state' => $this->order_state,
-            'expiration' => $this->expiration,
             'return_url' => $this->return_url,
             'process_url' => $this->process_url,
             'created_at' => $this->created_at,

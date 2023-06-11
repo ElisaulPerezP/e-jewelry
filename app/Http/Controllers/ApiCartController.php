@@ -2,26 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\cart\ItemCartRequest;
+use App\Http\Requests\ItemCart\AmountItemCartRequest;
+use App\Http\Requests\ItemCart\StateItemCartRequest;
 use App\Http\Resources\ItemCartResource;
-use App\Http\Resources\ProductResource;
 use App\Models\ItemCart;
 use App\Models\Product;
-use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Cache;
 
 class ApiCartController extends Controller
 {
-    public function index(User $user): AnonymousResourceCollection
+    public function index(): AnonymousResourceCollection
     {
         Cache::forget('cart');
-        $itemCarts = Cache::rememberForever('cart', function () use ($user) {
-            return $user->itemCarts()->get();
+        $itemsCart = Cache::rememberForever('cart', function () {
+            return auth()->user()->itemsCart->where('state', 'selected', 'in_cart');
         });
 
-        return ItemCartResource::collection($itemCarts);
+        return ItemCartResource::collection($itemsCart);
     }
 
     public function update(ItemCartRequest $request, ItemCart $itemCart): ItemCartResource|string

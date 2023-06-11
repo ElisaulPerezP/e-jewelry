@@ -34,7 +34,6 @@ class ApiOrderController extends Controller
 
     public function store(Request $request): OrderResource
     {
-
         $itemsCart = ItemCart::where('state', 'selected')
             ->where('user_id', auth()->user()->id)
             ->get();

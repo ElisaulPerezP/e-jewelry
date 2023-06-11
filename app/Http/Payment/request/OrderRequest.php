@@ -38,10 +38,6 @@ class OrderRequest extends FormRequest
                 'required',
 
             ],
-            'expiration' => [
-                'required',
-                'date',
-            ],
             'return_url' => [
                 'required',
                 'string',

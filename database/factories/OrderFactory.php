@@ -19,8 +19,7 @@ class OrderFactory extends Factory
             'reference' => uuid_create(),
             'total' => fake()->randomNumber(6),
             'currency' => $this->faker->randomElement(['USD', 'COP']),
-            'order_state' => $this->faker->randomElement(['processing', 'reject', 'approved']),
-            'expiration' => date('c'),
+            'state' => $this->faker->randomElement(['processing', 'reject', 'approved']),
             'return_url' => 'http:/test',
             'process_url' => null,
              ];

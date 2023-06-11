@@ -16,7 +16,6 @@ class Order extends Model
         'total',
         'currency',
         'order_state',
-        'expiration',
         'return_url',
         'process_url',
         'request_id',

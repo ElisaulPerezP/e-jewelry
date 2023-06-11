@@ -16,8 +16,7 @@ class OrderFactory extends Factory
     {
         return [
             'user_id' => random_int(1, User::count()),
-            'payment_reference' => uuid_create(),
-            'description' => fake()->sentence(5),
+            'reference' => uuid_create(),
             'total' => fake()->randomNumber(6),
             'currency' => $this->faker->randomElement(['USD', 'COP']),
             'order_state' => $this->faker->randomElement(['processing', 'reject', 'approved']),

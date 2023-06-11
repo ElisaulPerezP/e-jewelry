@@ -10,11 +10,11 @@ class ItemCartResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'itemCart_id' => $this->id,
+            'id' => $this->id,
             'user_id' => auth()->user()->id,
-            'product_id' => $this->product_id,
+            'product_id' => $this->product->id,
             'amount' => $this->amount,
-            'item_state' => $this->item_state,
+            'state' => $this->state,
             'product_image' => $this->product->image,
             'product_name' => $this->product->name,
             'products_price' => $this->product->price,

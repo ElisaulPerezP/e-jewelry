@@ -18,7 +18,7 @@ class OrderRequest extends FormRequest
                 'required',
                 'integer',
             ],
-            'payment_reference' => [
+            'reference' => [
                 'required',
                 'string',
             ],

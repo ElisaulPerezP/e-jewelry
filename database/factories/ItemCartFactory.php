@@ -19,8 +19,7 @@ class ItemCartFactory extends Factory
             'user_id' => random_int(1, User::count()),
             'product_id'=> random_int(1, Product::count()),
             'amount'=> $this->faker->randomNumber(2),
-            'item_state' => $this->faker->randomElement(['in_cart', 'saved']),
-            'expire_date' => time() + random_int(0, 10000),
+            'state' => $this->faker->randomElement(['in_cart', 'selected', 'in_order']),
         ];
     }
 }

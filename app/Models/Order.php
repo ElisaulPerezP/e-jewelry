@@ -12,8 +12,7 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
-        'payment_reference',
-        'description',
+        'reference',
         'total',
         'currency',
         'order_state',
@@ -30,14 +29,14 @@ class Order extends Model
     }
     public function canceled(): void
     {
-        $this->order_state = 'reject';
+        $this->order_state = 'rejected';
         $this->save();
     }
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-    public function itemCarts(): HasMany
+    public function itemsCart(): HasMany
     {
         return $this->hasMany(ItemCart::class, 'itemCart_id');
     }

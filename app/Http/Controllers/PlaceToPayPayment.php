@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
@@ -24,7 +25,7 @@ class PlaceToPayPayment extends Controller
             return $order;
         }
 
-        throw new \Exception($result->body());
+        throw new Exception($result->body());
     }
 
     private function createSession(Order $order, string $ipAddress, string $userAgent): array
@@ -70,7 +71,7 @@ class PlaceToPayPayment extends Controller
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function getRequestInformation(Order $order): RedirectResponse
     {
@@ -92,6 +93,6 @@ class PlaceToPayPayment extends Controller
             return redirect(route('orders.show', $order));
         }
 
-        throw  new \Exception($result->body());
+        throw  new Exception($result->body());
     }
 }

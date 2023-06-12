@@ -6,7 +6,9 @@ use App\Http\Payment\request\OrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\CartItem;
 use App\Models\Order;
+use App\Services\PlaceToPayPaymentService;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Cache;
@@ -62,8 +64,9 @@ class ApiOrderController extends Controller
 
         $order->setTotal();
 
-        $service = new PlaceToPayPayment();
-        $order = $service->pay($order, $request->ip(), $request->userAgent());
+        $service = new PlaceToPayPaymentService();
+        $service->pay($order, $request->ip(), $request->userAgent());
+
         Cache::forget('orders');
 
         return new OrderResource($order);
@@ -74,11 +77,23 @@ class ApiOrderController extends Controller
      */
     public function checkStatus(Order $order): OrderResource
     {
-        if ($order->state === 'pending') {
-            $service = new PlaceToPayPayment();
-            $service->getRequestInformation($order);
-        }
+        $service = new PlaceToPayPaymentService();
+        $service->getRequestInformation($order);
 
         return new OrderResource($order);
+    }
+
+    public function retry(Request $request, Order $order): OrderResource|JsonResponse
+    {
+        if ($order->state !== 'rejected') {
+            return response()->json(['error' => 'Esta orden no esta rechazada, el estado es ' . $order->state], 422);
+        }
+
+        $newOrder = $order->clone();
+
+        $service = new PlaceToPayPaymentService();
+        $service->pay($newOrder, $request->ip(), $request->userAgent());
+
+        return new OrderResource($newOrder);
     }
 }

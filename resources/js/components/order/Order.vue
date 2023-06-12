@@ -10,23 +10,17 @@
                                 <tr
                                     class="text-md font-semibold tracking-wide text-left text-gray-900 bg-blue-100 uppercase border-b border-gray-600">
                                     <th class="px-4 py-3">{{ ('Identificador') }}</th>
-                                    <th class="px-4 py-3">{{ ('Descripcion') }}</th>
                                     <th class="px-4 py-3">{{ ('Fecha de creacion') }}</th>
                                     <th class="px-4 py-3">{{ ('Total') }}</th>
                                     <th class="px-4 py-3">{{ ('Estado') }}</th>
-                                    <th class="px-4 py-3">{{ ('Accion') }}</th>
+                                    <th class="px-4 py-3">{{ ('Detalles') }}</th>
                                 </tr>
                                 </thead>
                                 <tbody class="bg-white">
                                 <tr class="text-gray-700" v-for="order in orders" :key="order.id">
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-sm">
-                                            <p class="font-semibold text-black">{{ order.payment_reference }}</p>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-3 border">
-                                        <div class="flex items-center text-sm">
-                                            <p class="font-semibold text-black">{{ order.description }}</p>
+                                            <p class="font-semibold text-black">{{ order.reference }}</p>
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 border">
@@ -41,14 +35,14 @@
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 border">
-                                        {{ order.order_state }}
+                                        {{ order.state }}
                                     </td>
 
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-sm">
                                             <button @click="detail(order.id)"
                                                     class="inline-flex items-center px-1 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                                <slot> ver detalles</slot>
+                                                <slot> ...</slot>
                                             </button>
                                         </div>
                                     </td>

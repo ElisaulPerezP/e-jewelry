@@ -21,14 +21,14 @@ class Order extends Model
         'request_id',
     ];
 
-    public function completed(): void
+    public function approved(): void
     {
-        $this->order_state = 'approved';
+        $this->state = 'approved';
         $this->save();
     }
-    public function canceled(): void
+    public function rejected(): void
     {
-        $this->order_state = 'rejected';
+        $this->state = 'rejected';
         $this->save();
     }
 
@@ -46,5 +46,19 @@ class Order extends Model
     public function cartItems(): HasMany
     {
         return $this->hasMany(CartItem::class);
+    }
+
+    public function clone(): self
+    {
+        $newOrder = $this->replicate(['created_at', 'updated_at']);
+        $newOrder->save();
+
+        foreach ($this->cartItems as $cartItem) {
+            $newCartItem = $cartItem->replicate();
+            $newCartItem->order_id = $newOrder->id;
+            $newCartItem->save();
+        }
+
+        return $newOrder;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http;
+namespace Tests\Feature;
 
 use App\Models\CartItem;
 use App\Models\Order;
@@ -19,7 +19,7 @@ class ApiOrderControllerTest extends TestCase
     {
         $admin = User::factory()->create();
         $product = Product::factory()->create();
-        $cartItem = CartItem::factory()->create([
+        CartItem::factory()->create([
             'user_id' => $admin->id,
             'product_id' => $product->id,
             'amount' => 10,
@@ -28,20 +28,12 @@ class ApiOrderControllerTest extends TestCase
         $permission = Permission::findOrCreate('api.order.index');
         $role = Role::findOrCreate('admin')->givePermissionTo($permission);
         $admin->assignRole($role);
-        Order::factory()->create([
-            'user_id' => $admin->id,
-            'reference' => 1,
-            'total' => $product->price * $cartItem->amount,
-            'currency' => 'COP',
-            'state' => 'pending',
-            'return_url' => 'http:/test',
-            'process_url' => null,
-        ])->save();
+
+        $this->actingAs($admin, 'api')->postJson(route('api.order.store'));
 
         $response = $this->actingAs($admin, 'api')->getJson(route('api.order.index'));
 
         $response->assertOk();
-
         $response->assertJsonStructure([
             'data' => [
                 '*' => [
@@ -49,13 +41,12 @@ class ApiOrderControllerTest extends TestCase
                     'reference',
                     'total',
                     'currency',
-                    'order_state',
+                    'state',
                     'return_url',
                     'process_url',
                 ],
             ],
         ]);
-
         $this->assertDatabaseCount('orders', 1);
         $this->assertTrue(Cache::has('orders'));
     }
@@ -88,5 +79,26 @@ class ApiOrderControllerTest extends TestCase
         $this->assertDatabaseCount('orders', 1);
         $this->assertEquals($user->id, $orderCreated->user_id);
         $this->assertEquals('pending', $orderCreated->state);
+    }
+
+    public function testItCanRetryAnOrder()
+    {
+        $user = User::factory()->create();
+        $product1 = Product::factory()->create(['price' => 10000]);
+        $product2 = Product::factory()->create(['price' => 20000]);
+        CartItem::factory()->create(['user_id' => $user->id, 'amount' => 1, 'product_id' => $product1->id, 'state' => 'selected']);
+        CartItem::factory()->create(['user_id' => $user->id, 'amount' => 2, 'product_id' => $product2->id, 'state' => 'selected']);
+
+        $response = $this->actingAs($user, 'api')->postJson(route('api.order.store'));
+        $order = Order::findOrFail($response->json()['data']['id']);
+        $order->rejected();
+
+        $response = $this->actingAs($user, 'api')->postJson(route('api.order.retry', $order));
+        $order = Order::findOrFail($response->json()['data']['id']);
+
+        $response->assertCreated();
+        $this->assertDatabaseCount('orders', 2);
+        $this->assertEquals($user->id, $order->user_id);
+        $this->assertEquals('pending', $order->state);
     }
 }

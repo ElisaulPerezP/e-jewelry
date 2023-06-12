@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Services;
 
 use App\Models\Order;
 use Carbon\Carbon;
@@ -9,7 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
-class PlaceToPayPayment extends Controller
+class PlaceToPayPaymentService
 {
     public function pay(Order $order, string $ip, string $userAgent): Order
     {
@@ -76,19 +76,16 @@ class PlaceToPayPayment extends Controller
      */
     public function getRequestInformation(Order $order): RedirectResponse
     {
-        $result = Http::post(
-            'https://checkout-co.placetopay.dev/api/session/' . $order->request_id,
-            [
-            'auth' => $this->getAuth(),
-            ]
-        );
+        $result = Http::post('https://checkout-co.placetopay.dev/api/session/' . $order->request_id, [
+                'auth' => $this->getAuth(),
+            ]);
 
         if ($result->ok()) {
             $status = $result->json()['status']['status'];
             if ($status == 'APPROVED') {
-                $order->completed();
+                $order->approved();
             } elseif ($status == 'REJECTED') {
-                $order->canceled();
+                $order->rejected();
             }
 
             return redirect(route('orders.show', $order));

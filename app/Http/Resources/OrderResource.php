@@ -14,7 +14,7 @@ class OrderResource extends JsonResource
             'reference' => $this->reference,
             'total' => $this->total,
             'currency' => $this->currency,
-            'order_state' => $this->order_state,
+            'state' => $this->state,
             'return_url' => $this->return_url,
             'process_url' => $this->process_url,
             'created_at' => $this->created_at,

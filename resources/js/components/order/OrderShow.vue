@@ -30,13 +30,6 @@
                                         <tr>
                                             <td class="px-4 py-3 border">
                                                 <div class="flex items-center text-sm">
-                                                    <p class="font-semibold text-black text-md text-lg text-left">Descripcion</p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="px-4 py-3 border">
-                                                <div class="flex items-center text-sm">
                                                     <p class="font-semibold text-black text-md text-lg text-left">Total:</p>
                                                 </div>
                                             </td>
@@ -63,19 +56,11 @@
                                         <tr>
                                             <td class="px-4 py-3 border">
                                                 <div class="flex items-center text-sm">
-                                                    <p class="font-semibold text-black text-md text-lg text-left">Fecha de expiracion</p>
+                                                    <p class="font-semibold text-black text-md text-lg text-left">Acción</p>
                                                 </div>
                                             </td>
-                                        </tr>
-                                        <tr>
                                             <td class="px-4 py-3 border">
-                                                <div class="flex items-center text-sm">
-                                                    <p class="font-semibold text-black text-md text-lg text-left">Reintentar el pago</p>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 border"
-                                                v-if="order.state === 'rejected'">
-                                                <button @click="retryPay" class = "inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">Reintentar el pago ahora</button>
+                                                <button @click="order.state === 'rejected' ? retryPay(order.id) : seePay() " class = "inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">{{order.state === 'rejected' ? 'Reintentar el pago' : 'Ver el pago'}}</button>
                                             </td>
                                         </tr>
 
@@ -125,8 +110,13 @@ onMounted(() => {
 const back = () => {
     window.location.href = "/products"
 }
-const retryPay = () => {
+const retryPay = async (id) => {
+    await axios.post('/api/order/' + id + '/retry')
+        .then(response => window.location.href = response.data.data.process_url)
+}
 
+const seePay = () => {
+    window.location.href = order.value.process_url
 }
 
 const edit = () => {

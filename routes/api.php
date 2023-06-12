@@ -28,6 +28,8 @@ Route::middleware('auth:api')->name('api.')->group(function () {
             ->name('store');
         Route::get('/{order}/checkStatus', [ApiOrderController::class, 'checkStatus'])
             ->name('show');
+        Route::post('/{order}/retry', [ApiOrderController::class, 'retry'])
+            ->name('retry');
     });
 
     Route::middleware('role:admin')->prefix('/products')->name('products.')->group(function () {

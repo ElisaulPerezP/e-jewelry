@@ -15,9 +15,16 @@ class ApiOrderController extends Controller
 {
     public function index(): AnonymousResourceCollection
     {
+        Cache::forget('orders');
         $orders = Cache::rememberForever('orders', function () {
             return auth()->user()->orders;
         });
+
+        foreach ($orders as $order) {
+            if ($order->state === 'pending') {
+                $this->checkStatus($order);
+            }
+        }
 
         return OrderResource::collection($orders);
     }

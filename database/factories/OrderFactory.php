@@ -2,24 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\Product;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
-            'user_id' => random_int(1, User::count()),
-            'product_id'=> random_int(1, Product::count()),
-            'amount'=> $this->faker->randomNumber(2),
-            'item_state' => $this->faker->randomElement(['processing', 'reject', 'approved']),
+            'reference' => uuid_create(),
+            'currency' => $this->faker->randomElement(['USD', 'COP']),
+            'state' => $this->faker->randomElement(['pending', 'rejected', 'approved']),
+            'return_url' => 'http:/test',
         ];
     }
 }

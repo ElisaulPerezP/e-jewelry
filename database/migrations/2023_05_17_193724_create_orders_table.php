@@ -5,24 +5,22 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class() extends Migration {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
-            $table->integer('amount');
-            $table->enum('item_state', ['processing', 'reject', 'approved']);
+            $table->foreignId('user_id')->constrained('users');
+            $table->string('reference');
+            $table->integer('total')->nullable();
+            $table->string('currency');
+            $table->enum('state', ['pending', 'rejected', 'approved']);
+            $table->string('return_url');
+            $table->string('request_id')->nullable();
+            $table->string('process_url')->nullable();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('orders');

@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
         $admin->assignRole('admin');
 
         User::factory()
-            ->count(1000)
+            ->count(10)
             ->create();
         User::all()->each(function ($user) {
             $user->assignRole('user');

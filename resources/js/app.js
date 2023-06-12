@@ -7,7 +7,9 @@ import ProductsEdit from "./components/products/ProductsEdit.vue";
 import ProductCard from "./components/products/ProductCard.vue";
 import ProductsCreate from "./components/products/ProductsCreate.vue";
 import Paginator from "./components/Paginator.vue";
-import cart from "./components/cart/Cart.vue";
+import Cart from "./components/cart/Cart.vue";
+import Order from "./components/order/Order.vue";
+import OrderShow from "./components/order/OrderShow.vue";
 
 const app = createApp({});
 
@@ -16,7 +18,9 @@ app.component('products-show', ProductsShow);
 app.component('products-edit', ProductsEdit);
 app.component('product-card', ProductCard);
 app.component('products-create', ProductsCreate);
-app.component('cart-index', cart);
+app.component('cart-index', Cart);
+app.component('order-index', Order);
+app.component('order-show', OrderShow);
 
 app.component('paginator', Paginator);
 app.mount('#app');

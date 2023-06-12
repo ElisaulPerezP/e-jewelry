@@ -6,8 +6,8 @@
     </x-slot>
 
     <div class="py-12" id="app">
-        <cart-index>
-        </cart-index>
+        <order-show :order_id="{{$id}}">
+        </order-show>
     </div>
 
 </x-app-layout>

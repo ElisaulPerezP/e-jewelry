@@ -81,9 +81,9 @@ onMounted(() => {
         });
 
 if (props.user_id !== null) {
-    axios.get('/api/cart/' + props.user_id)
+    axios.get('/api/cart/')
         .then(response => itemsCart.value = response.data.data)
-        .catch(error => console.log(error));
+        .catch(error => console.log(error))
 }
 
 })
@@ -93,7 +93,7 @@ const inCartProducts = computed(() => {
 
         const inCart = itemsCart.value.some(item => item.product_id === product.id);
 
-        return { ...product, inCart: inCart };
+        return { ...product, inCart: inCart }
     });
 });
 
@@ -137,7 +137,7 @@ const goToCart = () => {
     window.location.href = window.location.href = "/cart/" + props.user_id;
 }
 const back = () => {
-    window.location.href = window.history.back();
+    window.location.href = window.history.back()
 }
 
 </script>

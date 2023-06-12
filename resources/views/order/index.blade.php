@@ -6,8 +6,8 @@
     </x-slot>
 
     <div class="py-12" id="app">
-        <cart-index>
-        </cart-index>
+        <order-index>
+        </order-index>
     </div>
 
 </x-app-layout>

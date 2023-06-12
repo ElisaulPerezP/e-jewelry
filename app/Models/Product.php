@@ -21,8 +21,8 @@ class Product extends Model
         'barCode',
         'image',
     ];
-    public function itemCarts(): HasMany
+    public function cartItems(): HasMany
     {
-        return $this->hasMany(ItemCart::class);
+        return $this->hasMany(CartItem::class);
     }
 }

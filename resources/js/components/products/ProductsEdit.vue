@@ -15,7 +15,7 @@
                                         <th class="px-4 py-3 text-4xl align-middle text-3xl">Edicion de un producto</th>
                                     </tr>
                                     <tr>
-                                        <th class="max-w-md"><img :src="'../../storage/' + product.image" alt="name"
+                                        <th class="max-w-md"><img :src="'/storage/' + product.image" alt="name"
                                                                   class="max-w-xl">
                                             Cambie el nombre aqui: <input v-model="product.name"
                                                                           placeholder="Nuevo nombre"
@@ -183,10 +183,10 @@ const handleClick = () => {
 }
 const changeStatus = () => {
     product.value.status = !product.value.status;
-    axios.put('/api/products/changeStatus/' + product.value.id)
+    axios.put('/api/products/' + product.value.id +'/changeStatus/' )
 }
 const back = () => {
-    window.location.href = "/products";
+    window.location.href = window.history.back()
 }
 
 </script>

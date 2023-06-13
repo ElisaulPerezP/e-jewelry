@@ -197,7 +197,7 @@ const handleClick = () => {
         })
 }
 const back = () => {
-    window.location.href = "/products";
+    window.location.href = window.history.back()
 }
 
 </script>

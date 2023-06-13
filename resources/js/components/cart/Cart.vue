@@ -4,22 +4,20 @@
             <div class="p-6 bg-white border-b border-gray-200">
                 <section class="container mx-auto p-6 font-mono">
                     <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
-                        <div class="py-4 flex justify-between">
+                        <div>
                             <div class="py-4 flex justify-between">
-                                <div class="py-4 flex justify-between">
                                 <button @click="pay"
+                                        v-if ="totalPrice !== 0"
                                         class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xl text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                                     {{
                                         totalPrice === 0 ? 'selecciona productos para pagar' : 'pagar ahora:' + ' COP $' + totalPrice
                                     }}
                                 </button>
-                                </div>
-                                <div class="py-4 flex justify-between">
                                 <button @click="seeOrders"
                                         class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xl text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                                         Ver ordenes
                                 </button>
-                                </div>
+
                             </div>
                         </div>
                         <div class="w-full overflow-x-auto">
@@ -42,6 +40,7 @@
                                         <div class="flex items-center text-sm">
                                             <input
                                                 type="checkbox"
+                                                :checked="CartItem==='selected'"
                                                 v-model="CartItem.state"
                                                 true-value="selected"
                                                 false-value="in_cart"
@@ -116,11 +115,13 @@
                                         <td class="px-4 py-3 border">
                                             <div>
                                                 <button @click="pay"
+                                                        v-if ="totalPrice !== 0"
                                                         class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xl text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                                                     {{
                                                         totalPrice === 0 ? 'NO HA SELECCIONADO PRODUCTOS' : 'PAGAR AHORA'
                                                     }}
                                                 </button>
+                                                {{totalPrice === 0 ? 'Seleccione productos para pagar' : ''}}
                                             </div>
 
                                         </td>
@@ -140,7 +141,7 @@
 
     <div v-if="showModal" class="fixed inset-0 flex items-center justify-center">
         <div class="bg-white p-8 rounded shadow-lg">
-            <h2 class="text-2xl font-bold mb-4">Modal</h2>
+            <h2 class="text-2xl font-bold mb-4">{{modalTitle}}</h2>
             <p>{{ modalMessage }}</p>
             <button @click="closeModal"
                     class="mt-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
@@ -160,6 +161,7 @@ const query = ref("")
 const open = ref(false)
 const showModal = ref(false)
 const modalMessage = ref('')
+const modalTitle = ref('')
 
 const totalPrice = computed(() => {
     let total = 0
@@ -185,7 +187,10 @@ const changeState = CartItem => {
 const setAmount = async CartItem => {
     axios.put('/api/cart/' + CartItem.id + '/setAmount', {'amount': CartItem.amount})
         .then(response => CartItem.value = response.data.data)
-        .catch(error => console.log(error))
+        .catch(error => {
+            console.log(error)
+            popModal('Ups, tenemos un problema', error.response.data.error)
+        })
 }
 const back = () => {
     window.location.href = window.history.back()
@@ -196,6 +201,11 @@ const deleteItemCart = async (CartItem) => {
         .catch(error => console.log(error))
 }
 
+const popModal = (title, message) => {
+    showModal.value = true
+    modalMessage.value=message
+    modalTitle.value=title
+}
 const closeModal = () => {
     location.reload()
     showModal.value = false

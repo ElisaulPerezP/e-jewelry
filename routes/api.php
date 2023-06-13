@@ -24,10 +24,12 @@ Route::middleware('auth:api')->name('api.')->group(function () {
     Route::prefix('/order')->name('order.')->group(function () {
         Route::get('/', [ApiOrderController::class, 'index'])
             ->name('index');
+        Route::get('/{order}/show', [ApiOrderController::class, 'show'])
+            ->name('show');
         Route::post('/create', [ApiOrderController::class, 'store'])
             ->name('store');
         Route::get('/{order}/checkStatus', [ApiOrderController::class, 'checkStatus'])
-            ->name('show');
+            ->name('checkStatus');
         Route::post('/{order}/retry', [ApiOrderController::class, 'retry'])
             ->name('retry');
     });

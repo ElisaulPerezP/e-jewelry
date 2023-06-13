@@ -17,7 +17,7 @@ class ApiCartController extends Controller
     {
         Cache::forget('cart');
         $itemsCart = Cache::rememberForever('cart', function () {
-            return auth()->user()->cartItems->where('state', 'selected', 'in_cart');
+            return auth()->user()->cartItems->whereIn('state', ['selected', 'in_cart']);
         });
 
         return CartItemResource::collection($itemsCart);

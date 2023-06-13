@@ -31,6 +31,15 @@ class ApiOrderController extends Controller
         return OrderResource::collection($orders);
     }
 
+    public function show(Order $order): OrderResource
+    {
+        if ($order->state === 'pending') {
+            $this->checkStatus($order);
+        }
+
+        return new OrderResource($order);
+    }
+
     public function update(OrderRequest $request, Order $order): OrderResource|string
     {
         $order->state = $request->state;

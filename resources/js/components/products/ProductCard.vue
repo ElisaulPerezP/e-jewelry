@@ -2,10 +2,12 @@
     <div class="max-w-7xl sm:px-6 lg:px-8">
         <div class="py-4 flex justify-between">
             <div>
-                <input type="text" v-model="query" placeholder="Buscar..."
+                <input @change = "search(query)" type="text" v-model="query" placeholder="Buscar..."
                        class="bg-white  shadow-sm sm:rounded-lg">
             </div>
+
             <div>
+
                 <paginator @data="handleDataPagination" :currentPage="currentPage" :lastPage="receivedLastPage"></paginator>
             </div>
         </div>
@@ -13,7 +15,6 @@
             <div class="p-6 bg-white border-b border-gray-200">
                 <div class="my-8">
                     <div class="container mx-auto px-6">
-                        <input type="text" v-model="query" placeholder="Buscar...">
                         <div
                             class="grid gap-6 grid-cols-3 mt-6"
                         >
@@ -87,6 +88,26 @@ if (props.user_id !== null) {
 }
 
 })
+
+
+const search = async (query) => {
+    axios.get('/api/products', {params: {searching: query, active_products: 1, current_page: currentPage.value}})
+        .then(response => {
+            products.value = response.data.data;
+            receivedCurrentPage.value = response.data.meta.current_page
+            receivedLastPage.value = response.data.meta.last_page
+        })
+        .catch(error => {
+            console.log(error);
+        });
+
+    if (props.user_id !== null) {
+        axios.get('/api/cart/')
+            .then(response => itemsCart.value = response.data.data)
+            .catch(error => console.log(error))
+    }
+
+}
 
 const inCartProducts = computed(() => {
     return products.value.map(product => {

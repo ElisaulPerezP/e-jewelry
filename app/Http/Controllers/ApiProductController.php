@@ -15,15 +15,16 @@ class ApiProductController extends Controller
     public function index(Request $request): AnonymousResourceCollection
     {
         Cache::forget('products');
+        $searching = $request->query('searching', '');
         $perPage = $request->query('per_page', 6);
         $currentPage = $request->query('current_page', 1);
         $activeProducts = $request->query('active_products', 1);
         $activeProducts ?
-        $paginatedProducts = Cache::rememberForever('products', function () use ($currentPage, $perPage) {
-            return Product::where('status', 1)->paginate($perPage, ['id', 'name', 'description', 'price', 'stock', 'score', 'status', 'barCode', 'image'], 'page', $currentPage);
+        $paginatedProducts = Cache::rememberForever('products', function () use ($currentPage, $perPage, $searching) {
+            return Product::where('status', 1)->where('name', 'like', '%' . $searching . '%')->paginate($perPage, ['id', 'name', 'description', 'price', 'stock', 'score', 'status', 'barCode', 'image'], 'page', $currentPage);
         }) :
-            $paginatedProducts = Cache::rememberForever('products', function () use ($currentPage, $perPage) {
-                return Product::paginate($perPage, ['id', 'name', 'description', 'price', 'stock', 'score', 'status', 'barCode', 'image'], 'page', $currentPage);
+            $paginatedProducts = Cache::rememberForever('products', function () use ($currentPage, $perPage, $searching) {
+                return Product::where('name', 'like', '%' . $searching . '%')->paginate($perPage, ['id', 'name', 'description', 'price', 'stock', 'score', 'status', 'barCode', 'image'], 'page', $currentPage);
             });
 
         return ProductResource::collection($paginatedProducts);

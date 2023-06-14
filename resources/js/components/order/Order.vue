@@ -35,7 +35,23 @@
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 border">
-                                        {{ order.state }}
+                                        <tr>
+                                            <td colspan="2"
+                                                v-if="order.state === 'approved'">
+                                                <font-awesome-icon icon="fa-regular fa-check-circle" beat size="2xl"
+                                                                   style="color: #32b849"/>
+                                            </td>
+                                            <td colspan="2"
+                                                v-if="order.state === 'rejected'">
+                                                <font-awesome-icon icon="fa-regular fa-circle-xmark" beat size="2xl"
+                                                                   style="color: #cf4a4a"/>
+                                            </td>
+                                            <td colspan="2"
+                                                v-if="order.state === 'pending'">
+                                                <font-awesome-icon icon="fa-regular fa-arrow-alt-circle-right" beat size="2xl"
+                                                                   style="color: #ebe52d"/>
+                                            </td>
+                                        </tr>
                                     </td>
 
                                     <td class="px-4 py-3 border">

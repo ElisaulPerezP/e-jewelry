@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\ApiCartController;
-use App\Http\Controllers\ApiOrderController;
-use App\Http\Controllers\ApiProductController;
+use App\Http\Controllers\CartItems\ApiCartController;
+use App\Http\Controllers\Orders\ApiOrderController;
+use App\Http\Controllers\Products\ApiProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/products', [ApiProductController::class, 'index'])->name('api.products.index');

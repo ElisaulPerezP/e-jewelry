@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Actions\CartItem;
 
 use App\Http\Requests\CartItem\StateCartItemRequest;

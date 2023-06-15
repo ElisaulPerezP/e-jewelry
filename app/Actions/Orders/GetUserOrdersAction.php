@@ -2,10 +2,10 @@
 
 namespace App\Actions\Orders;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use App\Http\Resources\OrderResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class GetUserOrdersAction
 {
@@ -24,5 +24,4 @@ class GetUserOrdersAction
 
         return OrderResource::collection($orders);
     }
-
 }

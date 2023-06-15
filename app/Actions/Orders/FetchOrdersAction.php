@@ -22,6 +22,7 @@ class FetchOrdersAction
                 $this->checkStatus($order);
             }
         }
+
         return OrderResource::collection($orders);
     }
 

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Products;
 
-use App\Actions\Products\GetPaginatedProductsAction;
-use App\Actions\Products\UpdateProductAction;
+use App\Actions\Products\ChangeProductStatusAction;
 use App\Actions\Products\CreateProductAction;
 use App\Actions\Products\DeleteProductAction;
-use App\Actions\Products\ChangeProductStatusAction;
+use App\Actions\Products\GetPaginatedProductsAction;
+use App\Actions\Products\UpdateProductAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Products\ProductRequest;
 use App\Http\Resources\ProductResource;

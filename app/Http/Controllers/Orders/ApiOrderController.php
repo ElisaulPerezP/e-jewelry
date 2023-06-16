@@ -10,6 +10,7 @@ use App\Actions\Orders\ShowOrderAction;
 use App\Actions\Orders\UpdateOrderAction;
 use App\Http\Controllers\Controller;
 use App\Http\Payment\request\OrderRequest;
+use App\Http\Requests\IndexRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use Exception;
@@ -42,9 +43,9 @@ class ApiOrderController extends Controller
         $this->retryOrderAction = $retryOrderAction;
     }
 
-    public function index(): AnonymousResourceCollection
+    public function index(IndexRequest $request): AnonymousResourceCollection
     {
-        $orders = $this->fetchOrdersAction->execute();
+        $orders = $this->fetchOrdersAction->execute($request);
 
         return $orders;
     }

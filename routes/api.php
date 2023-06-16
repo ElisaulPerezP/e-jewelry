@@ -19,6 +19,8 @@ Route::middleware('auth:api')->name('api.')->group(function () {
             ->name('destroy');
         Route::put('/{cartItem}/changeState', [ApiCartController::class, 'changeState'])
             ->name('update.state.saved');
+        Route::get('/total', [ApiCartController::class, 'total'])
+            ->name('total');
     });
 
     Route::prefix('/order')->name('order.')->group(function () {

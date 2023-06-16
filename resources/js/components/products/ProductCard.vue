@@ -7,7 +7,6 @@
             </div>
 
             <div>
-
                 <paginator @data="handleDataPagination" :currentPage="currentPage" :lastPage="receivedLastPage"></paginator>
             </div>
         </div>
@@ -60,7 +59,7 @@ const receivedCurrentPage = ref(1)
 const receivedFirstPage = ref(1)
 const receivedLastPage = ref(1)
 const itemsCart = ref([])
-
+const per_page = ref(9)
 
 const props = defineProps({
     user_id: {
@@ -71,7 +70,7 @@ const props = defineProps({
 
 
 onMounted(() => {
-    axios.get('/api/products', {params: {searching: "", active_products: 1, current_page: currentPage.value}})
+    axios.get('/api/products', {params: {searching: "", current_page: currentPage.value, per_page: per_page.value, flag: 1}})
         .then(response => {
             products.value = response.data.data;
             receivedCurrentPage.value = response.data.meta.current_page
@@ -82,7 +81,7 @@ onMounted(() => {
         });
 
 if (props.user_id !== null) {
-    axios.get('/api/cart/')
+    axios.get('/api/cart/',{params: {searching: "", current_page: currentPage.value, per_page: 1000, flag: 1}})
         .then(response => itemsCart.value = response.data.data)
         .catch(error => console.log(error))
 }
@@ -91,7 +90,7 @@ if (props.user_id !== null) {
 
 
 const search = async (query) => {
-    axios.get('/api/products', {params: {searching: query, active_products: 1, current_page: currentPage.value}})
+    axios.get('/api/products', {params: {searching: query, current_page: currentPage.value, per_page: per_page.value, flag: 1}})
         .then(response => {
             products.value = response.data.data;
             receivedCurrentPage.value = response.data.meta.current_page
@@ -101,11 +100,6 @@ const search = async (query) => {
             console.log(error);
         });
 
-    if (props.user_id !== null) {
-        axios.get('/api/cart/')
-            .then(response => itemsCart.value = response.data.data)
-            .catch(error => console.log(error))
-    }
 
 }
 
@@ -127,7 +121,12 @@ const filteredProducts = computed(() => {
 })
 
 const sendToCart = async (product) => {
-    await axios.post('api/cart/' + product.id + '/store')
+    await axios.post('/api/cart/' + product.id + '/store')
+        .then(response => {
+            if (response.status === 201) {
+                itemsCart.value = response.data.data;
+            }})
+        .catch(error => console.log(error))
     location.reload()
 }
 
@@ -143,7 +142,7 @@ const handleDataPagination = (data) => {
         currentPage.value=receivedLastPage.value
     } else {
     }
-    axios.get('/api/products', {params: {searching: "", active_products: 1, current_page: currentPage.value}})
+    axios.get('/api/products', {params: {searching: query.value, current_page: currentPage.value, per_page: per_page.value, flag: 1}})
         .then(response => {
             products.value = response.data.data;
             receivedCurrentPage.value = response.data.meta.current_page
@@ -152,6 +151,7 @@ const handleDataPagination = (data) => {
         .catch(error => {
             console.log(error);
         });
+
 };
 
 const goToCart = () => {

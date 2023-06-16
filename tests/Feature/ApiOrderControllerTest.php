@@ -31,7 +31,7 @@ class ApiOrderControllerTest extends TestCase
 
         $this->actingAs($admin, 'api')->postJson(route('api.order.store'));
 
-        $response = $this->actingAs($admin, 'api')->getJson(route('api.order.index'));
+        $response = $this->actingAs($admin, 'api')->getJson(route('api.order.index', ['searching' => '', 'current_page' => 1, 'per_page' => 1, 'flag' => 0]));
 
         $response->assertOk();
         $response->assertJsonStructure([

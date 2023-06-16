@@ -25,7 +25,7 @@ class ApiProductControllerTest extends TestCase
         $role = Role::findOrCreate('admin')->givePermissionTo($permission);
         $admin->assignRole($role);
 
-        $response = $this->actingAs($admin, 'api')->getJson(route('api.products.index'));
+        $response = $this->actingAs($admin, 'api')->getJson(route('api.products.index', ['searching' => '', 'current_page' => 1, 'per_page' => 1, 'flag' => 0]));
 
         $response->assertOk();
         $response->assertJsonStructure([

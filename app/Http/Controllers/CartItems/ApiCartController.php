@@ -7,9 +7,11 @@ use App\Actions\CartItem\ChangeCartItemStateAction;
 use App\Actions\CartItem\DeleteCartItemAction;
 use App\Actions\CartItem\GetCartItemsAction;
 use App\Actions\CartItem\SetCartItemAmountAction;
+use App\Actions\CartItem\TotalRetriveAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CartItem\AmountCartItemRequest;
 use App\Http\Requests\CartItem\StateCartItemRequest;
+use App\Http\Requests\IndexRequest;
 use App\Http\Resources\CartItemResource;
 use App\Models\CartItem;
 use App\Models\Product;
@@ -20,6 +22,7 @@ class ApiCartController extends Controller
 {
     protected $getCartItemsAction;
     protected $addCartItemAction;
+    protected $totalRetriveAction;
     protected $changeCartItemStateAction;
     protected $setCartItemAmountAction;
     protected $deleteCartItemAction;
@@ -27,25 +30,32 @@ class ApiCartController extends Controller
     public function __construct(
         GetCartItemsAction $getCartItemsAction,
         AddCartItemAction $addCartItemAction,
+        TotalRetriveAction $totalRetriveAction,
         ChangeCartItemStateAction $changeCartItemStateAction,
         SetCartItemAmountAction $setCartItemAmountAction,
         DeleteCartItemAction $deleteCartItemAction
     ) {
         $this->getCartItemsAction = $getCartItemsAction;
         $this->addCartItemAction = $addCartItemAction;
+        $this->totalRetriveAction = $totalRetriveAction;
         $this->changeCartItemStateAction = $changeCartItemStateAction;
         $this->setCartItemAmountAction = $setCartItemAmountAction;
         $this->deleteCartItemAction = $deleteCartItemAction;
     }
 
-    public function index(): AnonymousResourceCollection
+    public function index(IndexRequest $request): AnonymousResourceCollection
     {
-        return $this->getCartItemsAction->execute();
+        return $this->getCartItemsAction->execute($request);
     }
 
     public function store(Product $product): CartItemResource
     {
         return $this->addCartItemAction->execute($product);
+    }
+
+    public function total(): JsonResponse
+    {
+        return $this->totalRetriveAction->execute();
     }
 
     public function changeState(StateCartItemRequest $request, CartItem $cartItem): CartItemResource

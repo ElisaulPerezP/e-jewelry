@@ -2,21 +2,21 @@
 
 namespace App\Actions\Products;
 
+use App\Http\Requests\IndexRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Cache;
 
 class GetPaginatedProductsAction
 {
-    public function execute(Request $request): AnonymousResourceCollection
+    public function execute(IndexRequest $request): AnonymousResourceCollection
     {
         Cache::forget('products');
         $searching = $request->query('searching', '');
         $perPage = $request->query('per_page', 6);
         $currentPage = $request->query('current_page', 1);
-        $activeProducts = $request->query('active_products', 1);
+        $activeProducts = $request->query('flag', 1);
 
         $paginatedProducts = Cache::rememberForever('products', function () use ($currentPage, $perPage, $searching, $activeProducts) {
             $query = Product::query();

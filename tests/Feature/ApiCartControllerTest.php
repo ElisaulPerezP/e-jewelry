@@ -29,7 +29,7 @@ class ApiCartControllerTest extends TestCase
             'state' => 'in_cart',
         ]);
 
-        $response = $this->actingAs($admin, 'api')->getJson(route('api.cart.index', $admin));
+        $response = $this->actingAs($admin, 'api')->getJson(route('api.cart.index', ['searching' => '', 'current_page' => 1, 'per_page' => 1, 'flag' => 0]));
 
         $response->assertOk();
 

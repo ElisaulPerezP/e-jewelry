@@ -8,11 +8,11 @@ use App\Actions\Products\DeleteProductAction;
 use App\Actions\Products\GetPaginatedProductsAction;
 use App\Actions\Products\UpdateProductAction;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\IndexRequest;
 use App\Http\Requests\Products\ProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ApiProductController extends Controller
@@ -37,7 +37,7 @@ class ApiProductController extends Controller
         $this->changeProductStatusAction = $changeProductStatusAction;
     }
 
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(IndexRequest $request): AnonymousResourceCollection
     {
         return $this->getPaginatedProductsAction->execute($request);
     }

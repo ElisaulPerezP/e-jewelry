@@ -12,7 +12,8 @@
                                 </button>
                             </div>
                             <div>
-
+                                    <input @change = "search(query)" type="text" v-model="query" placeholder="Buscar..."
+                                           class="bg-white  shadow-sm sm:rounded-lg">
                             <paginator @data="handleDataPagination" :currentPage="currentPage"
                                            :lastPage="receivedLastPage"></paginator>
                             </div>
@@ -124,11 +125,12 @@ const currentPage = ref(1)
 const receivedCurrentPage = ref(1)
 const receivedFirstPage = ref(1)
 const receivedLastPage = ref(1)
+const per_page = ref(15)
 
 onMounted(() => {
-    axios.get('/api/products', {params: {searching: "", active_products: 0, current_page: currentPage.value}})
+    axios.get('/api/products', {params: {searching: "", current_page: currentPage.value, per_page: per_page.value, flag: 0}})
         .then(response => {
-            products.value = response.data.data;
+            products.value = response.data.data
             receivedCurrentPage.value = response.data.meta.current_page
             receivedLastPage.value = response.data.meta.last_page
         })
@@ -162,7 +164,7 @@ const handleDataPagination = (data) => {
         currentPage.value=receivedLastPage.value
     } else {
     }
-    axios.get('/api/products', {params: {searching: "", active_products: 0, current_page: currentPage.value}})
+    axios.get('/api/products', {params: {searching: query.value, current_page: currentPage.value, per_page: per_page.value, flag: 0}})
         .then(response => {
             products.value = response.data.data;
             receivedCurrentPage.value = response.data.meta.current_page
@@ -171,6 +173,19 @@ const handleDataPagination = (data) => {
         .catch(error => {
             console.log(error);
         });
+};
+
+const search = async (query) => {
+    axios.get('/api/products', {params: {searching: query, current_page: currentPage.value, per_page: per_page.value, flag: 0}})
+        .then(response => {
+            products.value = response.data.data;
+            receivedCurrentPage.value = response.data.meta.current_page
+            receivedLastPage.value = response.data.meta.last_page
+        })
+        .catch(error => {
+            console.log(error);
+        });
+
 };
 
 </script>

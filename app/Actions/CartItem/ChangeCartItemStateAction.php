@@ -13,22 +13,24 @@ class ChangeCartItemStateAction
 {
     public function execute(StateCartItemRequest $request, CartItem $cartItem): CartItemResource|JsonResponse
     {
-
-        if ($cartItem->state !== "collected") {
+        if ($cartItem->state !== 'collected') {
             $cartItem->state = $request->state;
             $cartItem->save();
             Cache::forget('cart');
+
             return new CartItemResource($cartItem);
         }
-        $action = new SetCartItemAmountAction;
+        $action = new SetCartItemAmountAction();
         $response = $action->execute(new AmountCartItemRequest(['amount' => $cartItem->amount]), $cartItem);
 
         if ($response instanceof CartItemResource) {
             $cartItem->state = $request->state;
             $cartItem->save();
             Cache::forget('cart');
+
             return new CartItemResource($cartItem);
         }
+
         return $response;
     }
 }

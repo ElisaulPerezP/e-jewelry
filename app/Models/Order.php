@@ -4,9 +4,7 @@ namespace App\Models;
 
 //use App\Jobs\MailerOrderState;
 use App\Actions\CartItem\ChangeCartItemStateAction;
-use App\Http\Requests\CartItem\AmountCartItemRequest;
 use App\Http\Requests\CartItem\StateCartItemRequest;
-use App\Http\Resources\CartItemResource;
 use App\Jobs\MailerOrderState;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -33,8 +31,8 @@ class Order extends Model
         $this->save();
         MailerOrderState::dispatch($this)->onConnection('database')->onQueue('mailer');
         $this->cartItems->each(function ($item) {
-            $action = new ChangeCartItemStateAction;
-            $action -> execute(new StateCartItemRequest(['state' => 'paid']), $item);
+            $action = new ChangeCartItemStateAction();
+            $action->execute(new StateCartItemRequest(['state' => 'paid']), $item);
         });
         //TODO: delegar esta logica
     }

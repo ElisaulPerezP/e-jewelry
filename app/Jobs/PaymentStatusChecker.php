@@ -13,7 +13,10 @@ use Illuminate\Support\Facades\Log;
 
 class PaymentStatusChecker implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
     public function __construct()
     {
     }
@@ -22,9 +25,9 @@ class PaymentStatusChecker implements ShouldQueue
      */
     public function handle(): void
     {
-        $revisor = new CheckOrderStatusAction;
+        $revisor = new CheckOrderStatusAction();
         $orders = Order::where('state', 'pending')->get();
-        Log::channel('payments')->info("Command executed");
+        Log::channel('payments')->info('Command executed');
         foreach ($orders as $order) {
             $revisor->execute($order);
             Log::channel('payments')->info("{$order->id} has been checked, its status has been updated to:{$order->state} Through command.");

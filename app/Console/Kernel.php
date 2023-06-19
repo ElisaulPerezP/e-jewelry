@@ -9,14 +9,13 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
-
     /**
      * Define the application's command schedule.
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->job(new ShelfStocker, 'shelf-stocker')->everyFiveMinutes();
-        $schedule->job(new PaymentStatusChecker, 'paymen-status')->everyFiveMinutes();
+        $schedule->job(new ShelfStocker(), 'shelf-stocker')->everyFiveMinutes();
+        $schedule->job(new PaymentStatusChecker(), 'paymen-status')->everyFiveMinutes();
     }
 
     /**

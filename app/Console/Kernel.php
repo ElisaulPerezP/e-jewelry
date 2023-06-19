@@ -2,17 +2,21 @@
 
 namespace App\Console;
 
+use App\Jobs\PaymentStatusChecker;
+use App\Jobs\ShelfStocker;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
+
     /**
      * Define the application's command schedule.
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->job(new ShelfStocker, 'shelf-stocker')->everyFiveMinutes();
+        $schedule->job(new PaymentStatusChecker, 'paymen-status')->everyFiveMinutes();
     }
 
     /**

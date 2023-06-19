@@ -130,6 +130,18 @@ return [
             'driver' => 'single',
             'path' => storage_path('logs/visits.log'),
         ],
+        'stocker' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/shelfStockerRegister.log'),
+        ],
+        'payments' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/paymentStatusChecker.log'),
+        ],
+        'mailer' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/mailer.log'),
+        ],
     ],
 
 ];

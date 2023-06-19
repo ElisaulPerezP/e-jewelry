@@ -23,7 +23,7 @@ class GetCartItemsAction
             $query = CartItem::where('user_id', Auth::user()->id);
 
             if ($activeProducts == 1) {
-                $query->whereIn('state', ['in_cart', 'selected']);
+                $query->whereIn('state', ['in_cart', 'selected', 'collected']);
             }
 
             $query->whereExists(function ($query) use ($searching) {

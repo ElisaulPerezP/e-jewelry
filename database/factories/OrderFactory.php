@@ -11,7 +11,7 @@ class OrderFactory extends Factory
         return [
             'reference' => uuid_create(),
             'currency' => $this->faker->randomElement(['USD', 'COP']),
-            'state' => $this->faker->randomElement(['pending', 'rejected', 'approved']),
+            'state' => $this->faker->randomElement(['rejected', 'approved']),
             'return_url' => 'http:/test',
         ];
     }

@@ -245,9 +245,13 @@ const handleDataPagination = (data) => {
         });
 };
 
-const changeState = CartItem => {
+const changeState = async CartItem => {
     axios.put('/api/cart/' + CartItem.id + '/changeState', {'state': CartItem.state})
-        .catch(error => console.log(error))
+        .catch(error => {
+            console.log(error)
+            popModal('Ups, tenemos un problema', error.response.data.error)
+        })
+
     axios.get('/api/cart/total')
         .then(response => {
             totalPrice.value = response.data;

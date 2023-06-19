@@ -4,7 +4,14 @@
             <div class="p-6 bg-white border-b border-gray-200">
                 <section class="container mx-auto p-6 font-mono">
                     <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
-                        <div class="w-full overflow-x-auto">
+                        <div>
+
+                                    <input @change="search(query)" type="text" v-model="query" placeholder="Buscar..."
+                                           class="bg-white  shadow-sm sm:rounded-lg">
+
+                                    <paginator @data="handleDataPagination" :currentPage="currentPage"
+                                               :lastPage="receivedLastPage"></paginator>
+
                             <table class="w-full text-xs border-separate">
                                 <thead class="text-sm">
                                 <tr
@@ -30,12 +37,29 @@
                                     </td>
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-xs">
-                                            <p class="font-semibold text-black">{{order.currency + ' ' + order.total }}
+                                            <p class="font-semibold text-black">{{ order.currency + ' ' + order.total }}
                                             </p>
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 border">
-                                        {{ order.state }}
+                                        <tr>
+                                            <td colspan="2"
+                                                v-if="order.state === 'approved'">
+                                                <font-awesome-icon icon="fa-regular fa-check-circle" beat size="2xl"
+                                                                   style="color: #32b849"/>
+                                            </td>
+                                            <td colspan="2"
+                                                v-if="order.state === 'rejected'">
+                                                <font-awesome-icon icon="fa-regular fa-circle-xmark" beat size="2xl"
+                                                                   style="color: #cf4a4a"/>
+                                            </td>
+                                            <td colspan="2"
+                                                v-if="order.state === 'pending'">
+                                                <font-awesome-icon icon="fa-regular fa-arrow-alt-circle-right" beat
+                                                                   size="2xl"
+                                                                   style="color: #ebe52d"/>
+                                            </td>
+                                        </tr>
                                     </td>
 
                                     <td class="px-4 py-3 border">
@@ -87,13 +111,79 @@ const query = ref("")
 const open = ref(false)
 const showModal = ref(false)
 const modalMessage = ref('')
-
+const currentPage = ref(1)
+const receivedData = ref("")
+const receivedCurrentPage = ref(1)
+const receivedFirstPage = ref(1)
+const receivedLastPage = ref(1)
+const per_page = ref(3)
 
 onMounted(() => {
-    axios.get('/api/order/')
-        .then(response => orders.value = response.data.data)
+    axios.get('/api/order/', {
+        params: {
+            searching: '',
+            current_page: currentPage.value,
+            per_page: per_page.value,
+            flag: 0
+        }
+    })
+        .then(response => {
+            orders.value = response.data.data
+            receivedCurrentPage.value = response.data.meta.current_page
+            receivedLastPage.value = response.data.meta.last_page
+        })
         .catch(error => console.log(error))
 })
+
+const search = async (query) => {
+    axios.get('/api/order/', {
+        params: {
+            searching: query,
+            current_page: currentPage.value,
+            per_page: per_page.value,
+            flag: 0
+        }
+    })
+        .then(response => {
+            orders.value = response.data.data;
+            receivedCurrentPage.value = response.data.meta.current_page
+            receivedLastPage.value = response.data.meta.last_page
+        })
+        .catch(error => {
+            console.log(error);
+        });
+}
+
+const handleDataPagination = (data) => {
+    receivedData.value = data;
+    if (receivedData.value === 'firts_page') {
+        currentPage.value = receivedFirstPage.value
+    } else if (receivedData.value === 'back_page' && currentPage.value !== 1) {
+        currentPage.value = currentPage.value - 1
+    } else if (receivedData.value === 'next_page' && currentPage.value !== receivedLastPage.value) {
+        currentPage.value = currentPage.value + 1
+    } else if (receivedData.value === 'last_page') {
+        currentPage.value = receivedLastPage.value
+    } else {
+    }
+    axios.get('/api/order/', {
+        params: {
+            searching: query.value,
+            current_page: currentPage.value,
+            per_page: per_page.value,
+            flag: 0
+        }
+    })
+        .then(response => {
+            orders.value = response.data.data;
+            receivedCurrentPage.value = response.data.meta.current_page
+            receivedLastPage.value = response.data.meta.last_page
+        })
+        .catch(error => {
+            console.log(error);
+        });
+};
+
 
 const back = () => {
     window.location.href = window.history.back()
@@ -106,10 +196,6 @@ const detail = (id) => {
 const closeModal = () => {
     location.reload()
     showModal.value = false
-}
-
-const retryPay = (order) => {
-    window.location.href = order.process_url
 }
 
 </script>

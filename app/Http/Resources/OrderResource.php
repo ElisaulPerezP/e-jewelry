@@ -18,6 +18,7 @@ class OrderResource extends JsonResource
             'return_url' => $this->return_url,
             'process_url' => $this->process_url,
             'created_at' => $this->created_at,
+            'cart_items' => CartItemResource::collection($this->cartItems),
         ];
     }
 }

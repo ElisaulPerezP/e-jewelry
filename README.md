@@ -1,66 +1,91 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# e-jewelry
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+e-jewelry es un comercio electrónico desarrollado en PHP sobre el framework de Laravel. Su funcionalidad está alineada con las necesidades funcionales expuestas en el reto presentado por Evertec en su bootcamp de PHP. Estas son:
 
-## About Laravel
+- Gestión de usuarios con diferentes roles y permisos.
+- Gestión de productos con diferentes categorías y estados.
+- Gestión de logs para el registro de actividad de clientes de la aplicación.
+- Gestión de pagos mediante el consumo de PlaceToPay de Evertec.
+- Gestión de inventarios.
+- Gestión de reportes financieros.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+e-jewelry implementa Composer para la gestión de dependencias PHP, y NodeJS como gestor de dependencias de JavaScript, lo que facilita la instalación de la aplicación.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Requerimientos para su ejecución:
+- PHP 8.1+ (required)
+- MYSQL 8.0+ (required)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Instalación
 
-## Learning Laravel
+- Tome una copia del repositorio:
+$ git clone git@github.com:ElisaulPerezP/e-jewelry.git
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- Instalación de dependencias PHP:
+$ composer install
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- Instalación de dependencias JavaScript:
+$ npm install
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Configuración
 
-## Laravel Sponsors
+### Archivo de variables de entorno
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+En el directorio raíz encontrará el archivo .env.example. Debe realizar una copia de este archivo, y el nuevo archivo debe llamarse .env y ubicarse en el repositorio raíz también.
 
-### Premium Partners
+Edite el archivo .env y coloque las variables de entorno. Estas le permitirán a la aplicación interactuar con su base de datos, su proveedor de servicio de correo y con la pasarela de pagos. Tenga en cuenta que solo necesita agregar los datos faltantes, ya que .env.example tiene los valores estándar.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+#### Base de datos
+DB_CONNECTION= (ejemplo: mysql)
+DB_HOST= (ejemplo: 127.0.0.1)
+DB_PORT= (ejemplo: 3306)
+DB_DATABASE= (ejemplo: jewelry)
+DB_USERNAME= (ejemplo: root)
+DB_PASSWORD= (ejemplo: asdf123?#)
 
-## Contributing
+#### Servicio de correo
+MAIL_MAILER= (ejemplo: log)
+MAIL_HOST= (ejemplo: sandbox.smtp.mailtrap.io)
+MAIL_PORT= (ejemplo: 2525)
+MAIL_USERNAME= (ejemplo: 7b1254812907fb) <- para pruebas, obtenga su propio usuario en mailtrap
+MAIL_PASSWORD= (ejemplo: 3a3628ead73327) <- para pruebas, obtenga su propia clave en mailtrap
+MAIL_ENCRYPTION= (ejemplo: tls)
+MAIL_FROM_ADDRESS= (ejemplo: "hello@example.com")
+MAIL_FROM_NAME= (ejemplo: "${APP_NAME}")
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+#### Clave de la aplicación
 
-## Code of Conduct
+Este campo le permitirá a su aplicación identificarse para establecer comunicación con otras aplicaciones o servicios. Para generar la clave de la aplicación, ejecute el siguiente comando en el directorio raíz del proyecto:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+$ php artisan key:generate
 
-## Security Vulnerabilities
+Después de ejecutar el comando, si todo salió bien, se llenará automáticamente el campo APP_KEY en su archivo .env. Debería ser parecido (no igual) a esto:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+APP_KEY=base64:aBfDU+/NdjceIpPiScGUaMz1aAH6RVcmoR0oJyPOKUc=
 
-## License
+#### Preparación de la base de datos
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Para migrar y sembrar la base de datos y probar la aplicación, ejecute el siguiente comando:
+
+$ php artisan migrate --seed
+
+#### Enlace de almacenamiento
+
+Para crear un enlace simbólico entre las carpetas public y storage, ejecute el siguiente comando:
+
+$ php artisan storage:link
+
+#### Configuración de Passport
+
+Para que el sistema de seguridad 'passport', encargado de autorizar las conexiones a las rutas API, funcione, es necesario proporcionarle sus claves de encriptación. Esto se puede lograr ejecutando el siguiente comando:
+
+$ php artisan passport:keys
+
+#### Prueba
+
+Para asegurarse de que todo salió bien, ejecute las pruebas con el siguiente comando:
+
+$ php artisan test
+
+## Contribuciones al desarrollo
+
+Si desea unirse al desarrollo de esta aplicación, puede hacerlo solicitando un pull request.

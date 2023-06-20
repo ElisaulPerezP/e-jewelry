@@ -22,9 +22,7 @@ class GetCartItemsAction
         $paginatedCartItems = Cache::rememberForever('cart', function () use ($currentPage, $perPage, $searching, $activeProducts) {
             $query = CartItem::where('user_id', Auth::user()->id);
 
-
             if ($activeProducts === 1) {
-
                 $query->whereIn('state', ['in_cart', 'selected', 'collected']);
             }
 

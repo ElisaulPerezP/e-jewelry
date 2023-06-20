@@ -10,7 +10,9 @@ class IndexRequest extends FormRequest
     {
         return true;
     }
-
+    /**
+     * @return array<string, array<string>>
+     */
     public function rules(): array
     {
         return [

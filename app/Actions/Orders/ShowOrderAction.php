@@ -7,7 +7,7 @@ use App\Models\Order;
 
 class ShowOrderAction
 {
-    private $checkOrderStatusAction;
+    private CheckOrderStatusAction $checkOrderStatusAction;
 
     public function __construct(CheckOrderStatusAction $checkOrderStatusAction)
     {

@@ -20,12 +20,12 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ApiCartController extends Controller
 {
-    protected $getCartItemsAction;
-    protected $addCartItemAction;
-    protected $totalRetriveAction;
-    protected $changeCartItemStateAction;
-    protected $setCartItemAmountAction;
-    protected $deleteCartItemAction;
+    protected GetCartItemsAction $getCartItemsAction;
+    protected AddCartItemAction $addCartItemAction;
+    protected TotalRetriveAction $totalRetriveAction;
+    protected ChangeCartItemStateAction $changeCartItemStateAction;
+    protected SetCartItemAmountAction $setCartItemAmountAction;
+    protected DeleteCartItemAction $deleteCartItemAction;
 
     public function __construct(
         GetCartItemsAction $getCartItemsAction,

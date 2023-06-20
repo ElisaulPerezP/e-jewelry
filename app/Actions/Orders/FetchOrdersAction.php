@@ -15,15 +15,15 @@ class FetchOrdersAction
     public function execute(IndexRequest $request): AnonymousResourceCollection
     {
         $searching = $request->query('searching', '');
-        $perPage = $request->query('per_page', 6);
-        $currentPage = $request->query('current_page', 1);
-        $activeProducts = $request->query('flag', 1);
+        $perPage = $request->query('per_page', '6');
+        $currentPage = $request->query('current_page', '1');
+        $activeProducts = $request->query('flag', '1');
 
         Cache::forget('orders');
         $paginatedOrders = Cache::rememberForever('orders', function () use ($currentPage, $perPage, $searching, $activeProducts) {
             $query = Order::where('user_id', Auth::user()->id);
 
-            if ($activeProducts == 1) {
+            if ($activeProducts === 1) {
                 $query->whereIn('state', ['pending', 'approved']);
             }
             $query->where('reference', 'like', '%' . $searching . '%');

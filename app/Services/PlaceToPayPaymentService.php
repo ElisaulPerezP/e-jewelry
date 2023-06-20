@@ -28,7 +28,9 @@ class PlaceToPayPaymentService
 
         throw new Exception($result->body());
     }
-
+    /**
+     * @return array<string, array<string>>
+     */
     private function createSession(Order $order, string $ipAddress, string $userAgent): array
     {
         return [
@@ -51,7 +53,9 @@ class PlaceToPayPaymentService
             'userAgent' => $userAgent,
         ];
     }
-
+    /**
+     * @return array<string, string>
+     */
     private function getAuth(): array
     {
         $nonce = Str::random();

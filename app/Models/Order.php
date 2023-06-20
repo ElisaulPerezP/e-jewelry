@@ -32,7 +32,7 @@ class Order extends Model
         $this->save();
     }
 
-    public function setTotal()
+    public function setTotal(): void
     {
         foreach ($this->cartItems as $cartItem) {
             $this->total += $cartItem->amount * $cartItem->product->price;

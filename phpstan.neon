@@ -1,5 +1,37 @@
 parameters:
-    level: 2
+    level: 6
     paths:
         - app
         - tests
+    ignoreErrors:
+        - '#Call to an undefined static method App\\Models\\[a-zA-Z0-9\\_]+::where\(\)#'
+        - '#Call to an undefined static method App\\Models\\[a-zA-Z0-9\\_]+::select\(\)#'
+        - '#Call to an undefined static method App\\Models\\[a-zA-Z0-9\\_]+::findOrFail\(\)#'
+        - '#Call to an undefined static method App\\Models\\[a-zA-Z0-9\\_]+::create\(\)#'
+        - '#Access to an undefined property App\\Models\\[a-zA-Z0-9\\_\:\$]#'
+        - '#Access to an undefined property App\\Http\\Resources\\[a-zA-Z0-9\\_\:\$]#'
+        - '#Access to an undefined property Illuminate\\Contracts\\Auth\\[a-zA-Z0-9\\_\:\$]#'
+        - '#Access to an undefined property App\\Http\\Requests\\CartItem\\[a-zA-Z0-9\\_\:\$]#'
+        - '#Access to an undefined property App\\Http\\Requests\\Orders\\[a-zA-Z0-9\\_\:\$]#'
+        - '#Access to an undefined property App\\Http\\Requests\\Products\\[a-zA-Z0-9\\_\:\$]#'
+        - '#Call to an undefined method Illuminate\\Contracts\\Auth\\Guard::logout\(\)#'
+        - '#Access to an undefined property Illuminate\\Http\\[a-zA-Z0-9\\_\:\$]#'
+        - '#Access to an undefined property App\\Http\\Requests\\Users\\[a-zA-Z0-9\\_\:\$]#'
+        - '#Cannot call method getKey\(\) on object\|string#'
+        - '#Call to an undefined method Spatie\\Permission\\Contracts\\[a-zA-Z0-9\\_\:\$]#'
+        - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int\, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\[a-zA-Z0-9\\_\:\$]#'
+        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Collection<int\, Illuminate\\Database\\Eloquent\\Model\>\|Illuminate\\Database\\Eloquent\\[a-zA-Z0-9\\_\:\$]#'
+        - '#Call to an undefined method Illuminate\\Contracts\\Filesystem\\Filesystem::assertExists\(\)#'
+        - '#Access to an undefined property Illuminate\\Database\\Eloquent\\[a-zA-Z0-9\\_\:\$]#'
+        - '#Method App\\Http\\Controllers\\Auth\\[a-zA-Z0-9\\_]+::create\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\Factory\|Illuminate\\Contracts\\View\\View#'
+        - '#Method App\\Http\\Controllers\\Auth\\[a-zA-Z0-9\\_]+::show\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\Factory\|Illuminate\\Contracts\\View\\View#'
+        - '#Method App\\Http\\Controllers\\CartItems\\[a-zA-Z0-9\\_]+::index\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\Factory\|Illuminate\\Contracts\\View\\View#'
+        - '#Method App\\Http\\Controllers\\Orders\\[a-zA-Z0-9\\_]+::index\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\Factory\|Illuminate\\Contracts\\View\\View#'
+        - '#Method App\\Http\\Controllers\\Orders\\[a-zA-Z0-9\\_]+::show\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\Factory\|Illuminate\\Contracts\\View\\View#'
+        - '#Method App\\Http\\Controllers\\Products\\[a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\Factory\|Illuminate\\Contracts\\View\\View#'
+        - '#Method App\\Http\\Controllers\\[a-zA-Z0-9\\_]+::edit\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\Factory\|Illuminate\\Contracts\\View\\View#'
+        - '#Method App\\Http\\Controllers\\[a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\Factory\|Illuminate\\Contracts\\View\\View#'
+        - '#Method App\\View\\Components\\AppLayout::render\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\Factory\|Illuminate\\Contracts\\View\\View#'
+        - '#Method App\\View\\Components\\GuestLayout::render\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\Factory\|Illuminate\\Contracts\\View\\View#'
+        - '#Parameter \#1 \$user of method Illuminate\\Foundation\\Testing\\TestCase::actingAs\(\) expects Illuminate\\Contracts\\Auth\\Authenticatable\, Illuminate\\Database\\Eloquent\\Collection<int\, Illuminate\\Database\\Eloquent\\Model>\|Illuminate\\Database\\Eloquent\\Model given#'
+    treatPhpDocTypesAsCertain: false

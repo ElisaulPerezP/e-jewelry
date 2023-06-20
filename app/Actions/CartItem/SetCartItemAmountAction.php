@@ -13,9 +13,9 @@ class SetCartItemAmountAction
     public function execute(AmountCartItemRequest $request, CartItem $cartItem): CartItemResource|JsonResponse
     {
         $product = $cartItem->product;
-
-        if ($product->stock < $request->amount - $cartItem->amount) {
-            return response()->json(['error' => 'Lo sentimos, hay ' . ($product->stock + $cartItem->amount) . ' disponibles'], 422);
+        $realCartItemStock = $cartItem->state === 'collected' ? 0 : $cartItem->amount;
+        if ($product->stock < $request->amount - $realCartItemStock) {
+            return response()->json(['error' => 'Lo sentimos, hay ' . ($product->stock + $realCartItemStock) . ' disponibles'], 422);
         }
 
         $product->stock -= ($request->amount - $cartItem->amount);

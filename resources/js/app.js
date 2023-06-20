@@ -14,6 +14,8 @@ import Paginator from "./components/Paginator.vue";
 import Cart from "./components/cart/Cart.vue";
 import Order from "./components/order/Order.vue";
 import OrderShow from "./components/order/OrderShow.vue";
+import OrderStateMail from "./components/order/OrderStateMail.vue";
+
 
 library.add(faCheckCircle, faCircleXmark, faArrowAltCircleRight);
 const app = createApp({});
@@ -29,6 +31,7 @@ app.component('products-create', ProductsCreate);
 app.component('cart-index', Cart);
 app.component('order-index', Order);
 app.component('order-show', OrderShow);
+app.component('order-state-mail', OrderStateMail);
 
 app.component('paginator', Paginator);
 app.mount('#app');

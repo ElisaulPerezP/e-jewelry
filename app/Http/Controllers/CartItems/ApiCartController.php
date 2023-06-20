@@ -58,7 +58,7 @@ class ApiCartController extends Controller
         return $this->totalRetriveAction->execute();
     }
 
-    public function changeState(StateCartItemRequest $request, CartItem $cartItem): CartItemResource
+    public function changeState(StateCartItemRequest $request, CartItem $cartItem): CartItemResource|JsonResponse
     {
         return $this->changeCartItemStateAction->execute($request, $cartItem);
     }

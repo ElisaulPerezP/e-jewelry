@@ -2,6 +2,10 @@
 
 namespace App\Models;
 
+//use App\Jobs\MailerOrderState;
+use App\Actions\CartItem\ChangeCartItemStateAction;
+use App\Http\Requests\CartItem\StateCartItemRequest;
+use App\Jobs\MailerOrderState;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,11 +29,18 @@ class Order extends Model
     {
         $this->state = 'approved';
         $this->save();
+        MailerOrderState::dispatch($this)->onConnection('database')->onQueue('mailer');
+        $this->cartItems->each(function ($item) {
+            $action = new ChangeCartItemStateAction();
+            $action->execute(new StateCartItemRequest(['state' => 'paid']), $item);
+        });
+        //TODO: delegar esta logica
     }
     public function rejected(): void
     {
         $this->state = 'rejected';
         $this->save();
+        MailerOrderState::dispatch($this)->onConnection('database')->onQueue('mailer');
     }
 
     public function setTotal(): void
@@ -56,7 +67,7 @@ class Order extends Model
         foreach ($this->cartItems as $cartItem) {
             $newCartItem = $cartItem->replicate();
             $newCartItem->order_id = $newOrder->id;
-            $newCartItem->save();
+            $newCartItem->save(); //TODO: aqui hay fuga de stock
         }
 
         return $newOrder;

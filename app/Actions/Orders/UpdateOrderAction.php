@@ -2,7 +2,7 @@
 
 namespace App\Actions\Orders;
 
-use App\Http\Requests\OrderRequest;
+use App\Http\Requests\Orders\OrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use Illuminate\Support\Facades\Cache;

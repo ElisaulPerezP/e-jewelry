@@ -9,8 +9,8 @@ use App\Actions\Orders\RetryOrderAction;
 use App\Actions\Orders\ShowOrderAction;
 use App\Actions\Orders\UpdateOrderAction;
 use App\Http\Controllers\Controller;
-use App\Http\Payment\request\OrderRequest;
 use App\Http\Requests\IndexRequest;
+use App\Http\Requests\Orders\OrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use Exception;
@@ -20,12 +20,12 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ApiOrderController extends Controller
 {
-    protected $fetchOrdersAction;
-    protected $showOrderAction;
-    protected $updateOrderAction;
-    protected $createOrderAction;
-    protected $checkOrderStatusAction;
-    protected $retryOrderAction;
+    protected FetchOrdersAction $fetchOrdersAction;
+    protected ShowOrderAction $showOrderAction;
+    protected UpdateOrderAction $updateOrderAction;
+    protected CreateOrderAction $createOrderAction;
+    protected CheckOrderStatusAction $checkOrderStatusAction;
+    protected RetryOrderAction $retryOrderAction;
 
     public function __construct(
         FetchOrdersAction $fetchOrdersAction,

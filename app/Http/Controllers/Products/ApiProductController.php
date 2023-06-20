@@ -17,11 +17,11 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ApiProductController extends Controller
 {
-    protected $getPaginatedProductsAction;
-    protected $updateProductAction;
-    protected $createProductAction;
-    protected $deleteProductAction;
-    protected $changeProductStatusAction;
+    protected GetPaginatedProductsAction $getPaginatedProductsAction;
+    protected UpdateProductAction $updateProductAction;
+    protected CreateProductAction $createProductAction;
+    protected DeleteProductAction $deleteProductAction;
+    protected ChangeProductStatusAction $changeProductStatusAction;
 
     public function __construct(
         GetPaginatedProductsAction $getPaginatedProductsAction,

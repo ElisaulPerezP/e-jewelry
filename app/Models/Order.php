@@ -43,7 +43,7 @@ class Order extends Model
         MailerOrderState::dispatch($this)->onConnection('database')->onQueue('mailer');
     }
 
-    public function setTotal()
+    public function setTotal(): void
     {
         foreach ($this->cartItems as $cartItem) {
             $this->total += $cartItem->amount * $cartItem->product->price;

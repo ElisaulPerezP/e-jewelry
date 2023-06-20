@@ -14,9 +14,9 @@ class GetPaginatedProductsAction
     {
         Cache::forget('products');
         $searching = $request->query('searching', '');
-        $perPage = $request->query('per_page', 6);
-        $currentPage = $request->query('current_page', 1);
-        $activeProducts = $request->query('flag', 1);
+        $perPage = $request->query('per_page', '6');
+        $currentPage = $request->query('current_page', '1');
+        $activeProducts = $request->query('flag', '1');
 
         $paginatedProducts = Cache::rememberForever('products', function () use ($currentPage, $perPage, $searching, $activeProducts) {
             $query = Product::query();
@@ -27,7 +27,7 @@ class GetPaginatedProductsAction
 
             $query->where('name', 'like', '%' . $searching . '%');
 
-            return $query->paginate($perPage, ['id', 'name', 'description', 'price', 'stock', 'score', 'status', 'barCode', 'image'], 'page', $currentPage);
+            return $query->paginate((int)$perPage, ['id', 'name', 'description', 'price', 'stock', 'score', 'status', 'barCode', 'image'], 'page', (int)$currentPage);
         });
 
         return ProductResource::collection($paginatedProducts);

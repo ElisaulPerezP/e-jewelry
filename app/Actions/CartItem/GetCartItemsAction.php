@@ -14,15 +14,17 @@ class GetCartItemsAction
     public function execute(IndexRequest $request): AnonymousResourceCollection
     {
         $searching = $request->query('searching', '');
-        $perPage = $request->query('per_page', 6);
-        $currentPage = $request->query('current_page', 1);
-        $activeProducts = $request->query('flag', 1);
+        $perPage = $request->query('per_page', '6');
+        $currentPage = $request->query('current_page', '1');
+        $activeProducts = $request->query('flag', '1');
 
         Cache::forget('cart');
         $paginatedCartItems = Cache::rememberForever('cart', function () use ($currentPage, $perPage, $searching, $activeProducts) {
             $query = CartItem::where('user_id', Auth::user()->id);
 
-            if ($activeProducts == 1) {
+
+            if ($activeProducts === 1) {
+
                 $query->whereIn('state', ['in_cart', 'selected', 'collected']);
             }
 

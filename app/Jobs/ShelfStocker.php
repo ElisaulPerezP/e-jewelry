@@ -17,7 +17,7 @@ class ShelfStocker implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-    private CartItem $CartItem;
+
     /**
      * Create a new job instance.
      */

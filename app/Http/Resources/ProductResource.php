@@ -7,6 +7,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductResource extends JsonResource
 {
+    /**
+     * @return array<string, array<string>>
+     */
     public function toArray(Request $request): array
     {
         return [

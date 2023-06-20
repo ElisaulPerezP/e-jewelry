@@ -27,7 +27,7 @@ class ApiOrderControllerTest extends TestCase
         ]);
         $permission = Permission::findOrCreate('api.order.index');
         $role = Role::findOrCreate('admin')->givePermissionTo($permission);
-        $admin->assignRole($role);
+        $permission->assignRole($role);
 
         $this->actingAs($admin, 'api')->postJson(route('api.order.store'));
 
@@ -63,7 +63,7 @@ class ApiOrderControllerTest extends TestCase
         ]);
         $permission = Permission::findOrCreate('api.order.index');
         $role = Role::findOrCreate('admin')->givePermissionTo($permission);
-        $admin->assignRole($role);
+        $permission->assignRole($role);
 
         $order = $this->actingAs($admin, 'api')->postJson(route('api.order.store'));
         $response = $this->actingAs($admin, 'api')->getJson(route('api.order.show', $order['data']['id']));
@@ -114,7 +114,7 @@ class ApiOrderControllerTest extends TestCase
         $this->assertEquals('pending', $orderCreated->state);
     }
 
-    public function testItCanRetryAnOrder()
+    public function testItCanRetryAnOrder(): void
     {
         $user = User::factory()->create();
         $product1 = Product::factory()->create(['price' => 10000]);

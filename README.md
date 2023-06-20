@@ -98,9 +98,9 @@ Para que las tareas rutinarias se lleven a cabo, debes ejecutar los procesos enc
 Esta aplicación tiene tres colas para su funcionamiento, y cada uno de los siguientes workers atenderá esas colas. 
 Ejecuta los siguientes comandos para atender las colas de 'mailer', 'shelf-stocker' y 'payment-status':
 
-$ php artizan queue:work database --queue=mailer
-$ php artizan queue:work database --queue=shelf-stocker
-$ php artizan queue:work database --queue=paymen-status
+$ php artisan queue:work database --queue=mailer
+$ php artisan queue:work database --queue=shelf-stocker
+$ php artisan queue:work database --queue=paymen-status
 
 Estos trabajadores se encargan de enviar correos electrónicos,
 recoger los productos de los carritos para volver a colocarlos en la vitrina

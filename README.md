@@ -86,6 +86,36 @@ Para asegurarse de que todo salió bien, ejecute las pruebas con el siguiente co
 
 $ php artisan test
 
+#### Ejecución de la aplicación
+
+Para ejecutar la aplicación, debes lanzar el servicio utilizando el comando php artisan serve.
+
+Nota: Debes tener un servidor configurado para este propósito, por ejemplo, Apache.
+
+#### Contratación del personal de la tienda
+
+Para que las tareas rutinarias se lleven a cabo, debes ejecutar los procesos encargados de revisar la tabla de jobs.
+Esta aplicación tiene tres colas para su funcionamiento, y cada uno de los siguientes workers atenderá esas colas. 
+Ejecuta los siguientes comandos para atender las colas de 'mailer', 'shelf-stocker' y 'payment-status':
+
+$ php artizan queue:work database --queue=mailer
+$ php artizan queue:work database --queue=shelf-stocker
+$ php artizan queue:work database --queue=paymen-status
+
+Estos trabajadores se encargan de enviar correos electrónicos,
+recoger los productos de los carritos para volver a colocarlos en la vitrina
+y comunicarse con la pasarela de pagos para actualizar los estados de las órdenes de compra.
+
+#### Primeros pasos de las funcionalidades.
+
+Ingresa a la aplicación a través del enlace que se emitió durante el lanzamiento de la aplicación.
+Si la base de datos se ha sembrado correctamente, podrás ingresar con los siguientes datos:
+
+Email: admin@jewelry.com
+Contraseña: password
+
+(WIP)
+
 ## Contribuciones al desarrollo
 
 Si desea unirse al desarrollo de esta aplicación, puede hacerlo solicitando un pull request.

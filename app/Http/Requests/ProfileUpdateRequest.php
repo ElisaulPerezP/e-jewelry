@@ -8,6 +8,9 @@ use Illuminate\Validation\Rule;
 
 class ProfileUpdateRequest extends FormRequest
 {
+    /**
+     * @return array<string, array<string>>
+     */
     public function rules(): array
     {
         return [

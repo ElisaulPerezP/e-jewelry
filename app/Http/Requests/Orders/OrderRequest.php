@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Payment\request;
+namespace App\Http\Requests\Orders;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -10,7 +10,9 @@ class OrderRequest extends FormRequest
     {
         return true;
     }
-
+    /**
+     * @return array<string, array<string>>
+     */
     public function rules(): array
     {
         return [

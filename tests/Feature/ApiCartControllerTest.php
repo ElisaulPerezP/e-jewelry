@@ -29,7 +29,7 @@ class ApiCartControllerTest extends TestCase
             'state' => 'in_cart',
         ]);
 
-        $response = $this->actingAs($admin, 'api')->getJson(route('api.cart.index', $admin));
+        $response = $this->actingAs($admin, 'api')->getJson(route('api.cart.index', ['searching' => '', 'current_page' => '1', 'per_page' => '1', 'flag' => '0']));
 
         $response->assertOk();
 
@@ -56,7 +56,7 @@ class ApiCartControllerTest extends TestCase
         $admin = User::factory()->create();
         $permission = Permission::findOrCreate('api.cart.setAmount');
         $role = Role::findOrCreate('admin')->givePermissionTo($permission);
-        $admin->assignRole($role);
+        $permission->assignRole($role);
         $cartItem = CartItem::factory()->create([
             'user_id' => $admin->id,
             'product_id' => $product->id,
@@ -65,7 +65,7 @@ class ApiCartControllerTest extends TestCase
         ]);
 
         $response = $this->actingAs($admin, 'api')->putJson(route('api.cart.setAmount', $cartItem), [
-            'amount' => 11,
+            'amount' => '11',
 
         ]);
 
@@ -88,7 +88,7 @@ class ApiCartControllerTest extends TestCase
         $admin = User::factory()->create();
         $permission = Permission::findOrCreate('api.cart.changeState');
         $role = Role::findOrCreate('admin')->givePermissionTo($permission);
-        $admin->assignRole($role);
+        $permission->assignRole($role);
         $cartItem = CartItem::factory()->create([
             'user_id' => $admin->id,
             'product_id' => $product->id,
@@ -136,7 +136,7 @@ class ApiCartControllerTest extends TestCase
         $admin = User::factory()->create();
         $permission = Permission::findOrCreate('api.destroy.product');
         $role = Role::findOrCreate('admin')->givePermissionTo($permission);
-        $admin->assignRole($role);
+        $permission->assignRole($role);
         $product = Product::factory()->create();
 
         $this->assertDatabaseCount('cart_items', 0);

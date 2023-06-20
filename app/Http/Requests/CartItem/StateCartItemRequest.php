@@ -12,12 +12,15 @@ class StateCartItemRequest extends FormRequest
         return true;
     }
 
+    /**
+     * @return array<string, array<string>>
+     */
     public function rules(): array
     {
         return [
             'state' => [
                 'required',
-                Rule::in(['in_cart', 'in_order', 'selected']),
+                Rule::in(['in_cart', 'in_order', 'selected', 'paid', 'dispatch']),
             ],
          ];
     }

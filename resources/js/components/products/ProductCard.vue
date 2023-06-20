@@ -2,9 +2,10 @@
     <div class="max-w-7xl sm:px-6 lg:px-8">
         <div class="py-4 flex justify-between">
             <div>
-                <input type="text" v-model="query" placeholder="Buscar..."
+                <input @change = "search(query)" type="text" v-model="query" placeholder="Buscar..."
                        class="bg-white  shadow-sm sm:rounded-lg">
             </div>
+
             <div>
                 <paginator @data="handleDataPagination" :currentPage="currentPage" :lastPage="receivedLastPage"></paginator>
             </div>
@@ -13,7 +14,6 @@
             <div class="p-6 bg-white border-b border-gray-200">
                 <div class="my-8">
                     <div class="container mx-auto px-6">
-                        <input type="text" v-model="query" placeholder="Buscar...">
                         <div
                             class="grid gap-6 grid-cols-3 mt-6"
                         >
@@ -59,7 +59,7 @@ const receivedCurrentPage = ref(1)
 const receivedFirstPage = ref(1)
 const receivedLastPage = ref(1)
 const itemsCart = ref([])
-
+const per_page = ref(9)
 
 const props = defineProps({
     user_id: {
@@ -70,7 +70,7 @@ const props = defineProps({
 
 
 onMounted(() => {
-    axios.get('/api/products', {params: {searching: "", active_products: 1, current_page: currentPage.value}})
+    axios.get('/api/products', {params: {searching: "", current_page: currentPage.value, per_page: per_page.value, flag: 1}})
         .then(response => {
             products.value = response.data.data;
             receivedCurrentPage.value = response.data.meta.current_page
@@ -81,12 +81,27 @@ onMounted(() => {
         });
 
 if (props.user_id !== null) {
-    axios.get('/api/cart/')
+    axios.get('/api/cart/',{params: {searching: "", current_page: currentPage.value, per_page: 1000, flag: 1}})
         .then(response => itemsCart.value = response.data.data)
         .catch(error => console.log(error))
 }
 
 })
+
+
+const search = async (query) => {
+    axios.get('/api/products', {params: {searching: query, current_page: currentPage.value, per_page: per_page.value, flag: 1}})
+        .then(response => {
+            products.value = response.data.data;
+            receivedCurrentPage.value = response.data.meta.current_page
+            receivedLastPage.value = response.data.meta.last_page
+        })
+        .catch(error => {
+            console.log(error);
+        });
+
+
+}
 
 const inCartProducts = computed(() => {
     return products.value.map(product => {
@@ -106,7 +121,12 @@ const filteredProducts = computed(() => {
 })
 
 const sendToCart = async (product) => {
-    await axios.post('api/cart/' + product.id + '/store')
+    await axios.post('/api/cart/' + product.id + '/store')
+        .then(response => {
+            if (response.status === 201) {
+                itemsCart.value = response.data.data;
+            }})
+        .catch(error => console.log(error))
     location.reload()
 }
 
@@ -122,7 +142,7 @@ const handleDataPagination = (data) => {
         currentPage.value=receivedLastPage.value
     } else {
     }
-    axios.get('/api/products', {params: {searching: "", active_products: 1, current_page: currentPage.value}})
+    axios.get('/api/products', {params: {searching: query.value, current_page: currentPage.value, per_page: per_page.value, flag: 1}})
         .then(response => {
             products.value = response.data.data;
             receivedCurrentPage.value = response.data.meta.current_page
@@ -131,6 +151,7 @@ const handleDataPagination = (data) => {
         .catch(error => {
             console.log(error);
         });
+
 };
 
 const goToCart = () => {

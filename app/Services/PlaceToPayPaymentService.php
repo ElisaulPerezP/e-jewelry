@@ -28,7 +28,9 @@ class PlaceToPayPaymentService
 
         throw new Exception($result->body());
     }
-
+    /**
+     * @return array<string, array<string>>
+     */
     private function createSession(Order $order, string $ipAddress, string $userAgent): array
     {
         return [
@@ -46,12 +48,14 @@ class PlaceToPayPaymentService
                 ],
             ],
             'expiration' => Carbon::now()->addHour()->toIso8601String(),
-            'returnUrl' => 'http://127.0.0.1:8000/',
+            'returnUrl' => 'http://127.0.0.1:8000/' . 'order/' . $order->id . '/show',
             'ipAddress' => $ipAddress,
             'userAgent' => $userAgent,
         ];
     }
-
+    /**
+     * @return array<string, string>
+     */
     private function getAuth(): array
     {
         $nonce = Str::random();

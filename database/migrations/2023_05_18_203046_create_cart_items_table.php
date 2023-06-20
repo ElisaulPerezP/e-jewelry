@@ -12,7 +12,7 @@ return new class() extends Migration {
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('product_id')->constrained('products');
             $table->integer('amount');
-            $table->enum('state', ['in_cart', 'selected', 'in_order']);
+            $table->enum('state', ['in_cart', 'selected', 'in_order', 'collected', 'paid']);
             $table->foreignId('order_id')->nullable()->constrained('orders');
             $table->timestamps();
         });

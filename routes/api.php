@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\ApiCartController;
-use App\Http\Controllers\ApiOrderController;
-use App\Http\Controllers\ApiProductController;
+use App\Http\Controllers\CartItems\ApiCartController;
+use App\Http\Controllers\Orders\ApiOrderController;
+use App\Http\Controllers\Products\ApiProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/products', [ApiProductController::class, 'index'])->name('api.products.index');
@@ -19,15 +19,19 @@ Route::middleware('auth:api')->name('api.')->group(function () {
             ->name('destroy');
         Route::put('/{cartItem}/changeState', [ApiCartController::class, 'changeState'])
             ->name('update.state.saved');
+        Route::get('/total', [ApiCartController::class, 'total'])
+            ->name('total');
     });
 
     Route::prefix('/order')->name('order.')->group(function () {
         Route::get('/', [ApiOrderController::class, 'index'])
             ->name('index');
+        Route::get('/{order}/show', [ApiOrderController::class, 'show'])
+            ->name('show');
         Route::post('/create', [ApiOrderController::class, 'store'])
             ->name('store');
         Route::get('/{order}/checkStatus', [ApiOrderController::class, 'checkStatus'])
-            ->name('show');
+            ->name('checkStatus');
         Route::post('/{order}/retry', [ApiOrderController::class, 'retry'])
             ->name('retry');
     });

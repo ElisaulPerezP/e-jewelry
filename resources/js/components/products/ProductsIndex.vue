@@ -2,6 +2,10 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 bg-white border-b border-gray-200">
+                <button @click="downloadProducts"
+                        class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xl text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                    Descargar lista de productos
+                </button>
                 <section class="container mx-auto p-6 font-mono">
                     <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
                         <div class="py-4 flex justify-between">
@@ -117,6 +121,7 @@
 <script setup>
 import {ref, onMounted} from 'vue'
 import axios from 'axios'
+import FileSaver from 'file-saver';
 
 const products = ref([])
 const query = ref("")
@@ -152,6 +157,19 @@ const changeStatus = async (product) => {
     await axios.put('/api/products/' + product.id +'/changeStatus/')
 }
 
+const downloadProducts = async () => {
+    try {
+        const response = await axios.get('/api/export/products/', {responseType: 'blob'});
+        const contentDisposition = response.headers['content-disposition'];
+        const fileNameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+        const matches = fileNameRegex.exec(contentDisposition);
+        const fileName = matches && matches[1] ? matches[1] : 'products.xlsx';
+        const blob = new Blob([response.data], {type: 'text/xlsx'});
+        FileSaver.saveAs(blob, fileName);
+    } catch (error) {
+        console.error('Error al descargar los productos:', error);
+    }
+};
 const handleDataPagination = (data) => {
     receivedData.value = data;
     if (receivedData.value === 'firts_page') {

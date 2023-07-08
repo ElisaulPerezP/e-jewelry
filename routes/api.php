@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\ApiDTOController;
 use App\Http\Controllers\CartItems\ApiCartController;
+use App\Http\Controllers\ImportController;
 use App\Http\Controllers\Orders\ApiOrderController;
 use App\Http\Controllers\Products\ApiProductController;
 use Illuminate\Support\Facades\Route;
@@ -48,4 +50,7 @@ Route::middleware('auth:api')->name('api.')->group(function () {
         Route::put('/{product}/changeStatus', [ApiProductController::class, 'changeStatus'])
             ->name('changeStatus');
     });
+
+    Route::get('/export/products', [ApiDTOController::class, 'export'])->name('api.export.products');
+    Route::post('/import/products', [ImportController::class, 'store'])->name('api.import.products');
 });

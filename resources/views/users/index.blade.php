@@ -25,6 +25,9 @@
                                         <th class="px-4 py-3">{{ trans('tables.show') }}</th>
                                         <th class="px-4 py-3">{{ trans('tables.update') }}</th>
                                         <th class="px-4 py-3">{{ trans('tables.enabling') }}</th>
+                                        @can('edit.users.permissions')
+                                            <th class="px-4 py-3">{{ trans('tables.permissions') }}</th>
+                                        @endcan
 
                                     </tr>
                                     </thead>
@@ -82,6 +85,22 @@
                                                         @endif
                                                     </div>
                                                 </td>
+                                                @can('edit.users.permissions')
+                                                <td class="px-4 py-3 border">
+                                                    <div class="flex items-center text-sm">
+                                                        @if($user->email != 'admin@jewelry.com')
+                                                            <form action="{{ route('users.assignPermissions', $user) }}"
+                                                                  method="POST">
+                                                                @csrf
+                                                                {{ method_field('PUT') }}
+                                                                <x-primary-button>
+                                                                    {{trans('buttons.permissions')}}
+                                                                </x-primary-button>
+                                                            </form>
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                                @endcan
                                             </tr>
                                         @endforeach
                                     </div>

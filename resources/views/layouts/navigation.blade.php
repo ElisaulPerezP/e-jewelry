@@ -30,6 +30,20 @@
                         </x-nav-link>
                     </div>
                 @endcan
+                @can('index.user')
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('permissions.index')" :active="request()->routeIs('dashboard')">
+                            {{ trans('general.permissions') }}
+                        </x-nav-link>
+                    </div>
+                @endcan
+                @can('index.user')
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('roles.index')" :active="request()->routeIs('dashboard')">
+                            {{ trans('general.roles') }}
+                        </x-nav-link>
+                    </div>
+                @endcan
             </div>
 
             <!-- Settings Dropdown -->

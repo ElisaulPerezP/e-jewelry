@@ -58,7 +58,6 @@ Route::middleware('auth:api')->name('api.')->group(function () {
     Route::post('/import/products', [ImportController::class, 'store'])
         ->name('api.import.products');
 
-
     Route::middleware('role:admin')->prefix('/permissions')->name('permissions.')->group(function () {
         Route::get('/', [ApiPermissionController::class, 'index'])
             ->name('index');

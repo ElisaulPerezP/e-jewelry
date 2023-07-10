@@ -24,4 +24,7 @@ return [
     'areYouSure' => '¿Está seguro de querer eliminar la cuenta?',
     'onceDeleted' => 'Una vez que se elimine tu cuenta, todos sus recursos y datos se eliminarán permanentemente. Por favor, ingresa tu contraseña para confirmar que deseas eliminar tu cuenta de forma permanente.',
     'register' => 'Registrarse',
+    'permissions' => 'Permisos',
+    'roles' => 'Roles',
+
 ];

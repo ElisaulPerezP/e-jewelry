@@ -128,7 +128,7 @@
 
     <div v-if="formModal" class="fixed inset-0 flex items-center justify-center">
         <div class="bg-white p-8 rounded shadow-lg">
-            <h2 class="text-2xl font-bold mb-4">{{ modalTitle }}</h2>
+            <h2 class="text-2xl font-bold mb-4"> Subir un archivo .xlsx </h2>
             <p>{{ modalMessage }}</p>
             <div class="flex items-center text-sm">
                 <input type="file" @change="handleFileUpload">
@@ -156,7 +156,6 @@
 <script setup>
 import {ref, onMounted} from 'vue'
 import axios from 'axios'
-import FileSaver from 'file-saver';
 
 const products = ref([])
 const query = ref("")

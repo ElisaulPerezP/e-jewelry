@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\CartItems\CartController;
 use App\Http\Controllers\Orders\OrderController;
+use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\Products\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,8 +34,12 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::put('/users/changeStatus/{user}', [UserController::class, 'changeStatus'])->name('users.changeStatus');
     Route::get('/users/show/{user}', [UserController::class, 'show'])->name('users.show');
+    Route::put('/users/{user}/permissions', [UserController::class, 'assignPermissionsToUser'])->name('users.assignPermissions');
 
     Route::resource('/products', ProductController::class);
+    Route::get('/permissions/index', [PermissionsController::class, 'index'])->name('permissions.index');
+    Route::get('/roles/index', [RolesController::class, 'index'])->name('roles.index');
+    Route::get('/roles/{role}', [RolesController::class, 'assignPermissionsToRole'])->name('roles.permissions');
 });
 
 require __DIR__ . '/auth.php';

@@ -8,7 +8,7 @@ use Spatie\Permission\Models\Role;
 
 class PermissionSeeder extends Seeder
 {
-    protected const PERMISSIONS = [
+    protected const PERMISSIONS_WEB = [
         'index.user',
         'edit.user',
         'show.user',
@@ -17,6 +17,10 @@ class PermissionSeeder extends Seeder
         'edit.profile',
         'update.profile',
         'destroy.profile',
+        'edit.users.permissions',
+    ];
+
+    protected const PERMISSIONS_API = [
         'api.index.product',
         'api.update.product',
         'api.show.product',
@@ -31,17 +35,25 @@ class PermissionSeeder extends Seeder
     ];
     public function run(): void
     {
-        foreach (self::PERMISSIONS as $permission) {
-            Permission::findOrCreate($permission);
+        foreach (self::PERMISSIONS_WEB as $permission) {
+            Permission::findOrCreate($permission, 'web');
+        }
+        foreach (self::PERMISSIONS_API as $permission) {
+            Permission::findOrCreate($permission, 'api');
         }
 
         foreach (self::ROLES as $role) {
-            Role::findOrCreate($role);
+            Role::findOrCreate($role, 'web');
+        }
+        foreach (self::ROLES as $role) {
+            Role::findOrCreate($role, 'api');
         }
 
-        $role = Role::findByName('admin');
-        $role->syncPermissions(Permission::all());
-        $roleUser = Role::findByName('user');
+        $roleApi = Role::findByName('admin', 'api');
+        $roleApi->syncPermissions(Permission::whereIn('guard_name', ['api'])->get());
+        $roleWeb = Role::findByName('admin', 'web');
+        $roleWeb->syncPermissions(Permission::whereIn('guard_name', ['web'])->get());
+        $roleUser = Role::findByName('user', 'api');
         $roleUser->syncPermissions('api.index.product');
     }
 }

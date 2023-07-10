@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ApiDTOController;
+use App\Http\Controllers\ApiPermissionController;
+use App\Http\Controllers\ApiRolesController;
 use App\Http\Controllers\CartItems\ApiCartController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\Orders\ApiOrderController;
@@ -51,6 +53,40 @@ Route::middleware('auth:api')->name('api.')->group(function () {
             ->name('changeStatus');
     });
 
-    Route::get('/export/products', [ApiDTOController::class, 'export'])->name('api.export.products');
-    Route::post('/import/products', [ImportController::class, 'store'])->name('api.import.products');
+    Route::get('/export/products', [ApiDTOController::class, 'export'])
+        ->name('api.export.products');
+    Route::post('/import/products', [ImportController::class, 'store'])
+        ->name('api.import.products');
+
+    Route::middleware('role:admin')->prefix('/permissions')->name('permissions.')->group(function () {
+        Route::get('/', [ApiPermissionController::class, 'index'])
+            ->name('index');
+    });
+
+    Route::middleware('role:admin')->prefix('/roles')->name('roles.')->group(function () {
+        Route::delete('/{role}', [ApiRolesController::class, 'delete'])
+            ->name('delete');
+        Route::get('/{role}/permissions', [ApiRolesController::class, 'showPermissionsToRole'])
+            ->name('permissions');
+        Route::post('/store', [ApiRolesController::class, 'store'])
+            ->name('store');
+        Route::get('/', [ApiRolesController::class, 'index'])
+            ->name('index');
+        Route::post('/{role}/permissions', [ApiPermissionController::class, 'assignPermissionsToRole'])
+            ->name('permissions.store');
+    });
+
+    Route::middleware('role:admin')->prefix('/users')->name('users.')->group(function () {
+        Route::get('/{user}/permissions', [ApiRolesController::class, 'showPermissionsToUser'])
+            ->name('permissions');
+        Route::post('/{user}/permissions', [ApiPermissionController::class, 'assignPermissionsToUser'])
+            ->name('permissions.store');
+    });
+
+    Route::middleware('role:admin')->prefix('/identity')->name('identity.')->group(function () {
+        Route::get('/role/{role}', [ApiRolesController::class, 'roleIdentity'])
+            ->name('role');
+        Route::get('/user/{user}', [ApiRolesController::class, 'userIdentity'])
+            ->name('user');
+    });
 });

@@ -48,4 +48,8 @@ class UserController extends Controller
 
         return redirect(route('users.index'));
     }
+    public function assignPermissionsToUser(User $user): view
+    {
+        return view('users.assignPermissions', ['resource_type' => 'user', 'id' => $user->id]);
+    }
 }

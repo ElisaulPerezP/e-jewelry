@@ -88,7 +88,6 @@
                                                 @can('edit.users.permissions')
                                                 <td class="px-4 py-3 border">
                                                     <div class="flex items-center text-sm">
-                                                        @if($user->email != 'admin@jewelry.com')
                                                             <form action="{{ route('users.assignPermissions', $user) }}"
                                                                   method="POST">
                                                                 @csrf
@@ -97,7 +96,6 @@
                                                                     {{trans('buttons.permissions')}}
                                                                 </x-primary-button>
                                                             </form>
-                                                        @endif
                                                     </div>
                                                 </td>
                                                 @endcan

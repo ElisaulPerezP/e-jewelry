@@ -22,9 +22,9 @@ class ApiExcelExportsTest extends TestCase
         Excel::fake();
         Product::factory(2)->create();
         $admin = User::factory()->create();
-        $permission = Permission::findOrCreate('api.export.products');
+        $permission = Permission::findOrCreate('api.export.product');
         $role = Role::findOrCreate('admin')->givePermissionTo($permission);
-        $permission->assignRole($role);
+        $admin->assignRole($role);
         $response = $this->actingAs($admin, 'api')
             ->get('api/export/products/');
         $response->assertOk();
@@ -40,9 +40,9 @@ class ApiExcelExportsTest extends TestCase
         ];
         Excel::fake();
         $admin = User::factory()->create();
-        $permission = Permission::findOrCreate('api.export.products');
+        $permission = Permission::findOrCreate('api.import.product');
         $role = Role::findOrCreate('admin')->givePermissionTo($permission);
-        $permission->assignRole($role);
+        $admin->assignRole($role);
         $response = $this->actingAs($admin, 'api')
             ->withHeaders([
                 'Accept' => 'application/json',

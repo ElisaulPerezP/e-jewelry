@@ -40,22 +40,31 @@ Route::middleware('auth:api')->name('api.')->group(function () {
             ->name('retry');
     });
 
-    Route::middleware('role:admin')->prefix('/products')->name('products.')->group(function () {
-        Route::get('/{product}', [ApiProductController::class, 'show'])
-            ->name('show');
-        Route::post('/', [ApiProductController::class, 'store'])
-            ->name('store');
-        Route::put('/{product}', [ApiProductController::class, 'update'])
-            ->name('update');
-        Route::delete('/{product}', [ApiProductController::class, 'destroy'])
-            ->name('destroy');
-        Route::put('/{product}/changeStatus', [ApiProductController::class, 'changeStatus'])
-            ->name('changeStatus');
-    });
+    Route::get('/products/{product}', [ApiProductController::class, 'show'])
+        ->middleware('role_or_permission:api.show.product|admin')
+        ->name('products.show');
+
+    Route::post('/products', [ApiProductController::class, 'store'])
+        ->middleware('role_or_permission:api.store.product|admin')
+        ->name('products.store');
+
+    Route::put('/products/{product}', [ApiProductController::class, 'update'])
+        ->middleware('role_or_permission:api.update.product|admin')
+        ->name('products.update');
+
+    Route::delete('/products/{product}', [ApiProductController::class, 'destroy'])
+        ->middleware('role_or_permission:api.destroy.product|admin')
+        ->name('products.destroy');
+
+    Route::put('/products/{product}/changeStatus', [ApiProductController::class, 'changeStatus'])
+        ->middleware('role_or_permission:api.changeStatus.product|admin')
+        ->name('products.changeStatus');
 
     Route::get('/export/products', [ApiDTOController::class, 'export'])
+        ->middleware('role_or_permission:api.export.product|admin')
         ->name('api.export.products');
     Route::post('/import/products', [ImportController::class, 'store'])
+        ->middleware('role_or_permission:api.import.product|admin')
         ->name('api.import.products');
 
     Route::middleware('role:admin')->prefix('/permissions')->name('permissions.')->group(function () {

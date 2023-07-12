@@ -41,30 +41,30 @@ Route::middleware('auth:api')->name('api.')->group(function () {
     });
 
     Route::get('/products/{product}', [ApiProductController::class, 'show'])
-        ->middleware('role_or_permission:api.show.product')
+        ->middleware('role_or_permission:api.show.product|admin')
         ->name('products.show');
 
     Route::post('/products', [ApiProductController::class, 'store'])
-        ->middleware('role_or_permission:api.store.product')
+        ->middleware('role_or_permission:api.store.product|admin')
         ->name('products.store');
 
     Route::put('/products/{product}', [ApiProductController::class, 'update'])
-        ->middleware('role_or_permission:api.update.product')
+        ->middleware('role_or_permission:api.update.product|admin')
         ->name('products.update');
 
     Route::delete('/products/{product}', [ApiProductController::class, 'destroy'])
-        ->middleware('role_or_permission:api.destroy.product')
+        ->middleware('role_or_permission:api.destroy.product|admin')
         ->name('products.destroy');
 
     Route::put('/products/{product}/changeStatus', [ApiProductController::class, 'changeStatus'])
-        ->middleware('role_or_permission:api.changeStatus.product')
+        ->middleware('role_or_permission:api.changeStatus.product|admin')
         ->name('products.changeStatus');
 
     Route::get('/export/products', [ApiDTOController::class, 'export'])
-        ->middleware('role_or_permission:api.export.product')
+        ->middleware('role_or_permission:api.export.product|admin')
         ->name('api.export.products');
     Route::post('/import/products', [ImportController::class, 'store'])
-        ->middleware('role_or_permission:api.import.product')
+        ->middleware('role_or_permission:api.import.product|admin')
         ->name('api.import.products');
 
     Route::middleware('role:admin')->prefix('/permissions')->name('permissions.')->group(function () {

@@ -27,6 +27,8 @@ class PermissionSeeder extends Seeder
         'api.store.product',
         'api.destroy.product',
         'api.changeStatus.product',
+        'api.export.product',
+        'api.import.product',
     ];
 
     protected const ROLES = [

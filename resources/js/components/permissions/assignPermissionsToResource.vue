@@ -181,7 +181,7 @@ const handleDataPagination = (data) => {
             searching: query.value,
             current_page: currentPage.value,
             per_page: per_page.value,
-            flag: objectOfInterest.value.guard_name
+            flag: (objectOfInterest.value.guard_name === 'api' ? 'api' : objectOfInterest.value.guard_name === 'web' ? 'web' : '0')
         }
     })
         .then(response => {
@@ -200,7 +200,7 @@ const search = async (query) => {
             searching: query,
             current_page: currentPage.value,
             per_page: per_page.value,
-            flag: objectOfInterest.value.guard_name
+            flag: (objectOfInterest.value.guard_name === 'api' ? 'api' : objectOfInterest.value.guard_name === 'web' ? 'web' : '0')
         }
     })
         .then(response => {

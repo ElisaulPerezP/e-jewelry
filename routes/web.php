@@ -35,6 +35,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::put('/users/changeStatus/{user}', [UserController::class, 'changeStatus'])->name('users.changeStatus');
     Route::get('/users/show/{user}', [UserController::class, 'show'])->name('users.show');
     Route::put('/users/{user}/permissions', [UserController::class, 'assignPermissionsToUser'])->name('users.assignPermissions');
+    Route::put('/users/{user}/roles', [UserController::class, 'assignRolesToUser'])->name('users.assignRoles');
 
     Route::resource('/products', ProductController::class);
     Route::get('/permissions/index', [PermissionsController::class, 'index'])->name('permissions.index');

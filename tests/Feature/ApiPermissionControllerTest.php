@@ -340,6 +340,73 @@ class ApiPermissionControllerTest extends TestCase
         $this->assertFalse($hasPermissions);
     }
 
+    public function testItCanAssignRolesToUser(): void
+    {
+        $admin = User::factory()->create();
+        $permission = Permission::findOrCreate('users.roles.store');
+        $role = Role::findOrCreate('admin')->givePermissionTo($permission);
+        $admin->assignRole($role);
+
+        $RoleForTest = Role::findOrCreate('RoleForTest');
+        $userForTest = User::factory()->create();
+        $rolesIds = [$RoleForTest->id];
+        $requestData = ['roles' => $rolesIds];
+        $parameters = ['params' => $requestData];
+
+        $response = $this->actingAs($admin, 'api')->post(
+            route('api.users.roles.store', $userForTest),
+            $parameters
+        );
+        $this->assertAuthenticated();
+        $response->assertStatus(200);
+
+        $response->assertJsonStructure([
+            'data' => [
+                '*' => [
+                    'id',
+                    'name',
+                    'guard_name',
+                    'created_at',
+                    'updated_at',
+                ],
+            ],
+        ]);
+        $this->assertTrue($userForTest->hasRole($RoleForTest));
+    }
+
+    public function testItCanRevokeRolesToUser(): void
+    {
+        $admin = User::factory()->create();
+        $permission = Permission::findOrCreate('users.roles.store');
+        $role = Role::findOrCreate('admin')->givePermissionTo($permission);
+        $admin->assignRole($role);
+
+        $RoleForTest = Role::findOrCreate('RoleForTest');
+        $userForTest = User::factory()->create();
+        $rolesIds = [$RoleForTest->id];
+        $requestData = ['roles' => $rolesIds];
+        $parameters = ['params' => $requestData];
+
+        $response = $this->actingAs($admin, 'api')->post(
+            route('api.users.roles.store', $userForTest),
+            $parameters
+        );
+        $this->assertAuthenticated();
+        $response->assertStatus(200);
+        $this->assertTrue($userForTest->hasRole($RoleForTest));
+
+        $rolesIds = [];
+        $requestData = ['roles' => $rolesIds];
+        $parameters = ['params' => $requestData];
+
+        $response = $this->actingAs($admin, 'api')->post(
+            route('api.users.roles.store', $userForTest),
+            $parameters
+        );
+        $hasRoles = $userForTest->roles()->exists();
+        $this->assertFalse($hasRoles);
+    }
+
     public function testItCanRetrieveResourceIdentity(): void
     {
         $admin = User::factory()->create();

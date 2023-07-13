@@ -14,5 +14,6 @@ return [
     'disableStatus' => 'Inhabilitado',
     'deleteAccount' => 'Borrar cuenta',
     'permissions' => 'Permisos',
+    'roles' => 'Roles',
 
 ];

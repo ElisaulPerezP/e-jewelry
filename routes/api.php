@@ -90,6 +90,10 @@ Route::middleware('auth:api')->name('api.')->group(function () {
             ->name('permissions');
         Route::post('/{user}/permissions', [ApiPermissionController::class, 'assignPermissionsToUser'])
             ->name('permissions.store');
+        Route::get('/{user}/roles', [ApiPermissionController::class, 'showRolesToUser'])
+            ->name('roles.store');
+        Route::post('/{user}/roles', [ApiPermissionController::class, 'assignRolesToUser'])
+            ->name('roles.store');
     });
 
     Route::middleware('role:admin')->prefix('/identity')->name('identity.')->group(function () {

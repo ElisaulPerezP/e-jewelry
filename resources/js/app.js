@@ -18,6 +18,7 @@ import OrderStateMail from "./components/order/OrderStateMail.vue";
 import PermissionsIndex from "./components/permissions/PermissionsIndex.vue"
 import RolesIndex from "./components/permissions/RolesIndex.vue"
 import assignPermissions from "./components/permissions/assignPermissionsToResource.vue"
+import assignRoles from "./components/permissions/assignRolesToUser.vue"
 
 
 library.add(faCheckCircle, faCircleXmark, faArrowAltCircleRight);
@@ -38,6 +39,7 @@ app.component('order-state-mail', OrderStateMail);
 app.component('permissions-index', PermissionsIndex);
 app.component('roles-index', RolesIndex);
 app.component('assign-permissions-to-resource', assignPermissions);
+app.component('assign-roles-to-user', assignRoles);
 
 app.component('paginator', Paginator);
 app.mount('#app');

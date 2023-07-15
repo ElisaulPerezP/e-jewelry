@@ -52,8 +52,7 @@ class ProductsImport implements ToModel, WithStartRow, WithChunkReading, ShouldQ
                 'image'=> $row[8],
             ]);
             $childProduct->save();
-            $conciliator = new ProductsConciliationStockAction();
-            $childProduct->stock = $conciliator->execute($parentProduct, $childProduct->stock);
+            $childProduct->stock = (new ProductsConciliationStockAction())($parentProduct, $childProduct->stock);
             $childProduct->save();
             $parentProduct->stock = 0;
             $parentProduct->save();
@@ -68,8 +67,8 @@ class ProductsImport implements ToModel, WithStartRow, WithChunkReading, ShouldQ
             return $childProduct;
         }
 
-        $conciliator = new ProductsConciliationStockAction();
-        $parentProduct->stock = $conciliator->execute($parentProduct, $row[4]);
+
+        $parentProduct->stock = (new ProductsConciliationStockAction())($parentProduct, $row[4]);
         $parentProduct->save();
 
         return $parentProduct;

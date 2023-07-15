@@ -15,10 +15,12 @@ import Cart from "./components/cart/Cart.vue";
 import Order from "./components/order/Order.vue";
 import OrderShow from "./components/order/OrderShow.vue";
 import OrderStateMail from "./components/order/OrderStateMail.vue";
-import PermissionsIndex from "./components/permissions/PermissionsIndex.vue"
-import RolesIndex from "./components/permissions/RolesIndex.vue"
-import assignPermissions from "./components/permissions/assignPermissionsToResource.vue"
-import assignRoles from "./components/permissions/assignRolesToUser.vue"
+import PermissionsIndex from "./components/permissions/PermissionsIndex.vue";
+import RolesIndex from "./components/permissions/RolesIndex.vue";
+import assignPermissions from "./components/permissions/assignPermissionsToResource.vue";
+import assignRoles from "./components/permissions/assignRolesToUser.vue";
+import ClientIndex from "./components/permissions/ClientIndex.vue";
+import ClientCode from "./components/permissions/ClientCode.vue";
 
 
 library.add(faCheckCircle, faCircleXmark, faArrowAltCircleRight);
@@ -40,6 +42,8 @@ app.component('permissions-index', PermissionsIndex);
 app.component('roles-index', RolesIndex);
 app.component('assign-permissions-to-resource', assignPermissions);
 app.component('assign-roles-to-user', assignRoles);
+app.component('client-index', ClientIndex);
+app.component('client-code', ClientCode);
 
 app.component('paginator', Paginator);
 app.mount('#app');

@@ -18,6 +18,7 @@ class PermissionSeeder extends Seeder
         'update.profile',
         'destroy.profile',
         'edit.users.permissions',
+        'user.dev',
     ];
 
     protected const PERMISSIONS_API = [
@@ -27,8 +28,30 @@ class PermissionSeeder extends Seeder
         'api.store.product',
         'api.destroy.product',
         'api.changeStatus.product',
-        'api.export.product',
-        'api.import.product',
+        'api.export.products',
+        'api.import.products',
+        'api.index.cart',
+        'api.setAmount.cart',
+        'api.store.cart',
+        'api.destroy.cart',
+        'api.changeState.cart',
+        'api.total.cart',
+        'api.order.index',
+        'api.order.show',
+        'api.order.store',
+        'api.order.retry',
+        'api.permissions.index',
+        'api.roles.delete',
+        'api.permissionsToRole.show',
+        'api.roles.store',
+        'api.roles.index',
+        'api.roles.assignPermissions',
+        'api.user.showPermissions',
+        'api.user.assignPermissions',
+        'api.user.showRoles',
+        'api.user.assignRoles',
+        'api.role.identity',
+        'api.user.identity',
     ];
 
     protected const ROLES = [
@@ -51,11 +74,25 @@ class PermissionSeeder extends Seeder
             Role::findOrCreate($role, 'api');
         }
 
-        $roleApi = Role::findByName('admin', 'api');
-        $roleApi->syncPermissions(Permission::whereIn('guard_name', ['api'])->get());
-        $roleWeb = Role::findByName('admin', 'web');
-        $roleWeb->syncPermissions(Permission::whereIn('guard_name', ['web'])->get());
-        $roleUser = Role::findByName('user', 'api');
-        $roleUser->syncPermissions('api.index.product');
+        $roleAdminApi = Role::findByName('admin', 'api');
+        $roleAdminApi->syncPermissions(Permission::whereIn('guard_name', ['api'])->get()->pluck('name')->toArray());
+        $roleAdminWeb = Role::findByName('admin', 'web');
+        $roleAdminWeb->syncPermissions(Permission::whereIn('guard_name', ['web'])->get()->pluck('name')->toArray());
+
+        $roleUserApi = Role::findByName('user', 'api');
+        $roleUserApi->syncPermissions(
+            'api.index.product',
+            'api.show.product',
+            'api.index.cart',
+            'api.setAmount.cart',
+            'api.store.cart',
+            'api.destroy.cart',
+            'api.changeState.cart',
+            'api.total.cart',
+            'api.order.index',
+            'api.order.show',
+            'api.order.store',
+            'api.order.retry'
+        );
     }
 }

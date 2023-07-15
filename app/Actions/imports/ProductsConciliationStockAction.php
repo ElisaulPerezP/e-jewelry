@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class ProductsConciliationStockAction
 {
-    public function execute(Product $parentProduct, int $childProductStock): int
+    public function __invoke(Product $parentProduct, int $childProductStock): int
     {
         $totalOutStock = 0;
         $outEvents = DB::table('table_stock_out_product')

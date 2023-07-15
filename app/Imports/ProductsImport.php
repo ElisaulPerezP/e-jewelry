@@ -67,7 +67,6 @@ class ProductsImport implements ToModel, WithStartRow, WithChunkReading, ShouldQ
             return $childProduct;
         }
 
-
         $parentProduct->stock = (new ProductsConciliationStockAction())($parentProduct, $row[4]);
         $parentProduct->save();
 

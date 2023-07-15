@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Cache;
 
 class DeleteCartItemAction
 {
-    public function execute(CartItem $cartItem): JsonResponse
+    public function __invoke(CartItem $cartItem): JsonResponse
     {
         $product = $cartItem->product;
         $product->stock += $cartItem->amount;

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Cache;
 
 class SetCartItemAmountAction
 {
-    public function execute(AmountCartItemRequest $request, CartItem $cartItem): CartItemResource|JsonResponse
+    public function __invoke(AmountCartItemRequest $request, CartItem $cartItem): CartItemResource|JsonResponse
     {
         $product = $cartItem->product;
         $realCartItemStock = $cartItem->state === 'collected' ? 0 : $cartItem->amount;

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Cache;
 
 class ChangeCartItemStateAction
 {
-    public function execute(StateCartItemRequest $request, CartItem $cartItem): CartItemResource|JsonResponse
+    public function __invoke(StateCartItemRequest $request, CartItem $cartItem): CartItemResource|JsonResponse
     {
         if ($cartItem->state !== 'collected') {
             $cartItem->state = $request->state;
@@ -20,8 +20,7 @@ class ChangeCartItemStateAction
 
             return new CartItemResource($cartItem);
         }
-        $action = new SetCartItemAmountAction();
-        $response = $action->execute(new AmountCartItemRequest(['amount' => $cartItem->amount]), $cartItem);
+        $response =  (new SetCartItemAmountAction())(new AmountCartItemRequest(['amount' => $cartItem->amount]), $cartItem);
 
         if ($response instanceof CartItemResource) {
             $cartItem->state = $request->state;

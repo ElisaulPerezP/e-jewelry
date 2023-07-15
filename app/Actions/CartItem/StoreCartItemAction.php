@@ -8,9 +8,9 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
-class AddCartItemAction
+class StoreCartItemAction
 {
-    public function execute(Product $product): CartItemResource
+    public function __invoke(Product $product): CartItemResource
     {
         $cartItem = new CartItem();
         $cartItem->user_id = Auth::user()->id;

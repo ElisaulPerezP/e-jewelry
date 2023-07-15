@@ -26,5 +26,6 @@ return [
     'register' => 'Registrarse',
     'permissions' => 'Permisos',
     'roles' => 'Roles',
+    'developers'=>'Desarrolladores',
 
 ];

@@ -17,7 +17,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ApiProductController extends Controller
 {
-       public function index(IndexRequest $request): AnonymousResourceCollection
+    public function index(IndexRequest $request): AnonymousResourceCollection
     {
         return (new GetPaginatedProductsAction())($request);
     }
@@ -40,6 +40,7 @@ class ApiProductController extends Controller
     public function destroy(Product $product): JsonResponse
     {
         (new DeleteProductAction())($product);
+
         return new JsonResponse(['message' => 'deleted'], 204);
     }
 

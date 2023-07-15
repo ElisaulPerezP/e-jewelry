@@ -20,7 +20,7 @@ class ChangeCartItemStateAction
 
             return new CartItemResource($cartItem);
         }
-        $response =  (new SetCartItemAmountAction())(new AmountCartItemRequest(['amount' => $cartItem->amount]), $cartItem);
+        $response = (new SetCartItemAmountAction())(new AmountCartItemRequest(['amount' => $cartItem->amount]), $cartItem);
 
         if ($response instanceof CartItemResource) {
             $cartItem->state = $request->state;

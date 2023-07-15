@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\CartItems;
 
-use App\Actions\CartItem\StoreCartItemAction;
 use App\Actions\CartItem\ChangeCartItemStateAction;
 use App\Actions\CartItem\DeleteCartItemAction;
 use App\Actions\CartItem\GetCartItemsAction;
 use App\Actions\CartItem\SetCartItemAmountAction;
+use App\Actions\CartItem\StoreCartItemAction;
 use App\Actions\CartItem\TotalRetriveAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CartItem\AmountCartItemRequest;
@@ -27,7 +27,7 @@ class ApiCartController extends Controller
 
     public function store(Product $product): CartItemResource
     {
-        return (new StoreCartItemAction)($product);
+        return (new StoreCartItemAction())($product);
     }
 
     public function total(): JsonResponse

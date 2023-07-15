@@ -20,49 +20,24 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ApiOrderController extends Controller
 {
-    protected FetchOrdersAction $fetchOrdersAction;
-    protected ShowOrderAction $showOrderAction;
-    protected UpdateOrderAction $updateOrderAction;
-    protected CreateOrderAction $createOrderAction;
-    protected CheckOrderStatusAction $checkOrderStatusAction;
-    protected RetryOrderAction $retryOrderAction;
-
-    public function __construct(
-        FetchOrdersAction $fetchOrdersAction,
-        ShowOrderAction $showOrderAction,
-        UpdateOrderAction $updateOrderAction,
-        CreateOrderAction $createOrderAction,
-        CheckOrderStatusAction $checkOrderStatusAction,
-        RetryOrderAction $retryOrderAction
-    ) {
-        $this->fetchOrdersAction = $fetchOrdersAction;
-        $this->showOrderAction = $showOrderAction;
-        $this->updateOrderAction = $updateOrderAction;
-        $this->createOrderAction = $createOrderAction;
-        $this->checkOrderStatusAction = $checkOrderStatusAction;
-        $this->retryOrderAction = $retryOrderAction;
-    }
-
     public function index(IndexRequest $request): AnonymousResourceCollection
     {
-        $orders = $this->fetchOrdersAction->execute($request);
-
-        return $orders;
+        return (new FetchOrdersAction())($request);
     }
 
     public function show(Order $order): OrderResource
     {
-        return $this->showOrderAction->execute($order);
+        return (new ShowOrderAction())($order);
     }
 
     public function update(OrderRequest $request, Order $order): OrderResource|string
     {
-        return $this->updateOrderAction->execute($order, $request);
+        return (new UpdateOrderAction())($order, $request);
     }
 
     public function store(Request $request): OrderResource
     {
-        return $this->createOrderAction->execute($request);
+        return (new CreateOrderAction())($request);
     }
 
     /**
@@ -70,11 +45,11 @@ class ApiOrderController extends Controller
      */
     public function checkStatus(Order $order): OrderResource
     {
-        return $this->checkOrderStatusAction->execute($order);
+        return (new CheckOrderStatusAction())($order);
     }
 
     public function retry(Request $request, Order $order): OrderResource|JsonResponse
     {
-        return $this->retryOrderAction->execute($request, $order);
+        return (new RetryOrderAction())($request, $order);
     }
 }

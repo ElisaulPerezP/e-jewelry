@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class CreateRoleAction
 {
-    public function execute(Request $request): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
         Cache::forget('roles');
         $name = $request->input('name');

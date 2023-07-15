@@ -10,7 +10,7 @@ use Spatie\Permission\Models\Role;
 
 class GetPaginatedPermissionsToRoleAction
 {
-    public function execute(IndexRequest $request, Role $role): AnonymousResourceCollection
+    public function __invoke(IndexRequest $request, Role $role): AnonymousResourceCollection
     {
         $searching = $request->query('searching', '');
         $perPage = $request->query('per_page', '6');

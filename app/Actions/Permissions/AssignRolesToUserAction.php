@@ -10,7 +10,7 @@ use Spatie\Permission\Models\Role;
 
 class AssignRolesToUserAction
 {
-    public function execute(RolesRequest $request, User $user): AnonymousResourceCollection
+    public function __invoke(RolesRequest $request, User $user): AnonymousResourceCollection
     {
         $rolesIds = $request->input('params.roles');
 

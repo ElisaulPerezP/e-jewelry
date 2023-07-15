@@ -7,7 +7,7 @@ use Spatie\Permission\Models\Role;
 
 class DeleteRoleAction
 {
-    public function execute(Role $role): JsonResponse
+    public function __invoke(Role $role): JsonResponse
     {
         $response = $role->delete();
 

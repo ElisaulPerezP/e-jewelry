@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Cache;
 
 class GetPaginatedPermissionsToUserAction
 {
-    public function execute(IndexRequest $request, User $user): AnonymousResourceCollection
+    public function __invoke(IndexRequest $request, User $user): AnonymousResourceCollection
     {
         $searching = $request->query('searching', '');
         $perPage = $request->query('per_page', '6');

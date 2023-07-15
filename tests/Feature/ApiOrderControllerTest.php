@@ -27,7 +27,7 @@ class ApiOrderControllerTest extends TestCase
         ]);
         $permission = Permission::findOrCreate('api.order.index');
         $role = Role::findOrCreate('admin')->givePermissionTo($permission);
-        $permission->assignRole($role);
+        $admin->assignRole($role);
 
         $this->actingAs($admin, 'api')->postJson(route('api.order.store'));
 
@@ -63,7 +63,7 @@ class ApiOrderControllerTest extends TestCase
         ]);
         $permission = Permission::findOrCreate('api.order.index');
         $role = Role::findOrCreate('admin')->givePermissionTo($permission);
-        $permission->assignRole($role);
+        $admin->assignRole($role);
 
         $order = $this->actingAs($admin, 'api')->postJson(route('api.order.store'));
         $response = $this->actingAs($admin, 'api')->getJson(route('api.order.show', $order['data']['id']));
@@ -86,6 +86,9 @@ class ApiOrderControllerTest extends TestCase
     public function testItCanCreateOrder(): void
     {
         $user = User::factory()->create();
+        $permission = Permission::findOrCreate('api.order.store', 'api');
+        $role = Role::findOrCreate('user', 'api')->givePermissionTo($permission);
+        $user->assignRole($role);
         $product1 = Product::factory()->create(['price' => 10000]);
         $product2 = Product::factory()->create(['price' => 20000]);
         CartItem::factory()->create(['user_id' => $user->id, 'amount' => 1, 'product_id' => $product1->id, 'state'=>'selected']);
@@ -101,6 +104,9 @@ class ApiOrderControllerTest extends TestCase
     public function testItCanUpdateOrderState(): void
     {
         $user = User::factory()->create();
+        $permission = Permission::findOrCreate('api.order.store', 'api');
+        $role = Role::findOrCreate('user', 'api')->givePermissionTo($permission);
+        $user->assignRole($role);
         $product1 = Product::factory()->create(['price' => 10000]);
         $product2 = Product::factory()->create(['price' => 20000]);
         CartItem::factory()->create(['user_id' => $user->id, 'amount' => 1, 'product_id' => $product1->id, 'state' => 'selected']);
@@ -117,6 +123,10 @@ class ApiOrderControllerTest extends TestCase
     public function testItCanRetryAnOrder(): void
     {
         $user = User::factory()->create();
+        $permission1 = Permission::findOrCreate('api.order.store', 'api');
+        $permission2 = Permission::findOrCreate('api.order.retry', 'api');
+        $role = Role::findOrCreate('user', 'api')->givePermissionTo($permission1, $permission2);
+        $user->assignRole($role);
         $product1 = Product::factory()->create(['price' => 10000]);
         $product2 = Product::factory()->create(['price' => 20000]);
         CartItem::factory()->create(['user_id' => $user->id, 'amount' => 1, 'product_id' => $product1->id, 'state' => 'selected']);
@@ -138,6 +148,9 @@ class ApiOrderControllerTest extends TestCase
     public function testItCanRetriveOrderItems(): void
     {
         $user = User::factory()->create();
+        $permission = Permission::findOrCreate('api.order.store', 'api');
+        $role = Role::findOrCreate('user', 'api')->givePermissionTo($permission);
+        $user->assignRole($role);
         $product1 = Product::factory()->create(['price' => 10000]);
         $product2 = Product::factory()->create(['price' => 20000]);
         CartItem::factory()->create(['user_id' => $user->id, 'amount' => 1, 'product_id' => $product1->id, 'state'=>'selected']);

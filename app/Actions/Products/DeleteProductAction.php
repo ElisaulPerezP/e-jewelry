@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Cache;
 
 class DeleteProductAction
 {
-    public function execute(Product $product): void
+    public function __invoke(Product $product): void
     {
         $product->delete();
         Cache::forget('products');

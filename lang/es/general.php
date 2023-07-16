@@ -27,5 +27,6 @@ return [
     'permissions' => 'Permisos',
     'roles' => 'Roles',
     'developers'=>'Desarrolladores',
+    'administration'=>'Administracion',
 
 ];

@@ -7,6 +7,7 @@ use App\Http\Controllers\CartItems\ApiCartController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\Orders\ApiOrderController;
 use App\Http\Controllers\Products\ApiProductController;
+use App\Http\Controllers\Reports\ApiAdministrationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/products', [ApiProductController::class, 'index'])->name('api.products.index');
@@ -125,5 +126,10 @@ Route::middleware('auth:api')->name('api.')->group(function () {
         Route::get('/user/{user}', [ApiRolesController::class, 'userIdentity'])
             ->middleware('role_or_permission:api.user.identity|admin')
             ->name('user');
+    });
+    Route::middleware('role:admin')->prefix('/sales')->name('sales.')->group(function () {
+        Route::get('/cart', [ApiAdministrationController::class, 'indexCartItemsPayed'])
+            ->middleware('role_or_permission:api.sales.cart|admin')
+            ->name('index');
     });
 });

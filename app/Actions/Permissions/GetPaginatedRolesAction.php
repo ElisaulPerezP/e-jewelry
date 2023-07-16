@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class GetPaginatedRolesAction
 {
-    public function execute(IndexRequest $request): AnonymousResourceCollection
+    public function __invoke(IndexRequest $request): AnonymousResourceCollection
     {
         Cache::forget('roles');
         $searching = $request->query('searching', '');

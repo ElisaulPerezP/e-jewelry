@@ -12,7 +12,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class CreateImportRegisterAction
 {
-    public function execute(ImportRequest $request): ImportResource|JsonResponse
+    public function __invoke(ImportRequest $request): ImportResource|JsonResponse
     {
         $import = new Import();
         $import->user_id = auth()->user()->id;

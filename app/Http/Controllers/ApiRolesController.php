@@ -18,24 +18,24 @@ class ApiRolesController extends Controller
 {
     public function index(IndexRequest $request): AnonymousResourceCollection
     {
-        return (new GetPaginatedRolesAction())->execute($request);
+        return (new GetPaginatedRolesAction())($request);
     }
     public function showPermissionsToRole(IndexRequest $request, Role $role): AnonymousResourceCollection
     {
-        return (new GetPaginatedPermissionsToRoleAction())->execute($request, $role);
+        return (new GetPaginatedPermissionsToRoleAction())($request, $role);
     }
     public function showPermissionsToUser(IndexRequest $request, User $user): AnonymousResourceCollection
     {
-        return (new GetPaginatedPermissionsToUserAction())->execute($request, $user);
+        return (new GetPaginatedPermissionsToUserAction())($request, $user);
     }
     public function store(RoleRequest $request): JsonResponse
     {
-        return (new CreateRoleAction())->execute($request);
+        return (new CreateRoleAction())($request);
     }
 
     public function delete(Role $role): JsonResponse
     {
-        return (new DeleteRoleAction())->execute($role);
+        return (new DeleteRoleAction())($role);
     }
     public function roleIdentity(Role $role): Role
     {

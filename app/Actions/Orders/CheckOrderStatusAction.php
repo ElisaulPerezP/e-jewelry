@@ -8,7 +8,7 @@ use App\Services\PlaceToPayPaymentService;
 
 class CheckOrderStatusAction
 {
-    public function execute(Order $order): OrderResource
+    public function __invoke(Order $order): OrderResource
     {
         $service = new PlaceToPayPaymentService();
         $service->getRequestInformation($order);

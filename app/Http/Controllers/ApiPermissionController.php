@@ -18,25 +18,25 @@ class ApiPermissionController extends Controller
 {
     public function index(IndexRequest $request): AnonymousResourceCollection
     {
-        return (new GetPaginatedPermissionsAction())->execute($request);
+        return (new GetPaginatedPermissionsAction())($request);
     }
 
     public function assignPermissionsToRole(PermissionsRequest $request, Role $role): AnonymousResourceCollection
     {
-        return (new AssignPermissionsToRoleAction())->execute($request, $role);
+        return (new AssignPermissionsToRoleAction())($request, $role);
     }
 
     public function assignPermissionsToUser(PermissionsRequest $request, User $user): AnonymousResourceCollection
     {
-        return (new AssignPermissionsToUserAction())->execute($request, $user);
+        return (new AssignPermissionsToUserAction())($request, $user);
     }
     public function showRolesToUser(indexRequest $request, User $user): AnonymousResourceCollection
     {
-        return (new GetPaginatedRolesToUserAction())->execute($request, $user);
+        return (new GetPaginatedRolesToUserAction())($request, $user);
     }
 
     public function assignRolesToUser(RolesRequest $request, User $user): AnonymousResourceCollection
     {
-        return (new AssignRolesToUserAction())->execute($request, $user);
+        return (new AssignRolesToUserAction())($request, $user);
     }
 }

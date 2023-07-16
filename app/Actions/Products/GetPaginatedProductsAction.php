@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Cache;
 
 class GetPaginatedProductsAction
 {
-    public function execute(IndexRequest $request): AnonymousResourceCollection
+    public function __invoke(IndexRequest $request): AnonymousResourceCollection
     {
         Cache::forget('products');
         $searching = $request->query('searching', '');

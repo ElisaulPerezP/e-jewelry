@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class GetImportsAction
 {
-    public function execute(IndexRequest $request): AnonymousResourceCollection
+    public function __invoke(IndexRequest $request): AnonymousResourceCollection
     {
         $searching = $request->query('searching', '');
         $perPage = $request->query('per_page', '6');

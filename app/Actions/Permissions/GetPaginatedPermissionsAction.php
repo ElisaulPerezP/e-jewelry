@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class GetPaginatedPermissionsAction
 {
-    public function execute(IndexRequest $request): AnonymousResourceCollection
+    public function __invoke(IndexRequest $request): AnonymousResourceCollection
     {
         Cache::forget('permissions');
         $searching = $request->query('searching', '');

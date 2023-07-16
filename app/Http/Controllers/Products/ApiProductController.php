@@ -17,34 +17,14 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ApiProductController extends Controller
 {
-    protected GetPaginatedProductsAction $getPaginatedProductsAction;
-    protected UpdateProductAction $updateProductAction;
-    protected CreateProductAction $createProductAction;
-    protected DeleteProductAction $deleteProductAction;
-    protected ChangeProductStatusAction $changeProductStatusAction;
-
-    public function __construct(
-        GetPaginatedProductsAction $getPaginatedProductsAction,
-        UpdateProductAction $updateProductAction,
-        CreateProductAction $createProductAction,
-        DeleteProductAction $deleteProductAction,
-        ChangeProductStatusAction $changeProductStatusAction
-    ) {
-        $this->getPaginatedProductsAction = $getPaginatedProductsAction;
-        $this->updateProductAction = $updateProductAction;
-        $this->createProductAction = $createProductAction;
-        $this->deleteProductAction = $deleteProductAction;
-        $this->changeProductStatusAction = $changeProductStatusAction;
-    }
-
     public function index(IndexRequest $request): AnonymousResourceCollection
     {
-        return $this->getPaginatedProductsAction->execute($request);
+        return (new GetPaginatedProductsAction())($request);
     }
 
     public function update(ProductRequest $request, Product $product): ProductResource
     {
-        return $this->updateProductAction->execute($request, $product);
+        return (new UpdateProductAction())($request, $product);
     }
 
     public function show(Product $product): ProductResource
@@ -54,19 +34,19 @@ class ApiProductController extends Controller
 
     public function store(ProductRequest $request): ProductResource
     {
-        return $this->createProductAction->execute($request);
+        return (new CreateProductAction())($request);
     }
 
     public function destroy(Product $product): JsonResponse
     {
-        $this->deleteProductAction->execute($product);
+        (new DeleteProductAction())($product);
 
         return new JsonResponse(['message' => 'deleted'], 204);
     }
 
     public function changeStatus(Product $product): ProductResource
     {
-        $this->changeProductStatusAction->execute($product);
+        (new ChangeProductStatusAction())($product);
 
         return new ProductResource($product);
     }

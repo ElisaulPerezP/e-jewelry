@@ -156,6 +156,7 @@
 <script setup>
 import {ref, onMounted} from 'vue'
 import axios from 'axios'
+import FileSaver from 'file-saver'
 
 const products = ref([])
 const query = ref("")

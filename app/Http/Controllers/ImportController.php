@@ -14,12 +14,12 @@ class ImportController extends Controller
 {
     public function index(IndexRequest $request)
     {
-        return (new GetImportsAction())->execute($request);
+        return (new GetImportsAction())($request);
     }
 
     public function store(ImportRequest $request)
     {
-        return (new CreateImportRegisterAction())->execute($request);
+        return (new CreateImportRegisterAction())($request);
     }
 
     public function show(Import $import)

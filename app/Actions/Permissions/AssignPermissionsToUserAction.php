@@ -10,7 +10,7 @@ use Spatie\Permission\Models\Permission;
 
 class AssignPermissionsToUserAction
 {
-    public function execute(PermissionsRequest $request, User $user): AnonymousResourceCollection
+    public function __invoke(PermissionsRequest $request, User $user): AnonymousResourceCollection
     {
         $permissionsIds = $request->input('params.permissions');
 

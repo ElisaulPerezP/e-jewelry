@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Cache;
 
 class CreateProductAction
 {
-    public function execute(ProductRequest $request): ProductResource
+    public function __invoke(ProductRequest $request): ProductResource
     {
         $product = new Product();
         $product->name = $request->name;

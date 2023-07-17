@@ -76,4 +76,8 @@ Route::get('/administration/dispatch', [AdministrationController::class, 'dispat
     ->middleware('role:|admin')
     ->name('administration.dispatch');
 
+Route::get('/administration/reports', [AdministrationController::class, 'reports'])
+    ->middleware('role:|admin')
+    ->name('reports.index');
+
 require __DIR__ . '/auth.php';

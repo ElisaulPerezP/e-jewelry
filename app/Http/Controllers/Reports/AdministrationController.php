@@ -15,4 +15,8 @@ class AdministrationController extends Controller
     {
         return view('administration.dispatch');
     }
+    public function reports(): View
+    {
+        return view('reports.index');
+    }
 }

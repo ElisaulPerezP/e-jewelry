@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\ApiDTOController;
+use App\Http\Controllers\ApiDTOProductsController;
+use App\Http\Controllers\ApiDTOReportController;
 use App\Http\Controllers\ApiPermissionController;
 use App\Http\Controllers\ApiRolesController;
 use App\Http\Controllers\CartItems\ApiCartController;
@@ -72,7 +73,7 @@ Route::middleware('auth:api')->name('api.')->group(function () {
         ->middleware('role_or_permission:api.changeStatus.product|admin')
         ->name('products.changeStatus');
 
-    Route::get('/export/products', [ApiDTOController::class, 'export'])
+    Route::get('/export/products', [ApiDTOProductsController::class, 'export'])
         ->middleware('role_or_permission:api.export.product|admin')
         ->name('api.export.products');
 
@@ -132,4 +133,16 @@ Route::middleware('auth:api')->name('api.')->group(function () {
             ->middleware('role_or_permission:api.sales.cart|admin')
             ->name('index');
     });
+
+    Route::get('/reports/dispatch', [ApiDTOReportController::class, 'export'])
+        ->middleware('role_or_permission:api.export.product|admin')
+        ->name('reports.dispatch');
+
+    Route::get('/reports', [ApiDTOReportController::class, 'index'])
+        ->middleware('role_or_permission:api.export.product|admin')
+        ->name('reports');
+
+    Route::get('/reports/download/{filePath}', [ApiDTOReportController::class, 'download'])
+        ->middleware('role_or_permission:api.export.product|admin')
+        ->name('reports.download');
 });

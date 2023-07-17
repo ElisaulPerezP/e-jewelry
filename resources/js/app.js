@@ -23,6 +23,8 @@ import ClientIndex from "./components/permissions/ClientIndex.vue";
 import ClientCode from "./components/permissions/ClientCode.vue";
 import ProductsDispatch from "./components/administration/ProductsDispatch.vue";
 import Administration from "./components/administration/Administration.vue";
+import DownLoadLinkFile from "./components/administration/Download-link-file.vue";
+import ReportsIndex from "./components/administration/ReportsIndex.vue";
 
 
 library.add(faCheckCircle, faCircleXmark, faArrowAltCircleRight);
@@ -48,6 +50,8 @@ app.component('client-index', ClientIndex);
 app.component('client-code', ClientCode);
 app.component('products-dispatch', ProductsDispatch);
 app.component('administration', Administration);
+app.component('download-link-file', DownLoadLinkFile);
+app.component('reports-index', ReportsIndex);
 
 
 app.component('paginator', Paginator);

@@ -20,7 +20,7 @@ class StateCartItemRequest extends FormRequest
         return [
             'state' => [
                 'required',
-                Rule::in(['in_cart', 'in_order', 'selected', 'paid', 'dispatch']),
+                Rule::in(['in_cart', 'in_order', 'selected', 'paid', 'dispatched']),
             ],
          ];
     }

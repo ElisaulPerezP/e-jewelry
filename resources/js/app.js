@@ -21,6 +21,9 @@ import assignPermissions from "./components/permissions/assignPermissionsToResou
 import assignRoles from "./components/permissions/assignRolesToUser.vue";
 import ClientIndex from "./components/permissions/ClientIndex.vue";
 import ClientCode from "./components/permissions/ClientCode.vue";
+import ProductsDispatch from "./components/administration/ProductsDispatch.vue";
+import Administration from "./components/administration/Administration.vue";
+import ReportsIndex from "./components/administration/ReportsIndex.vue";
 
 
 library.add(faCheckCircle, faCircleXmark, faArrowAltCircleRight);
@@ -44,6 +47,10 @@ app.component('assign-permissions-to-resource', assignPermissions);
 app.component('assign-roles-to-user', assignRoles);
 app.component('client-index', ClientIndex);
 app.component('client-code', ClientCode);
+app.component('products-dispatch', ProductsDispatch);
+app.component('administration', Administration);
+app.component('reports-index', ReportsIndex);
+
 
 app.component('paginator', Paginator);
 app.mount('#app');

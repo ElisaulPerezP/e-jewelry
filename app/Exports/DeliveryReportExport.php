@@ -2,43 +2,41 @@
 
 namespace App\Exports;
 
-use App\Models\Product;
+use App\Models\CartItem;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithDrawings;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
-class ProductsExport implements FromCollection, WithHeadings, ShouldAutoSize, WithDrawings, WithHeadingRow, WithEvents, ShouldQueue
+class DeliveryReportExport implements FromCollection, WithHeadings, ShouldAutoSize, WithHeadingRow, WithEvents, ShouldQueue
 {
     use Exportable;
     public function headings(): array
     {
-        return ['ID', 'Nombre', 'Descripción', 'Precio', 'Stock', 'Calificación', 'Status', 'Codigo de barras', 'Imagen', 'Fecha de creación', 'Ultima modificación'];
+        return ['ID', 'Nombre del producto', 'Cantidad', 'Usuario', 'Email', 'Fecha de pago'];
     }
 
-    public function collection(): Collection
+    public function collection()
     {
-        return Product::all();
-    }
+        $cartItems = CartItem::with(['product', 'user'])
+            ->where('state', 'paid')
+            ->get();
 
-    public function drawings(): array
-    {
-        return $this->collection()->map(function ($product, $index) {
-            $drawing = new Drawing();
-            $drawing->setPath(public_path('/storage/' . $product->image));
-            $drawing->setHeight(90);
-            $drawing->setCoordinates('I' . ($index + 2));
-
-            return $drawing;
-        })->toArray();
+        return $cartItems->map(function ($item) {
+            return [
+                'ID' => $item->id,
+                'Nombre del producto' => $item->product->name,
+                'Cantidad' => $item->amount,
+                'Usuario' => $item->user->name,
+                'Email' => $item->user->email,
+                'Fecha de pago' => $item->updated_at,
+            ];
+        });
     }
 
     public function registerEvents(): array

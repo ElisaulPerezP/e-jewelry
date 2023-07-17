@@ -6,7 +6,7 @@ use App\Exports\ProductsExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class ApiDTOController extends Controller
+class ApiDTOProductsController extends Controller
 {
     public function export(): BinaryFileResponse
     {

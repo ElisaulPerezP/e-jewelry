@@ -122,7 +122,7 @@ class ApiCartControllerTest extends TestCase
         $permission = Permission::findOrCreate('api.store.cart', 'api');
         $role = Role::findOrCreate('user', 'api')->givePermissionTo($permission);
         $user->assignRole($role);
-        $response = $this->actingAs($user, 'api')->postJson(route('api.cart.store', $user->id));
+        $response = $this->actingAs($user, 'api')->postJson(route('api.cart.store', $product->id));
 
         $cartItemCreated = CartItem::findOrFail($response->json()['data']['id']);
 

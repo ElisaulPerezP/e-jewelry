@@ -6,6 +6,7 @@ use App\Http\Controllers\Orders\OrderController;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\Products\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Reports\AdministrationController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -68,5 +69,15 @@ Route::get('/dev/showAuthorizationCode/', [ClientsController::class, 'showCode']
 Route::get('/dev/{user}', [ClientsController::class, 'index'])
     ->middleware('role_or_permission:user.dev|admin')
     ->name('client.index');
+Route::get('/administration', [AdministrationController::class, 'administration'])
+    ->middleware('role:|admin')
+    ->name('administration');
+Route::get('/administration/dispatch', [AdministrationController::class, 'dispatch'])
+    ->middleware('role:|admin')
+    ->name('administration.dispatch');
+
+Route::get('/administration/reports', [AdministrationController::class, 'reports'])
+    ->middleware('role:|admin')
+    ->name('reports.index');
 
 require __DIR__ . '/auth.php';

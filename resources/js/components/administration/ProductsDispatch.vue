@@ -1,5 +1,9 @@
 <template>
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <button @click="downloadProducts"
+                class="inline-flex items-center px-1 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+            Descargar lista de productos para despacho
+        </button>
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 bg-white border-b border-gray-200">
                 <section class="container mx-auto p-6 font-mono">
@@ -91,7 +95,6 @@ const receivedCurrentPage = ref(1)
 const receivedFirstPage = ref(1)
 const receivedLastPage = ref(1)
 const per_page = ref(3)
-const totalPrice = ref(0)
 
 onMounted(() => {
     axios.get('/api/sales/cart', {params: {searching: '', current_page: currentPage.value, per_page: per_page.value, flag: '1'}})
@@ -153,4 +156,11 @@ const seeUser = (CartItem) => {
     window.location.href = '/users/show/' + CartItem.user_id
 }
 
+const downloadProducts = async () => {
+    try {
+        const response = await axios.get('/api/export/reports/dispatch');
+    } catch (error) {
+        console.error('Error, no se puede encolar la tarea', error);
+    }
+};
 </script>

@@ -15,7 +15,7 @@
                     <section class="container mx-auto p-6 font-mono">
                         <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
                             <div class="w-full overflow-x-auto">
-                                <table class="w-full text-center border-separate">
+                                <table class=" text-center ">
                                     <thead>
                                     <tr
                                         class="text-md font-semibold tracking-wide text-left text-gray-900 bg-blue-100 uppercase border-b border-gray-600">
@@ -25,6 +25,11 @@
                                         <th class="px-4 py-3">{{ trans('tables.show') }}</th>
                                         <th class="px-4 py-3">{{ trans('tables.update') }}</th>
                                         <th class="px-4 py-3">{{ trans('tables.enabling') }}</th>
+                                        @can('edit.users.permissions')
+                                            <th class="px-4 py-3">{{ trans('tables.permissions') }}</th>
+                                            <th class="px-4 py-3">{{ trans('tables.roles') }}</th>
+
+                                        @endcan
 
                                     </tr>
                                     </thead>
@@ -82,6 +87,32 @@
                                                         @endif
                                                     </div>
                                                 </td>
+                                                @can('edit.users.permissions')
+                                                    <td class="px-4 py-3 border">
+                                                        <div class="flex items-center text-sm">
+                                                            <form action="{{ route('users.assignPermissions', $user) }}"
+                                                                  method="POST">
+                                                                @csrf
+                                                                {{ method_field('PUT') }}
+                                                                <x-primary-button>
+                                                                    {{trans('buttons.permissions')}}
+                                                                </x-primary-button>
+                                                            </form>
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-4 py-3 border">
+                                                        <div class="flex items-center text-sm">
+                                                            <form action="{{ route('users.assignRoles', $user) }}"
+                                                                  method="POST">
+                                                                @csrf
+                                                                {{ method_field('PUT') }}
+                                                                <x-primary-button>
+                                                                    {{trans('buttons.roles')}}
+                                                                </x-primary-button>
+                                                            </form>
+                                                        </div>
+                                                    </td>
+                                                @endcan
                                             </tr>
                                         @endforeach
                                     </div>

@@ -25,11 +25,10 @@ class PaymentStatusChecker implements ShouldQueue
      */
     public function handle(): void
     {
-        $revisor = new CheckOrderStatusAction();
         $orders = Order::where('state', 'pending')->get();
         Log::channel('payments')->info('Command executed');
         foreach ($orders as $order) {
-            $revisor->execute($order);
+            (new CheckOrderStatusAction())($order);
             Log::channel('payments')->info("{$order->id} has been checked, its status has been updated to:{$order->state} Through command.");
         }
     }

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Cache;
 
 class ChangeProductStatusAction
 {
-    public function execute(Product $product): void
+    public function __invoke(Product $product): void
     {
         $product->status = !$product->status;
         $product->save();

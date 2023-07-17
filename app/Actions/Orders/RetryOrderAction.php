@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class RetryOrderAction
 {
-    public function execute(Request $request, Order $order): OrderResource|JsonResponse
+    public function __invoke(Request $request, Order $order): OrderResource|JsonResponse
     {
         if ($order->state !== 'rejected') {
             return response()->json(['error' => 'Esta orden no esta rechazada, el estado es ' . $order->state], 422);

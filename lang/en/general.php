@@ -24,4 +24,9 @@ return [
     'areYouSure' => 'Are you sure you want to delete your account?',
     'onceDeleted' => 'Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.',
     'register' => 'Register',
-];
+    'permissions' => 'Permissions',
+    'roles' => 'Roles',
+    'developers'=>'Developers',
+    'administration'=>'Administration',
+
+    ];

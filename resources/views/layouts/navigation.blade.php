@@ -30,6 +30,20 @@
                         </x-nav-link>
                     </div>
                 @endcan
+                @can('index.user')
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('administration')" :active="request()->routeIs('dashboard')">
+                            {{ trans('general.administration') }}
+                        </x-nav-link>
+                    </div>
+                @endcan
+                @can('user.dev')
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('client.index', auth()->id())" :active="request()->routeIs('dashboard')">
+                            {{ trans('general.developers') }}
+                        </x-nav-link>
+                    </div>
+                @endcan
             </div>
 
             <!-- Settings Dropdown -->

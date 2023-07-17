@@ -54,9 +54,9 @@ class ApiCartControllerTest extends TestCase
     {
         $product = Product::factory()->create();
         $admin = User::factory()->create();
-        $permission = Permission::findOrCreate('api.cart.setAmount');
+        $permission = Permission::findOrCreate('api.setAmount.cart');
         $role = Role::findOrCreate('admin')->givePermissionTo($permission);
-        $permission->assignRole($role);
+        $admin->assignRole($role);
         $cartItem = CartItem::factory()->create([
             'user_id' => $admin->id,
             'product_id' => $product->id,
@@ -88,7 +88,7 @@ class ApiCartControllerTest extends TestCase
         $admin = User::factory()->create();
         $permission = Permission::findOrCreate('api.cart.changeState');
         $role = Role::findOrCreate('admin')->givePermissionTo($permission);
-        $permission->assignRole($role);
+        $admin->assignRole($role);
         $cartItem = CartItem::factory()->create([
             'user_id' => $admin->id,
             'product_id' => $product->id,
@@ -119,8 +119,10 @@ class ApiCartControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $product = Product::factory()->create();
-
-        $response = $this->actingAs($user, 'api')->postJson(route('api.cart.store', $user->id));
+        $permission = Permission::findOrCreate('api.store.cart', 'api');
+        $role = Role::findOrCreate('user', 'api')->givePermissionTo($permission);
+        $user->assignRole($role);
+        $response = $this->actingAs($user, 'api')->postJson(route('api.cart.store', $product->id));
 
         $cartItemCreated = CartItem::findOrFail($response->json()['data']['id']);
 
@@ -134,9 +136,9 @@ class ApiCartControllerTest extends TestCase
     public function testItCanDeleteItemCart(): void
     {
         $admin = User::factory()->create();
-        $permission = Permission::findOrCreate('api.destroy.product');
-        $role = Role::findOrCreate('admin')->givePermissionTo($permission);
-        $permission->assignRole($role);
+        $permission = Permission::findOrCreate('api.destroy.cart', 'api');
+        $role = Role::findOrCreate('admin', 'api')->givePermissionTo($permission);
+        $admin->assignRole($role);
         $product = Product::factory()->create();
 
         $this->assertDatabaseCount('cart_items', 0);

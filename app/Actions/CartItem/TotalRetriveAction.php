@@ -7,7 +7,7 @@ use Illuminate\Http\JsonResponse;
 
 class TotalRetriveAction
 {
-    public function execute(): JsonResponse
+    public function __invoke(): JsonResponse
     {
         $total = 0;
         $cartItems = CartItem::where('state', 'selected')

@@ -185,8 +185,9 @@ const handleClick = () => {
     formData.append('stock', product.value.stock)
     formData.append('status', product.value.status)
     formData.append('barCode', product.value.barCode)
-    formData.append('image', product.value.image)
-
+    if (product.value.image) {
+        formData.append('image', product.value.image)
+    }
     axios.post('/api/products', formData)
         .then(response => {
             product.value.value = response.data.data

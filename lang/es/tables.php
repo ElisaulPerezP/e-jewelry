@@ -15,5 +15,7 @@ return [
     'status' => 'Estado',
     'barCode' => 'Código de barras',
     'image' => 'Imagen',
+    'permissions' => 'Permisos',
+    'roles' => 'Roles',
 
 ];

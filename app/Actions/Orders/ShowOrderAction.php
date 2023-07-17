@@ -7,16 +7,10 @@ use App\Models\Order;
 
 class ShowOrderAction
 {
-    private CheckOrderStatusAction $checkOrderStatusAction;
-
-    public function __construct(CheckOrderStatusAction $checkOrderStatusAction)
-    {
-        $this->checkOrderStatusAction = $checkOrderStatusAction;
-    }
-    public function execute(Order $order): OrderResource
+    public function __invoke(Order $order): OrderResource
     {
         if ($order->state === 'pending') {
-            $this->checkOrderStatusAction->execute($order);
+            ( new CheckOrderStatusAction())($order);
         }
 
         return new OrderResource($order);

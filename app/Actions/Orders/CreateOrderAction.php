@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Cache;
 
 class CreateOrderAction
 {
-    public function execute(Request $request): OrderResource
+    public function __invoke(Request $request): OrderResource
     {
         $cartItems = CartItem::where('state', 'selected')
             ->where('user_id', auth()->user()->id)

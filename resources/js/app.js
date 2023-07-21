@@ -2,6 +2,7 @@ import('./bootstrap');
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faCheckCircle, faCircleXmark, faArrowAltCircleRight} from '@fortawesome/free-regular-svg-icons'
+import { faCartShopping} from '@fortawesome/free-solid-svg-icons'
 
 
 import { createApp } from "vue/dist/vue.esm-bundler";
@@ -26,7 +27,7 @@ import Administration from "./components/administration/Administration.vue";
 import ReportsIndex from "./components/administration/ReportsIndex.vue";
 
 
-library.add(faCheckCircle, faCircleXmark, faArrowAltCircleRight);
+library.add(faCheckCircle, faCircleXmark, faArrowAltCircleRight, faCartShopping);
 const app = createApp({});
 
 

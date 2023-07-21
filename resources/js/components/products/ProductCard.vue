@@ -5,10 +5,12 @@
                 <input @change = "search(query)" type="text" v-model="query" placeholder="Buscar..."
                        class="bg-white  shadow-sm sm:rounded-lg">
             </div>
-
-            <div>
-                <paginator @data="handleDataPagination" :currentPage="currentPage" :lastPage="receivedLastPage"></paginator>
-            </div>
+          <button @click="props.user_id === 0 ? register() : goToCart()"
+                  class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+             <font-awesome-icon icon="fa-solid fa-cart-shopping" size="2xl"
+                               style="color: #9e5ae2" />
+            {{itemsCart.length}}
+          </button>
         </div>
         <div class="bg-white  shadow-sm sm:rounded-lg">
             <div class="p-6 bg-white border-b border-gray-200">
@@ -30,8 +32,8 @@
                                 </div>
                                 <span class="text-gray-600 mt-2 text-xl uppercase">{{ product.name }}</span>
                                 <div class="flex justify-between">
-                                    <span class="text-gray-500 mt-2">COP $ {{ product.price }}</span>
-                                    <button @click="!product.inCart ? sendToCart(product) : goToCart()"
+                                    <span class="text-gray-500 mt-2">COP $ {{  formattedPrice(product.price)}}</span>
+                                    <button @click="props.user_id === 0 ? register() : (!product.inCart ? sendToCart(product) : goToCart())"
                                             class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                                         {{!product.inCart ? "COLOCAR EN EL CARRITO" : "VER EN EL CARRITO"}}
                                     </button>
@@ -43,12 +45,15 @@
                 </div>
             </div>
         </div>
+      <div>
+        <paginator @data="handleDataPagination" :currentPage="currentPage" :lastPage="receivedLastPage"></paginator>
+      </div>
     </div>
 </template>
 
 <script setup>
 
-import {defineProps, ref, onMounted, computed} from 'vue'
+import {defineProps, ref, onMounted, computed, reactive} from 'vue'
 import axios from 'axios'
 
 const products = ref([])
@@ -80,7 +85,7 @@ onMounted(() => {
             console.log(error);
         });
 
-if (props.user_id !== null) {
+if (props.user_id !== 0) {
     axios.get('/api/cart/',{params: {searching: "", current_page: currentPage.value, per_page: 1000, flag: 1}})
         .then(response => itemsCart.value = response.data.data)
         .catch(error => console.log(error))
@@ -104,10 +109,8 @@ const search = async (query) => {
 }
 
 const inCartProducts = computed(() => {
-    return products.value.map(product => {
-
-        const inCart = itemsCart.value.some(item => item.product_id === product.id);
-
+  return products.value.map(product => {
+        const inCart = itemsCart.value.some(item => item.product_id === product.id)
         return { ...product, inCart: inCart }
     });
 });
@@ -122,10 +125,6 @@ const filteredProducts = computed(() => {
 
 const sendToCart = async (product) => {
     await axios.post('/api/cart/' + product.id + '/store')
-        .then(response => {
-            if (response.status === 201) {
-                itemsCart.value = response.data.data;
-            }})
         .catch(error => console.log(error))
     location.reload()
 }
@@ -155,10 +154,17 @@ const handleDataPagination = (data) => {
 };
 
 const goToCart = () => {
-    window.location.href = window.location.href = "/cart/" + props.user_id;
+    window.location.href = "/cart/" + props.user_id;
 }
 const back = () => {
     window.location.href = window.history.back()
 }
-
+const register = () => {
+  window.location.href = "register"
+}
+const formattedPrice = (price) => {
+  const [integerPart, decimalPart] = price.toFixed(2).split('.');
+  const formattedIntegerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return `${formattedIntegerPart}.${decimalPart}`;
+};
 </script>

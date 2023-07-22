@@ -195,7 +195,7 @@ class ApiPermissionControllerTest extends TestCase
             ],
         ]);
 
-        $this->assertEquals('test.permission', $response->json()['data'][0]['name']);
+        $this->assertEquals('permissions.test.permission', $response->json()['data'][0]['name']);
 
         $this->assertTrue(Cache::has('permissionsOnUser'));
     }

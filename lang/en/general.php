@@ -28,5 +28,8 @@ return [
     'roles' => 'Roles',
     'developers'=>'Developers',
     'administration'=>'Administration',
+    'cart' => 'Cart',
+    'productDetail' => 'Product detail',
+    'productEdition' => 'Product Edition',
 
     ];

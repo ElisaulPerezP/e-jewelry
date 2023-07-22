@@ -6,13 +6,7 @@
                     <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
                         <div>
                             <div class="py-4 flex justify-between">
-                                <button @click="pay"
-                                        v-if="totalPrice.total !== 0"
-                                        class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xl text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                    {{
-                                        totalPrice.total === 0 ? 'selecciona productos para pagar' : 'pagar ahora:' + ' COP $' + totalPrice.total
-                                    }}
-                                </button>
+
                                 <button @click="seeOrders"
                                         class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xl text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                                     Ver ordenes
@@ -20,12 +14,6 @@
                                 <div>
                                     <input @change="search(query)" type="text" v-model="query" placeholder="Buscar..."
                                            class="bg-white  shadow-sm sm:rounded-lg">
-                                </div>
-
-                                <div>
-
-                                    <paginator @data="handleDataPagination" :currentPage="currentPage"
-                                               :lastPage="receivedLastPage"></paginator>
                                 </div>
 
                             </div>
@@ -45,7 +33,7 @@
                                 </tr>
                                 </thead>
                                 <tbody class="bg-white">
-                                <tr class="text-gray-700" v-for="CartItem in CartItems" :key="CartItem.id">
+                                <tr class="text-gray-700" v-for="CartItem in cartItems" :key="CartItem.id">
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-sm">
                                             <input
@@ -77,7 +65,7 @@
                                     </td>
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-xs">
-                                            <p class="font-semibold text-black">{{ CartItem.product_price }}
+                                            <p class="font-semibold text-black">COP ${{ formattedPrice(CartItem.product_price) }}
                                             </p>
                                         </div>
                                     </td>
@@ -85,7 +73,7 @@
                                         <div class="flex items-center text-sm">
                                             <a :href="'/products/' + CartItem.product_id"
                                                class="inline-flex items-center px-1 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                                <slot>...</slot>
+                                                <slot>Ver</slot>
                                             </a>
                                         </div>
                                     </td>
@@ -109,16 +97,16 @@
                             <div>
                                 <table class="w-full text-xs border-separate">
                                     <tr class="text-gray-700">
-                                        <td class="px-4 py-3 border">
-                                            <div>
+                                        <td class="px-4 py-3 border" v-if="totalPrice!== 0">
+                                            <div >
                                                 <p class="font-semibold text-black">Total
                                                 </p>
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 border text-xl">
-                                            <div>
+                                            <div >
                                                 <p>
-                                                    {{ totalPrice.total === 0 ? 0 : ' COP $' + totalPrice.total }}
+                                                  COP ${{ formattedPrice(totalPrice) }}
                                                 </p>
                                             </div>
                                         </td>
@@ -139,6 +127,11 @@
                             </div>
                         </div>
                     </div>
+                  <div>
+
+                    <paginator @data="handleDataPagination" :currentPage="currentPage"
+                               :lastPage="receivedLastPage"></paginator>
+                  </div>
                 </section>
                 <button @click="back"
                         class="inline-flex items-center px-1 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
@@ -162,10 +155,10 @@
 </template>
 
 <script setup>
-import {ref, onMounted, computed} from 'vue'
+import {ref, onMounted,} from 'vue'
 import axios from 'axios'
 
-const CartItems = ref([])
+const cartItems = ref([])
 const query = ref("")
 const open = ref(false)
 const showModal = ref(false)
@@ -182,33 +175,27 @@ const totalPrice = ref(0)
 onMounted(() => {
     axios.get('/api/cart/', {params: {searching: '', current_page: currentPage.value, per_page: per_page.value, flag: 1}})
         .then(response => {
-            CartItems.value = response.data.data
+            cartItems.value = response.data.data
             receivedCurrentPage.value = response.data.meta.current_page
             receivedLastPage.value = response.data.meta.last_page
         })
         .catch(error => console.log(error))
     axios.get('/api/cart/total')
         .then(response => {
-            totalPrice.value = response.data;
+            totalPrice.value = response.data.total;
         })
         .catch(error => {
             console.log(error);
         });
 })
 
-const search = async (query) => {
+
+const search = (query) => {
     axios.get('/api/cart/', {params: {searching: query, current_page: currentPage.value, per_page: per_page.value, flag: 1}})
         .then(response => {
-            CartItems.value = response.data.data;
+            cartItems.value = response.data.data;
             receivedCurrentPage.value = response.data.meta.current_page
             receivedLastPage.value = response.data.meta.last_page
-        })
-        .catch(error => {
-            console.log(error);
-        });
-    axios.get('/api/cart/total')
-        .then(response => {
-            totalPrice.value = response.data;
         })
         .catch(error => {
             console.log(error);
@@ -229,7 +216,7 @@ const handleDataPagination = (data) => {
     }
     axios.get('/api/cart/', {params: {searching: query.value, current_page: currentPage.value, per_page: per_page.value, flag: 1}})
         .then(response => {
-            CartItems.value = response.data.data;
+            cartItems.value = response.data.data;
             receivedCurrentPage.value = response.data.meta.current_page
             receivedLastPage.value = response.data.meta.last_page
         })
@@ -254,7 +241,7 @@ const changeState = async CartItem => {
 
     axios.get('/api/cart/total')
         .then(response => {
-            totalPrice.value = response.data;
+            totalPrice.value = response.data.total;
         })
         .catch(error => {
             console.log(error);
@@ -270,7 +257,7 @@ const setAmount = async CartItem => {
         })
     axios.get('/api/cart/total')
         .then(response => {
-            totalPrice.value = response.data;
+            totalPrice.value = response.data.total;
         })
         .catch(error => {
             console.log(error);
@@ -281,15 +268,9 @@ const back = () => {
 }
 const deleteItemCart = async (CartItem) => {
     axios.delete('/api/cart/' + CartItem.id + '/delete')
-        .then(() => CartItems.value.splice(CartItems.value.indexOf(CartItem), 1))
+        .then(() => cartItems.value.splice(cartItems.value.indexOf(CartItem), 1))
         .catch(error => console.log(error))
-    axios.get('/api/cart/total')
-        .then(response => {
-            totalPrice.value = response.data;
-        })
-        .catch(error => {
-            console.log(error);
-        });
+  location.reload()
 }
 
 const popModal = (title, message) => {
@@ -311,4 +292,9 @@ const seeOrders = () => {
     window.location.href = '/order'
 }
 
+const formattedPrice = (price) => {
+  const [integerPart, decimalPart] = price.toFixed(2).split('.');
+  const formattedIntegerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return `${formattedIntegerPart}.${decimalPart}`
+}
 </script>

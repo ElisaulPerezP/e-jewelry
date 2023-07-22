@@ -54,7 +54,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::put('/users/{user}/roles', [UserController::class, 'assignRolesToUser'])
         ->name('users.assignRoles');
 
-    Route::resource('/products', ProductController::class);
+    Route::resource('/products', ProductController::class)->except('show');
+
     Route::get('/permissions/index', [PermissionsController::class, 'index'])
         ->name('permissions.index');
     Route::get('/roles/index', [RolesController::class, 'index'])
@@ -62,6 +63,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::get('/roles/{role}', [RolesController::class, 'assignPermissionsToRole'])
         ->name('roles.permissions');
 });
+
+Route::get('/products/{product}', [ProductController::class, 'show'])->middleware(['auth', 'verified']);
 
 Route::get('/dev/showAuthorizationCode/', [ClientsController::class, 'showCode'])
     ->middleware('role_or_permission:user.dev|admin')

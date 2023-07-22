@@ -15,7 +15,6 @@ class UpdateProductAction
         $product->description = $request->description;
         $product->price = $request->price;
         $product->stock = $request->stock;
-        $product->score = $request->score;
         $product->barCode = $request->barCode;
 
         if ($request->hasFile('image')) {

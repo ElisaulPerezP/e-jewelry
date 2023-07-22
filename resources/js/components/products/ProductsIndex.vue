@@ -28,8 +28,6 @@
                             <div>
                                 <input @change="search(query)" type="text" v-model="query" placeholder="Buscar..."
                                        class="bg-white  shadow-sm sm:rounded-lg">
-                                <paginator @data="handleDataPagination" :currentPage="currentPage"
-                                           :lastPage="receivedLastPage"></paginator>
                             </div>
                         </div>
                         <div class="w-full overflow-x-auto">
@@ -64,7 +62,7 @@
                                     </td>
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-sm">
-                                            <p class="font-semibold text-black">{{ product.price }}
+                                            <p v-if="product.price" class="font-semibold text-black">COP ${{ formattedPrice(product.price) }}
                                             </p>
                                         </div>
                                     </td>
@@ -116,13 +114,15 @@
                                 </tr>
                                 </tbody>
                             </table>
+                          <paginator @data="handleDataPagination" :currentPage="currentPage"
+                                     :lastPage="receivedLastPage"></paginator>
                         </div>
-                        <button @click="back"
-                                class="inline-flex items-center px-1 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                            Atras
-                        </button>
                     </div>
                 </section>
+              <button @click="back"
+                      class="inline-flex items-center px-1 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                Atras
+              </button>
             </div>
         </div>
 
@@ -267,7 +267,7 @@ const handleDataPagination = (data) => {
         });
 };
 
-const search = async (query) => {
+const search = (query) => {
     axios.get('/api/products', {
         params: {
             searching: query,
@@ -292,5 +292,9 @@ const popModal = () =>{
 const closeModal = () => {
     formModal.value = false
 }
-
+const formattedPrice = (price) => {
+  const [integerPart, decimalPart] = price.toFixed(2).split('.');
+  const formattedIntegerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return `${formattedIntegerPart}.${decimalPart}`;
+};
 </script>

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Users\ChangeStatusUsersAction;
 use App\Http\Requests\Users\UserRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Cache;
@@ -12,11 +14,7 @@ class UserController extends Controller
 {
     public function index(): View
     {
-        $users = Cache::rememberForever('users', function () {
-            return User::select('id', 'name', 'email', 'status')->paginate(10);
-        });
-
-        return view('users.index', compact('users'));
+        return view('users.index');
     }
 
     public function show(User $user): View
@@ -39,14 +37,9 @@ class UserController extends Controller
 
         return redirect(route('users.index'));
     }
-    public function changeStatus(User $user): RedirectResponse
+    public function changeStatus(User $user): UserResource
     {
-        $user->status = !$user->status;
-        $user->save();
-
-        Cache::forget('users');
-
-        return redirect(route('users.index'));
+        return (new ChangeStatusUsersAction())($user);
     }
     public function assignPermissionsToUser(User $user): view
     {

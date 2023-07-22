@@ -25,6 +25,7 @@ import ClientCode from "./components/permissions/ClientCode.vue";
 import ProductsDispatch from "./components/administration/ProductsDispatch.vue";
 import Administration from "./components/administration/Administration.vue";
 import ReportsIndex from "./components/administration/ReportsIndex.vue";
+import UsersIndex from "./components/users/UsersIndex.vue";
 
 
 library.add(faCheckCircle, faCircleXmark, faArrowAltCircleRight, faCartShopping);
@@ -51,6 +52,7 @@ app.component('client-code', ClientCode);
 app.component('products-dispatch', ProductsDispatch);
 app.component('administration', Administration);
 app.component('reports-index', ReportsIndex);
+app.component('users-index', UsersIndex);
 
 
 app.component('paginator', Paginator);

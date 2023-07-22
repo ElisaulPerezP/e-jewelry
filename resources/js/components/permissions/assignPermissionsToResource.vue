@@ -8,7 +8,7 @@
                 <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
                     <p class="text-xl font-semibold tracking-wide text-left text-gray-900 bg-blue-100 uppercase border-b border-gray-600">
 
-                        Permisos para el {{ props.resource_type }} : {{ objectOfInterest.name }}
+                        Permisos para el {{ props.resource_type === 'user'? 'Usuario': 'Role' }} : {{ objectOfInterest.name }}
                     </p>
                     <div class="py-4 flex justify-between">
                         <div>
@@ -25,20 +25,13 @@
                             <thead class="text-sm">
                             <tr
                                 class="text-md font-semibold tracking-wide text-left text-gray-900 bg-blue-100 uppercase border-b border-gray-600">
-                                <th class="px-4 py-3">{{ ('id') }}</th>
                                 <th class="px-4 py-3">{{ ('nombre') }}</th>
                                 <th class="px-4 py-3">{{ ('guard') }}</th>
-                                <th class="px-4 py-3">{{ ('fecha de creacion') }}</th>
                                 <th class="px-4 py-3">{{ ('permitido') }}</th>
                             </tr>
                             </thead>
                             <tbody class="bg-white">
                             <tr class="text-gray-700" v-for="permission in permissions" :key="permission.id">
-                                <td class="px-4 py-3 border">
-                                    <div class="flex items-center text-sm">
-                                        <p class="font-semibold text-black">{{ permission.id }}</p>
-                                    </div>
-                                </td>
                                 <td class="px-4 py-3 border">
                                     <div class="flex items-center text-sm">
                                         <p class="font-semibold text-black">{{ permission.name }}
@@ -48,12 +41,6 @@
                                 <td class="px-4 py-3 border">
                                     <div class="flex items-center text-sm">
                                         <p class="font-semibold text-black">{{ permission.guard_name }}
-                                        </p>
-                                    </div>
-                                </td>
-                                <td class="px-4 py-3 border">
-                                    <div class="flex items-center text-sm">
-                                        <p class="font-semibold text-black">{{ permission.created_at }}
                                         </p>
                                     </div>
                                 </td>

@@ -8,7 +8,7 @@
                 <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
                     <p class="text-xl font-semibold tracking-wide text-left text-gray-900 bg-blue-100 uppercase border-b border-gray-600">
 
-                        Roles para el {{ props.resource_type }} : {{ objectOfInterest.name }}
+                        Roles para el {{ props.resource_type === 'user' ? 'Usuario': 'Role'}} : {{ objectOfInterest.name }}
                     </p>
                     <div class="py-4 flex justify-between">
                         <div>

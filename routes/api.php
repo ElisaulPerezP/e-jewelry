@@ -4,6 +4,7 @@ use App\Http\Controllers\ApiDTOProductsController;
 use App\Http\Controllers\ApiDTOReportController;
 use App\Http\Controllers\ApiPermissionController;
 use App\Http\Controllers\ApiRolesController;
+use App\Http\Controllers\ApiUserController;
 use App\Http\Controllers\CartItems\ApiCartController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\Orders\ApiOrderController;
@@ -145,4 +146,7 @@ Route::middleware('auth:api')->name('api.')->group(function () {
     Route::get('/reports/download/{filePath}', [ApiDTOReportController::class, 'download'])
         ->middleware('role_or_permission:api.export.product|admin')
         ->name('reports.download');
+    Route::get('/users', [ApiUserController::class, 'index'])
+        ->middleware('role_or_permission:api.index.user|admin')
+        ->name('users.index');
 });

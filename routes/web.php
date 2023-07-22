@@ -49,9 +49,9 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
         ->name('users.changeStatus');
     Route::get('/users/show/{user}', [UserController::class, 'show'])
         ->name('users.show');
-    Route::put('/users/{user}/permissions', [UserController::class, 'assignPermissionsToUser'])
+    Route::get('/users/{user}/permissions', [UserController::class, 'assignPermissionsToUser'])
         ->name('users.assignPermissions');
-    Route::put('/users/{user}/roles', [UserController::class, 'assignRolesToUser'])
+    Route::get('/users/{user}/roles', [UserController::class, 'assignRolesToUser'])
         ->name('users.assignRoles');
 
     Route::resource('/products', ProductController::class)->except('show');

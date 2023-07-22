@@ -82,12 +82,12 @@
                                                             {{ CartItem.amount }}</p>
                                                     </td>
                                                     <td class="px-4 py-3 border">
-                                                        <p class="font-semibold text-black text-md text-lg text-left">
-                                                            {{ CartItem.product_price }}</p>
+                                                        <p v-if="CartItem.product_price" class="font-semibold text-black text-md text-lg text-left">
+                                                            {{order.currency + ' $' + formattedPrice(CartItem.product_price) }}</p>
                                                     </td>
                                                     <td class="px-4 py-3 border">
-                                                        <p class="font-semibold text-black text-md text-lg text-left">
-                                                            {{ CartItem.product_price * CartItem.amount }}</p>
+                                                        <p v-if="CartItem.product_price" class="font-semibold text-black text-md text-lg text-left">
+                                                            {{order.currency + ' $' + formattedPrice(CartItem.product_price * CartItem.amount) }}</p>
                                                     </td>
                                                 </tr>
                                                 </tbody>
@@ -102,8 +102,8 @@
                                         </td>
                                         <td class="px-4 py-3 border">
                                             <div class="flex items-center text-sm">
-                                                <p class="font-semibold text-black text-left">
-                                                    {{ order.currency + ' ' + order.total }}
+                                                <p v-if="order.total" class="font-semibold text-black text-left">
+                                                    {{ order.currency + ' ' + formattedPrice(order.total) }}
                                                 </p>
                                             </div>
                                         </td>
@@ -197,5 +197,9 @@ const seePay = () => {
 const edit = () => {
     window.location.href = window.history.back()
 }
-
+const formattedPrice = (price) => {
+  const [integerPart, decimalPart] = price.toFixed(2).split('.');
+  const formattedIntegerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return `${formattedIntegerPart}.${decimalPart}`;
+}
 </script>

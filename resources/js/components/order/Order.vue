@@ -9,9 +9,6 @@
                                     <input @change="search(query)" type="text" v-model="query" placeholder="Buscar..."
                                            class="bg-white  shadow-sm sm:rounded-lg">
 
-                                    <paginator @data="handleDataPagination" :currentPage="currentPage"
-                                               :lastPage="receivedLastPage"></paginator>
-
                             <table class="w-full text-xs border-separate">
                                 <thead class="text-sm">
                                 <tr
@@ -37,7 +34,7 @@
                                     </td>
                                     <td class="px-4 py-3 border">
                                         <div class="flex items-center text-xs">
-                                            <p class="font-semibold text-black">{{ order.currency + ' ' + order.total }}
+                                            <p v-if="order.total" class="font-semibold text-black">{{ order.currency + ' $' + formattedPrice(order.total) }}
                                             </p>
                                         </div>
                                     </td>
@@ -75,10 +72,8 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="flex justify-between">
-                            <div>
-                            </div>
-                        </div>
+                      <paginator @data="handleDataPagination" :currentPage="currentPage"
+                                 :lastPage="receivedLastPage"></paginator>
                     </div>
                 </section>
                 <button @click="back"
@@ -197,5 +192,9 @@ const closeModal = () => {
     location.reload()
     showModal.value = false
 }
-
+const formattedPrice = (price) => {
+  const [integerPart, decimalPart] = price.toFixed(2).split('.');
+  const formattedIntegerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return `${formattedIntegerPart}.${decimalPart}`;
+}
 </script>

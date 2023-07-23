@@ -33,72 +33,72 @@
                   </tr>
                   </thead>
                   <tbody class="bg-white">
-                    <tr>
-                      <td class="px-4 py-3 border">
-                          <p class="font-semibold text-black text-md text-lg text-left">
-                            Descripcion</p>
-                      </td>
-                      <td class="px-4 py-3 border">
-                          <p class="font-semibold text-black text-left">{{
-                              product.description
-                            }}</p>
-                      </td>
-                      <td class="px-4 py-3 border items-center">
+                  <tr>
+                    <td class="px-4 py-3 border">
+                      <p class="font-semibold text-black text-md text-lg text-left">
+                        Descripcion</p>
+                    </td>
+                    <td class="px-4 py-3 border">
+                      <p class="font-semibold text-black text-left">{{
+                          product.description
+                        }}</p>
+                    </td>
+                    <td class="px-4 py-3 border items-center">
                                                     <textarea v-model="product.description"
                                                               placeholder="Nueva descripcion"
                                                               class="font-arial mb-2 mt-2 border border-gray-400 rounded-lg p-2"
                                                               style="font-size: 25px"></textarea>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="px-4 py-3 border">
-                          <p class="font-semibold text-black text-md text-lg text-left">
-                            Precio</p>
-                      </td>
-                      <td class="px-4 py-3 border">
-                          <p v-if="product.price" class="font-semibold text-black text-left">COP
-                            ${{ formattedPrice(product.price) }}
-                          </p>
-                      </td>
-                      <td class="px-4 py-3 border">
-                          <input type="number" v-model="product.price"
-                                 placeholder="Nuevo precio"
-                                 class="font-arial mb-2 mt-2 border border-gray-400 rounded-lg p-2"
-                                 style="font-size: 25px">
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="px-4 py-3 border">
-                          <p class="font-semibold text-black text-md text-lg text-left">
-                            Stock</p>
-                      </td>
-                      <td class="px-4 py-3 border">
-                          <p class="font-semibold text-black text-left">{{ product.stock }}
-                          </p>
-                      </td>
-                      <td class="px-4 py-3 border">
-                          <input type="number" v-model="product.stock"
-                                 placeholder="Nuevo stock"
-                                 class="font-arial mb-2 mt-2 border border-gray-400 rounded-lg p-2"
-                                 style="font-size: 25px">
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="px-4 py-3 border">
-                          <p class="font-semibold text-black text-md text-lg text-left">
-                            Enabling</p>
-                      </td>
-                      <td class="px-4 py-3 border">
-                          <p class="font-semibold text-black text-left">{{ product.status ? "ACTIVO" : "INACTIVO" }}
-                          </p>
-                      </td>
-                      <td class="px-4 py-3 border items-center">
-                        <button @click="changeStatus"
-                                class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                          {{ product.status ? "DESACTIVAR" : "ACTIVAR" }}
-                        </button>
-                      </td>
-                    </tr>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-3 border">
+                      <p class="font-semibold text-black text-md text-lg text-left">
+                        Precio</p>
+                    </td>
+                    <td class="px-4 py-3 border">
+                      <p v-if="product.price" class="font-semibold text-black text-left">COP
+                        ${{ formattedPrice(product.price) }}
+                      </p>
+                    </td>
+                    <td class="px-4 py-3 border">
+                      <input type="number" v-model="product.price"
+                             placeholder="Nuevo precio"
+                             class="font-arial mb-2 mt-2 border border-gray-400 rounded-lg p-2"
+                             style="font-size: 25px">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-3 border">
+                      <p class="font-semibold text-black text-md text-lg text-left">
+                        Stock</p>
+                    </td>
+                    <td class="px-4 py-3 border">
+                      <p class="font-semibold text-black text-left">{{ product.stock }}
+                      </p>
+                    </td>
+                    <td class="px-4 py-3 border">
+                      <input type="number" v-model="product.stock"
+                             placeholder="Nuevo stock"
+                             class="font-arial mb-2 mt-2 border border-gray-400 rounded-lg p-2"
+                             style="font-size: 25px">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-3 border">
+                      <p class="font-semibold text-black text-md text-lg text-left">
+                        Enabling</p>
+                    </td>
+                    <td class="px-4 py-3 border">
+                      <p class="font-semibold text-black text-left">{{ product.status ? "ACTIVO" : "INACTIVO" }}
+                      </p>
+                    </td>
+                    <td class="px-4 py-3 border items-center">
+                      <button @click="changeStatus"
+                              class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                        {{ product.status ? "DESACTIVAR" : "ACTIVAR" }}
+                      </button>
+                    </td>
+                  </tr>
 
                   </tbody>
                 </table>
@@ -202,7 +202,7 @@ const changeStatus = () => {
   axios.put('/api/products/' + product.value.id + '/changeStatus/')
 }
 const back = () => {
-  window.history.back()
+  window.history.back(true)
 }
 const formattedPrice = (price) => {
   const [integerPart, decimalPart] = price.toFixed(2).split('.');

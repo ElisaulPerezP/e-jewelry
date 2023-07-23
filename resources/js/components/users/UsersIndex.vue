@@ -58,7 +58,7 @@
                   <div class="flex items-center text-sm">
                     <button @click="changeStatus(user.id)"
                             class="inline-flex items-center px-1 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                      <slot> {{user.status ? 'Deshabilitar':'Habilitar'}}</slot>
+                      <slot> {{ user.status ? 'Deshabilitar' : 'Habilitar' }}</slot>
                     </button>
                   </div>
                 </td>
@@ -129,7 +129,7 @@ onMounted(() => {
 })
 
 const back = () => {
-  window.location.href = window.history.back();
+  window.history.back(true);
 }
 
 const handleDataPagination = (data) => {
@@ -183,10 +183,10 @@ const search = async (query) => {
 };
 
 const detail = (id) => {
-  window.location.href =  'users/show/' + id
+  window.location.href = 'users/show/' + id
 }
 const edit = (id) => {
-  window.location.href ='users/' + id
+  window.location.href = 'users/' + id
 }
 const changeStatus = (id) => {
   axios.put('/users/changeStatus/' + id)
@@ -196,9 +196,9 @@ const changeStatus = (id) => {
       })
 }
 const assignPermissions = (id) => {
-  window.location.href ='users/'+ id +'/permissions'
+  window.location.href = 'users/' + id + '/permissions'
 }
 const assignRoles = (id) => {
-  window.location.href ='users/'+ id +'/roles'
+  window.location.href = 'users/' + id + '/roles'
 }
 </script>

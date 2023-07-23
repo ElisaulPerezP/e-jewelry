@@ -17,7 +17,8 @@
                   </tr>
                   <tr>
                     <th colspan="2">
-                      <img v-if="product.image" :src="'./../../storage/' + product.image" :alt="product.name" class="max-w-sm">
+                      <img v-if="product.image" :src="'./../../storage/' + product.image" :alt="product.name"
+                           class="max-w-sm">
                     </th>
                   </tr>
                   </thead>
@@ -55,7 +56,8 @@
                     </td>
                     <td class="px-4 py-3 border">
                       <div class="flex items-center text-sm">
-                        <p v-if="product.price"  class="font-semibold text-black text-left">COP ${{ formattedPrice(product.price) }}
+                        <p v-if="product.price" class="font-semibold text-black text-left">COP
+                          ${{ formattedPrice(product.price) }}
                         </p>
                       </div>
                     </td>
@@ -160,7 +162,7 @@ const loadProduct = async () => {
 }
 
 const back = () => {
-  window.history.back()
+  window.history.back(true)
 }
 
 const edit = () => {

@@ -5,40 +5,49 @@ namespace App\Exports;
 use App\Models\Product;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithDrawings;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
-class ProductsExport implements FromCollection, WithHeadings, ShouldAutoSize, WithDrawings, WithHeadingRow, WithEvents, ShouldQueue
+class ProductsExport implements
+    FromCollection,
+    WithHeadings,
+    ShouldAutoSize,
+    WithHeadingRow,
+    WithEvents,
+    ShouldQueue
 {
     use Exportable;
     public function headings(): array
     {
-        return ['ID', 'Nombre', 'Descripción', 'Precio', 'Stock', 'Calificación', 'Status', 'Codigo de barras', 'Imagen', 'Fecha de creación', 'Ultima modificación'];
+        return [
+            'ID',
+            'Nombre',
+            'Descripción',
+            'Precio',
+            'Stock',
+            'Calificación',
+            'Status',
+            'Código de barras',
+            'Imagen',
+            'Fecha de creación',
+            'Ultima modificación',
+        ];
     }
 
     public function collection(): Collection
     {
-        return Product::all();
-    }
+        return Product::all()->map(function ($product) {
+            $product->image = config('app.url') . Storage::url($product->image);
 
-    public function drawings(): array
-    {
-        return $this->collection()->map(function ($product, $index) {
-            $drawing = new Drawing();
-            $drawing->setPath(public_path('/storage/' . $product->image));
-            $drawing->setHeight(90);
-            $drawing->setCoordinates('I' . ($index + 2));
-
-            return $drawing;
-        })->toArray();
+            return $product;
+        });
     }
 
     public function registerEvents(): array
@@ -50,7 +59,7 @@ class ProductsExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
                 $event->sheet->getDelegate()->getStyle('A1:L1')->applyFromArray([
                     'font' => [
                         'bold' => true,
-                        'size' => 14,
+                        'size' => 7,
                     ],
                     'alignment' => [
                         'horizontal' => Alignment::HORIZONTAL_CENTER,

@@ -18,6 +18,7 @@ class PermissionSeeder extends Seeder
         'update.profile',
         'destroy.profile',
         'edit.users.permissions',
+        'edit.product',
         'user.dev',
     ];
 

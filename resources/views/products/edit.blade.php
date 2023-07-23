@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __(trans('navigation.users')) }}
+        <h2 class="font-semibold text-xl text-gray-400 dark:text-gray-200 leading-tight">
+            {{ __(trans('general.productEdition')) }}
         </h2>
     </x-slot>
 

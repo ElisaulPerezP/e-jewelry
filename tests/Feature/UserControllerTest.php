@@ -17,18 +17,26 @@ class UserControllerTest extends TestCase
         User::factory(1000)->create();
 
         $admin = User::factory()->create();
-        $permission = Permission::findOrCreate('index.user');
+        $permission = Permission::findOrCreate('api.index.user');
         $role = Role::findOrCreate('admin')->givePermissionTo($permission);
         $admin->assignRole($role);
 
-        $response = $this->actingAs($admin)->get(route('users.index'));
+        $response = $this->actingAs($admin, 'api')->getJson(route('api.users.index', ['searching' => '', 'current_page' => '1', 'per_page' => '1', 'flag' => '0']));
 
         $this->assertAuthenticated();
+
+        $response->assertJsonStructure([
+            'data' => [
+                '*' => [
+                    'id',
+                    'name',
+                    'email',
+                    'status',
+                ],
+            ],
+        ]);
         $this->assertTrue(Cache::has('users'));
-        $this->assertEquals(Cache::get('users'), User::select('id', 'name', 'email', 'status')->paginate(10));
         $response->assertOk();
-        $response->assertViewIs('users.index');
-        $response->assertViewHas('users');
         $this->assertDatabaseCount('users', 1001);
     }
 
@@ -93,7 +101,15 @@ class UserControllerTest extends TestCase
 
         $userChanged = User::findOrFail($user->id);
 
-        $response->assertRedirect();
+        $response->assertOk();
+        $response->assertJsonStructure([
+            'data' => [
+                    'id',
+                    'name',
+                    'email',
+                    'status',
+            ],
+        ]);
         $this->assertFalse(Cache::has('users'));
         $this->assertDatabaseCount('users', 2);
         $this->assertAuthenticated();

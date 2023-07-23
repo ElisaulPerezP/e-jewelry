@@ -59,11 +59,11 @@ class ApiProductControllerTest extends TestCase
         $admin->assignRole($role);
 
         $response = $this->actingAs($admin, 'api')->putJson(route('api.products.update', $product), [
+            '_method' => 'PUT',
             'name' => 'testingName',
             'description' => 'testingDescription',
             'price' => '1000',
             'stock' => '1000',
-            'score' => '9',
             'barCode' => '1234',
             'image' => $file,
         ]);
@@ -78,7 +78,6 @@ class ApiProductControllerTest extends TestCase
         $this->assertEquals('testingDescription', $productUpdated->description);
         $this->assertEquals('1000', $productUpdated->price);
         $this->assertEquals('1000', $productUpdated->stock);
-        $this->assertEquals('9', $productUpdated->score);
         $this->assertEquals('1234', $productUpdated->barCode);
         Storage::disk('public')->assertExists($productUpdated->image);
     }

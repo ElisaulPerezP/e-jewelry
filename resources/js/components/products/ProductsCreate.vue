@@ -21,7 +21,10 @@
 
                                             <td class="px-4 py-3 border">
                                                 <div class="flex items-center text-sm">
-                                                    <input type="file" @change="handleFileUpload">
+                                                    <input
+                                                        type="file"
+                                                        accept="image/bmp, image/png, image/jpeg"
+                                                        @change="handleFileUpload">
                                                 </div>
                                             </td>
                                         </tr>

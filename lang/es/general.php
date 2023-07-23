@@ -31,5 +31,6 @@ return [
     'cart' => 'Carrito',
     'productDetail' => 'Detalle de producto',
     'productEdition' => 'Edición de producto',
+    'storeProduct' => 'Creación de producto',
 
 ];

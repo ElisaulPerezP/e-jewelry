@@ -31,5 +31,5 @@ return [
     'cart' => 'Cart',
     'productDetail' => 'Product detail',
     'productEdition' => 'Product Edition',
-
+    'storeProduct' => 'Store product',
     ];

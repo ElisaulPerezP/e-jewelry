@@ -158,7 +158,7 @@ const seeUser = (CartItem) => {
 
 const downloadProducts = async () => {
     try {
-        const response = await axios.get('/api/export/reports/dispatch');
+        const response = await axios.get('/api/reports/dispatch');
     } catch (error) {
         console.error('Error, no se puede encolar la tarea', error);
     }

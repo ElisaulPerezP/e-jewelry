@@ -131,7 +131,10 @@
             <h2 class="text-2xl font-bold mb-4"> Subir un archivo .xlsx </h2>
             <p>{{ modalMessage }}</p>
             <div class="flex items-center text-sm">
-                <input type="file" @change="handleFileUpload">
+                <input
+                    type="file"
+                    accept=".xlsx"
+                    @change="handleFileUpload">
             </div>
             <div class="flex items-center text-sm">
                 <input type="text" v-model="toSendFile.name"

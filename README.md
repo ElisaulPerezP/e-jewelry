@@ -9,14 +9,14 @@
 
 [Configuración](#configuración)
 - [Variables de entorno](#variables-de-entorno)
+- [Clave de la aplicación](#clave-de-la-aplicación)
 - [Base de datos](#base-de-datos)
 - [Servicio de correo](#servicio-de-correo)
-- [Clave de la aplicación](#clave-de-la-aplicación)
 - [Driver de colas](#driver-de-colas)
 
 [Preparación de la base de datos](#preparación-de-la-base-de-datos)\
 [Enlace de almacenamiento](#enlace-de-almacenamiento)\
-[Sistema de autenticación](#sistema-de-autenticación)\
+[Sistema de autenticación](#sistema-de-autenticación)
 - [Configuración de passport](#configuración-de-passport)
 
 [Comprobación de las características](#comprobación-de-las-características)
@@ -28,9 +28,23 @@
 - [Ejecución de la aplicación](#ejecución-de-la-aplicación)
 - [Lanzamiento de los trabajadores de la tienda](#lanzamiento-de-los-trabajadores-de-la-tienda)
 
-[Funcionamiento](#funcionamiento)
+[Ingrese a su tienda](#ingrese-a-su-tienda)
 
-- [Ciclo de vida de un usuario](#ciclo-de-vida-de-un-usuario)
+[Administración](#administración)
+- [Descarga de lista de productos](#descarga-de-lista-de-productos)
+- [Carga masiva de productos](#carga-masiva-de-productos)
+- [Reglas para la conciliación de carga de productos](#reglas-para-la-conciliación-de-carga-de-productos)
+- [Generación de reportes de productos para envío](#generación-de-reportes-de-productos-para-envío)
+- [Descarga de reporte de productos para envío](#descarga-de-reporte-de-productos-para-envío)
+
+[API](#api)
+- [Sistema Oauth2 de passport](#sistema-oauth2-de-passport)
+- [Intercambio de un código de autorización por un token de autorización](#intercambio-de-un-código-de-autorización-por-un-token-de-autorización)
+- [End-points accesibles](#end-points-accesibles)
+- [Product Index](#product-index)
+- [Product store](#product-store)
+- [Product Edit](#product-edit)
+[Ciclo de vida de un usuario](#ciclo-de-vida-de-un-usuario)
   - [Registro](#registro)
   - [Expulsión](#expulsión)
 - [Ciclo de vida de un producto](#ciclo-de-vida-de-un-producto)
@@ -60,13 +74,7 @@
 - [Roles](#roles)
   - [Crear un role](#crear-un-role)
   - [Asignar permisos a un role](#asignar-permisos-a-un-role)
-    [API](#api)
-  - [Sistema Oauth2 de passport](#sistema-oauth2-de-passport)
-- [Intercambio de un código de autorización por un token de autorización](#intercambio-de-un-código-de-autorización-por-un-token-de-autorización)
-- [End-points accesibles](#end-points-accesibles)
-- [Product Index](#product-index)
-- [Product store](#product-store)
-- [Product Edit](#product-edit)
+
 
 ## Prólogo
 
@@ -108,18 +116,43 @@ sistema servidor web.
 - Instalación de dependencias JavaScript:\
   ```$ npm install```
 
+- Preparacion de assets:\
+  ```$ npm run build```
+
 ## Configuración
 
-A continuación son expuestas las pautas a seguir para tener la aplicación corriendo en tu entorno, con tu base de datos, tu servicio de correo y algunas cosas más.
+A continuación son expuestas las pautas a seguir para tener la aplicación corriendo en tu entorno, con tu base de datos,
+tu servicio de correo y algunas cosas más.
 
 ### Variables de entorno
 
-En el directorio raíz encontrará el archivo `.env.example`. Debe realizar una copia de este archivo, el nuevo archivo debe llamarse `.env` y ubicarse en el repositorio raíz también.
+En el directorio raíz encontrará dos archivos importantes, `.env.example` y `.env.testing.example`. Debe realizar una 
+copia de estos archivos, los nuevs archivo debe llamarse `.env` y `.env.testing` y ubicarse en el repositorio raíz 
+también, para conseguirlo puede usar los siguientes comandos de consola:
 
-Edite el archivo `.env` y coloque las variables de entorno. Estas le permitirán a la aplicación interactuar con su base de datos, su proveedor de servicio de correo y con la pasarela de pagos, y controlador de colas de trabajo. Tenga en cuenta que solo necesita agregar los datos faltantes, ya que `.env.example` tiene los valores estándar.
+```$ cp .env.example .env```
+
+```$ cp .env.testing.example .env.testing```
+
+Edite el archivo `.env` colocando las variables de entorno de la forma indicada a continuación. Estas le permitirán a
+la aplicación interactuar con su base de datos, su proveedor de servicio de correo y con la pasarela de pagos, 
+y controlador de colas de trabajo. Tenga en cuenta que solo necesita agregar los datos faltantes, ya que `.env.example`
+tiene los valores estándar, al igual que `.env.testing.example`.
+
+#### Clave de la aplicación
+
+Este campo le permitirá a su aplicación identificarse para establecer comunicación con otras aplicaciones o servicios. Para generar la clave de la aplicación, ejecute el siguiente comando en el directorio raíz del proyecto:
+
+$ php artisan key:generate
+
+Después de ejecutar el comando, si todo salió bien, se llenará automáticamente el campo APP_KEY en su archivo .env. Debería ser parecido (no igual) a esto:
+```php
+APP_KEY=base64:aBfDU+/NdjceIpPiScGUaMz1aAH6RVcmoR0oJyPOKUc=
+```
 
 #### Base de datos
-
+Debe crear dos (2) nuevos esquemas en su base de datos para ser usado por la aplicacion. 
+Uno de ellos será usado por la aplicación, y debe estar reportado en el archivo ```.env``` de la siguiente manera:
 
 ``` php
 DB_CONNECTION= (ejemplo: mysql)
@@ -129,6 +162,16 @@ DB_DATABASE= (ejemplo: jewelry)
 DB_USERNAME= (ejemplo: root)
 DB_PASSWORD= (ejemplo: asdf123?#)
 ```
+El otro esquema será usado phpUnit para testear la aplicación, y debe estar reportado en el archivo ```.env.testing``` de la siguiente manera:
+``` php
+DB_CONNECTION= (ejemplo: mysql)
+DB_HOST= (ejemplo: 127.0.0.1)
+DB_PORT= (ejemplo: 3306)
+DB_DATABASE= (ejemplo: jewelry_testing)
+DB_USERNAME= (ejemplo: root)
+DB_PASSWORD= (ejemplo: asdf123?#)
+```
+Nota: De no ser configurado el archivo ```.env.testing``` , la aplicación presentará fallos debido a la bases de datos. 
 
 #### Servicio de correo
 ```php
@@ -141,16 +184,6 @@ MAIL_ENCRYPTION= (ejemplo: tls)
 MAIL_FROM_ADDRESS= (ejemplo: "hello@example.com")
 MAIL_FROM_NAME= (ejemplo: "${APP_NAME}")
 ```
-#### Clave de la aplicación
-
-Este campo le permitirá a su aplicación identificarse para establecer comunicación con otras aplicaciones o servicios. Para generar la clave de la aplicación, ejecute el siguiente comando en el directorio raíz del proyecto:
-
-$ php artisan key:generate
-
-Después de ejecutar el comando, si todo salió bien, se llenará automáticamente el campo APP_KEY en su archivo .env. Debería ser parecido (no igual) a esto:
-```php
-APP_KEY=base64:aBfDU+/NdjceIpPiScGUaMz1aAH6RVcmoR0oJyPOKUc=
-```
 #### Driver de colas
 
 Para el ambiente de desarrollo es recomendable mantener el controlador en sync, no obstante, 
@@ -161,6 +194,19 @@ más adelante se especificará con detalle su configuración. La variable en men
 ```php
 QUEUE_CONNECTION=sync
 ```
+
+#### Credenciales de la pasarela de pagos
+e-jewelry está diseñada para realizar pagos únicamente a travéz de la pasarela de pagos
+Place To Pay, póngase en contacto con la empresa mediante la pagina:
+https://sites.placetopay.com/ 
+Para contratar el servicio, o solicitar credenciales para realizar pruebas. Le serán 
+concedidas las credenciales que debera registrar en su archivo ```.env```.
+```php
+PLACETOPAY_LOGIN=
+PLACETOPAY_TRANKEY=
+PLACETOPAY_URL=
+```
+
 ### Preparación de la base de datos
 
 Para migrar las tablas requeridas y sembrarlas con información ficticia que le permitirá 
@@ -208,24 +254,90 @@ mediante diversos servidores.
 ### Lanzamiento de los trabajadores de la tienda
 
 Para que las tareas rutinarias se lleven a cabo, y solo en caso de que hayas seleccionado 
-`QUEUE_CONNECTION=sync`, debes poner en marcha los procesos encargados de revisar la tabla 
+`QUEUE_CONNECTION=database`, debes poner en marcha los procesos encargados de revisar la tabla 
 de jobs y ejecutar las rutinas que les conciernen. Esta aplicación tiene tres colas para su 
 funcionamiento, los siguientes workers atenderán esas colas. Ejecuta los siguientes comandos 
-para atender las colas de `shelf-stocker` y `payment-status`:
+para atender las colas de: `default` `shelf-stocker` y `payment-status`:
 ```
+$ php artisan queue:work database
 $ php artisan queue:work database --queue=shelf-stocker
 $ php artisan queue:work database --queue=payment-status
 ```
-Estos trabajadores se encargan de enviar correos electrónicos, recoger los productos de 
+Estos trabajadores se encargan de generar reportes, enviar correos electrónicos, recoger los productos de 
 los carritos para volver a colocarlos en la vitrina y comunicarse con la pasarela de pagos 
 para actualizar los estados de las órdenes de compra.
 
-## Funcionamiento
+Nota: De haber seleccionado `QUEUE_CONNECTION=sync` las tareas serán atendidas de forma inmediata por el sistema, asi
+que no es necesario ejecutar workers para que sea atendida ninguna tarea. 
+
+## Ingrese a su tienda
 
 Al correr las migraciones ha generado un usuario especial, su correo es `admin@jewelry.com` y 
-su contraseña es: `password`. Este usuario tiene el role 'admin', y con él tiene acceso a todas 
+su contraseña es: `password`. Este usuario tiene role 'admin', y con él tiene acceso a todas 
 las funcionalidades de la aplicación, incluso, puede crear a otros roles, esto será expuesto más 
 adelante, por ahora ingrese con estas credenciales para conocer su nueva tienda de joyas.
+
+# Administración:
+
+## Descarga de lista de productos
+En la sección de productos, el administrador encontrará el botón de ```Descargar lista de productos```, este botón
+iniciará la descarga de un archivo de excel, con extension xlsx, y que contendrá todos los productos de la tienda. 
+Podrá editar cualquier campo del archivo para ser subido de nuevo. 
+## Carga masiva de productos
+Al subir el archivo con productos, el administrador estará modificando los productos existentes y creando nuevos
+productos.
+### Reglas para la conciliación de carga de productos
+A continuación se describe el funcionamiento del importe de productos.
+- De subirse un producto con una ID nueva, el sistema creará un producto nuevo
+- De subirse un producto con una ID existente, el sistema evaluará si ha habido cambios en el nombre, la descripción o 
+el precio. 
+De ser así, se creará un producto nuevo, y el stock del producto antiguo será migrado al producto nuevo. 
+- De subirse un producto con una ID existente, sin cambios en los campos de nombre, descripción, o precio, serán alterados los 
+campos en el producto existente. 
+
+## Generación de reportes de productos para envío
+En la pestaña de Administración encontrará el botón de ```Articulos para despacho``` al ingresar, podrá ver los 
+artículos que fueron pagados y se encuentran esperando para ser despachados. En esta vista el administrador podrá cambiar
+el estado de los artículos a ```enviado```. Encontrará en esta vista el botón de ```Descargar lista de productos para despacho```
+La acción de este botón agenda el job de la generación del archivo de productos para el despacho, cuando es terminada su generación
+el administrador recibirá un email anunciando que el archivo está disponible para la descarga. 
+## Descarga de reporte de productos para envío
+En la vista de administración, puede ver el botón de ```Ver reportes``` allí podrá ver los reportes generados, y descargarlos. 
+
+## API
+e-jewelry es una aplicación compuesta por un back-end realizado en Laravel y un front-end realizado en Vue.js. Por
+tanto, todos sus recursos pueden ser consumidos por un cliente autorizado por un usuario con permisos. Los permisos
+del cliente serán heredados del usuario.
+
+### Sistema Oauth2 de Passport
+Esta aplicación implementa Laravel Passport para la gestión de seguridad en su API. Para consumir un recurso de la
+API usted debe contar con un token de autorización. Para obtenerlo, siga los siguientes pasos:
+
+1. Ingrese a la pestaña de "Desarrolladores".
+2. Cree un cliente pulsando el botón "Crear cliente", introduzca el nombre y pulse "Crear".
+  - Si desea revocarlo, pulse el botón "Revocar".
+  - Tome nota de los campos "ID", el "Secret" y "Redirect", más tarde los necesitará.
+3. Cree un código de autorización pulsando el botón "Crear código".
+4. Otorgue su autorización pulsando el botón "Authorize".
+5. Copie el código de autorización presentado. Ese código no se podrá acceder nuevamente.
+6. Entregue ese código al cliente que va a consumir los recursos de la API en su nombre.
+7. El cliente deberá intercambiar el código de autorización por un token de autorización antes de consumir los recursos.
+
+#### Intercambio de un código de autorización por un token de autorización
+Para facilitar el uso de la API, se postean a continuación los vínculos de acceso con las colecciones Postman
+asociadas al consumo de la API. El siguiente vínculo muestra cómo comunicarse con la ruta de intercambio de código
+de autorización:\
+[Enlace a la colección de intercambio de código de autorización](https://crimson-capsule-508960.postman.co/workspace/5db2496d-c262-481b-85f4-4fafc33bdcaf/request/27477039-245cac40-3e5a-4505-bf37-6f7687c684d6?ctx=documentation)
+### End-points accesibles
+
+Las características de la aplicación permiten consumir de forma segura los siguientes endpoints.
+#### Product Index
+[Enlace a la colección product Index](https://crimson-capsule-508960.postman.co/workspace/5db2496d-c262-481b-85f4-4fafc33bdcaf/request/27477039-9840cdb4-c913-4c1b-a17a-681bf93c1275?ctx=documentation)
+#### Product store
+[Enlace a la colección Product store](https://crimson-capsule-508960.postman.co/workspace/5db2496d-c262-481b-85f4-4fafc33bdcaf/request/27477039-671913e0-e174-40b0-a916-3ab8e4c4a1e5?ctx=documentation)
+#### Product Edit
+[Enlace al Product Edit](https://crimson-capsule-508960.postman.co/workspace/5db2496d-c262-481b-85f4-4fafc33bdcaf/request/27477039-81209743-6a01-4a37-b20c-c227747f89e1?ctx=documentation)
+
 
 ## Ciclo de vida de un Usuario
 
@@ -385,36 +497,3 @@ desea incluir en el rol, ¡y está hecho!
 ### El permiso `user.dev web`
 Este es un permiso especial, otorgado a un usuario para darle acceso a la generación de códigos de autorización para 
 consumir la API mediante una aplicación externa. Este permiso habilita la vista de la pestaña 'Desarrolladores'.
-# API
-e-jewelry es una aplicación compuesta por un back-end realizado en Laravel y un front-end realizado en Vue.js. Por 
-tanto, todos sus recursos pueden ser consumidos por un cliente autorizado por un usuario con permisos. Los permisos
-del cliente serán heredados del usuario.
-
-## Sistema Oauth2 de Passport
-Esta aplicación implementa Laravel Passport para la gestión de seguridad en su API. Para consumir un recurso de la 
-API usted debe contar con un token de autorización. Para obtenerlo, siga los siguientes pasos:
-
-1. Ingrese a la pestaña de "Desarrolladores".
-2. Cree un cliente pulsando el botón "Crear cliente", introduzca el nombre y pulse "Crear".
-   - Si desea revocarlo, pulse el botón "Revocar".
-   - Tome nota de los campos "ID", el "Secret" y "Redirect", más tarde los necesitará.
-3. Cree un código de autorización pulsando el botón "Crear código".
-4. Otorgue su autorización pulsando el botón "Authorize".
-5. Copie el código de autorización presentado. Ese código no se podrá acceder nuevamente.
-6. Entregue ese código al cliente que va a consumir los recursos de la API en su nombre.
-7. El cliente deberá intercambiar el código de autorización por un token de autorización antes de consumir los recursos.
-
-### Intercambio de un código de autorización por un token de autorización
-Para facilitar el uso de la API, se postean a continuación los vínculos de acceso con las colecciones Postman 
-asociadas al consumo de la API. El siguiente vínculo muestra cómo comunicarse con la ruta de intercambio de código 
-de autorización:\
-[Enlace a la colección de intercambio de código de autorización](https://crimson-capsule-508960.postman.co/workspace/5db2496d-c262-481b-85f4-4fafc33bdcaf/request/27477039-245cac40-3e5a-4505-bf37-6f7687c684d6?ctx=documentation)
-## End-points accesibles
-
-Las caracteristicas de la aplicacion permiten consumir de forma segura los siguientes endpoints. 
-### Product Index
-[Enlace a la colección product Index](https://crimson-capsule-508960.postman.co/workspace/5db2496d-c262-481b-85f4-4fafc33bdcaf/request/27477039-9840cdb4-c913-4c1b-a17a-681bf93c1275?ctx=documentation)
-### Product store
-[Enlace a la colección Product store](https://crimson-capsule-508960.postman.co/workspace/5db2496d-c262-481b-85f4-4fafc33bdcaf/request/27477039-671913e0-e174-40b0-a916-3ab8e4c4a1e5?ctx=documentation)
-### Product Edit
-[Enlace al Product Edit](https://crimson-capsule-508960.postman.co/workspace/5db2496d-c262-481b-85f4-4fafc33bdcaf/request/27477039-81209743-6a01-4a37-b20c-c227747f89e1?ctx=documentation)

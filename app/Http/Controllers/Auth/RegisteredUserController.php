@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Spatie\Permission\Models\Role;
 
 class RegisteredUserController extends Controller
 {
@@ -42,6 +43,11 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        $roleApiUser = Role::findOrCreate('user', 'api');
+        $roleWebUser = Role::findOrCreate('user', 'web');
+        $user->assignRole($roleApiUser);
+        $user->assignRole($roleWebUser);
 
         event(new Registered($user));
 
